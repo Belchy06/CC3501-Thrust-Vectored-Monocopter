@@ -33,6 +33,9 @@
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
+#include "FC32.h"
+#include "RealTimeLdd1.h"
+#include "TU1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -69,12 +72,25 @@ int main(void)
 
 	for(;;) {
 		if(IMU.dataAvailable(&IMU.sensor)) {
-			 float roll = (IMU.getRoll(&IMU.sensor)) * 180.0 / 3.14159; // Convert roll to degrees
-			 float pitch = (IMU.getPitch(&IMU.sensor)) * 180.0 / 3.14159; // Convert pitch to degrees
-			 float yaw = (IMU.getYaw(&IMU.sensor)) * 180.0 / 3.14159; // Convert yaw to degrees
-			 for(uint8_t i = 0; i < 1; i++) {
-				 ;
-			 }
+			word time;
+			FC32_Reset();
+			float roll = (IMU.getRoll(&IMU.sensor)) * 180.0 / 3.14159; // Convert roll to degrees
+			float pitch = (IMU.getPitch(&IMU.sensor)) * 180.0 / 3.14159; // Convert pitch to degrees
+			float yaw = (IMU.getYaw(&IMU.sensor)) * 180.0 / 3.14159; // Convert yaw to degrees
+			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor); // Return the rotation vector accuracy
+			FC32_GetTimeUS(&time);
+
+			FC32_Reset();
+			float i = IMU.getQuatI(&IMU.sensor);
+			float j = IMU.getQuatJ(&IMU.sensor);
+			float k = IMU.getQuatK(&IMU.sensor);
+			float real = IMU.getQuatReal(&IMU.sensor);
+			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor);
+			FC32_GetTimeUS(&time);
+
+			for(uint8_t i = 0; i < 1; i++) {
+			 ;
+			}
 		}
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/

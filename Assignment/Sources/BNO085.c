@@ -6,7 +6,6 @@
  */
 #include "BNO085.h"
 
-
 void New_BNO085(BNO085 *self, byte addr) {
 	self->sensor.devAddr = addr;
 	self->sensor._hasReset = false;
@@ -64,16 +63,12 @@ void softReset(Sensor *self) {
 	sendPacket(self, CHANNEL_EXECUTABLE, 1);
 
 	//Read all incoming data and flush it
-	for(int counter = 0; counter < 500000; counter++)
-	{
-		__asm volatile ("nop");
-	}
-	while (receivePacket(self) == true);
-	for(int counter = 0; counter < 500000; counter++)
-	{
-		__asm volatile ("nop");
-	}
-	while (receivePacket(self) == true);
+	delay(75);
+	while (receivePacket(self) == true)
+		;
+	delay(75);
+	while (receivePacket(self) == true)
+		;
 }
 
 bool receivePacket(Sensor *self) {

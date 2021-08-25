@@ -51,6 +51,23 @@ Module "CI2C1"     (component InternalI2C)
                 method directs to or from selected device, until a new slave device is selected by this method. This method is 
                 not available for the SLAVE mode.
 
+Module "FC32"      (component FreeCntr32)
+   - FC32_Reset -This method clears the counter.
+   - FC32_GetTimeUS -This method returns the time (as a 16-bit unsigned integer) in microseconds since the last resetting after 
+                the last reset.
+   - FC32_GetTimeMS -This method returns the time (as a 16-bit unsigned integer) in milliseconds since the last resetting after 
+                the last reset.
+
+Module "TU1"       (component TimerUnit_LDD)
+   - TU1_Init -Initializes the device. Allocates memory for the device data structure, allocates interrupt vectors and sets 
+                interrupt priority, sets pin routing, sets timing, etc. If the property <"Enable in init. code"> is set to 
+                "yes" value then the device is also enabled (see the description of the <Enable> method). In this case the 
+                <Enable> method is not necessary and needn't to be generated. This method can be called only once. Before the 
+                second call of Init the <Deinit> must be called first.
+   - TU1_ResetCounter -Resets counter. If counter is counting up then it is set to zero. If counter is counting down then 
+                counter is updated to the reload value.   The method is not available if HW doesn't allow resetting of the 
+                counter.
+
 Module "Cpu"       (component MK22FN512DC12)
 
 ===================================================================================

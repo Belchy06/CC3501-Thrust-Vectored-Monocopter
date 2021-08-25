@@ -14,6 +14,7 @@
 #include "I2C.h"
 #include <stdbool.h>
 #include <math.h>
+#include "Helpers.h"
 
 #ifndef SOURCES_ACCELOROMETER_H_
 #define SOURCES_ACCELOROMETER_H_

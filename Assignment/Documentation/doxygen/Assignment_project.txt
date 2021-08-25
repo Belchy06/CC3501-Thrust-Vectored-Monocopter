@@ -27,6 +27,8 @@
 
 \page page_components Components 
 - \subpage IntI2cLdd1
+- \subpage TU1
+- \subpage RealTimeLdd1
 
 */
 
@@ -60,6 +62,8 @@
 
 \page page_components Components 
 - \subpage IntI2cLdd1
+- \subpage TU1
+- \subpage RealTimeLdd1
 
 */
 

@@ -1,0 +1,50 @@
+/*
+ * PID.c
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+#include "PID.h"
+
+void New_PID(PID *self, float* Input, float* Output, float* Setpoint, float Kp, float Ki, float Kd, int ControllerDir) {
+	self->myOutput = Outputl;
+	self->myInput = Input;
+	self->mySetpoint = Setpoint;
+	self->inAuto = false;
+	setOutputLimits(self, 0, 255); // Default pwm limits
+	self->SampleTime = 100;
+	self->initialize = &initialize;
+	self->setMode = &setMode;
+	self->compute = &compute;
+	self->setOutputLimits = &setOutputLimits;
+	self->setTunings = &setTunings;
+	self->setSampleTime = &setSampleTime;
+}
+
+void initialize(PID *self) {
+
+}
+
+void setMode(PID *self, int Mode) {
+
+}
+
+bool compute(PID *self) {
+
+}
+
+void setOutputLimits(PID *self, double Min, double Max) {
+
+}
+
+void setTunings(PID *self, double Ki, double Kp, double Kd) {
+
+}
+
+void setControllerDirection(PID *self, int Direction) {
+
+}
+
+void setSampleTime(PID *self, int NewSampleTime) {
+
+}

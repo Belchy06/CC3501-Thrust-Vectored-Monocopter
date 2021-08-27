@@ -1,0 +1,37 @@
+/*
+ * PID.c
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+#include "PID.h"
+
+
+
+void initialize(PID *self) {
+
+}
+
+void setMode(PID *self, int Mode) {
+
+}
+
+bool compute(PID *self) {
+
+}
+
+void setOutputLimits(PID *self, double Min, double Max) {
+
+}
+
+void setTunings(PID *self, double Ki, double Kp, double Kd) {
+
+}
+
+void setControllerDirection(PID *self, int Direction) {
+
+}
+
+void setSampleTime(PID *self, int NewSampleTime) {
+
+}

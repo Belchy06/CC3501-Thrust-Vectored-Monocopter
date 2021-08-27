@@ -9,6 +9,11 @@
 #define SOURCES_SENSORS_H_
 
 typedef struct {
+
+} Sensor;
+
+typedef struct BNO085 {
+	// Variables
 	// Every sensor has an i2c address
 	uint8_t devAddr;
 	uint8_t sequenceNumber[6];
@@ -41,24 +46,49 @@ typedef struct {
 	int16_t gyro_Q1;
 	int16_t magnetometer_Q1;
 	int16_t angular_velocity_Q1;
-} Sensor;
-
-typedef struct {
-	// Variables
-	Sensor sensor;
 	// Functions
-	bool (*begin)(Sensor *self);
-	void (*enableRotationVector)(Sensor *self, uint16_t timeBetweenReports);
-	bool (*dataAvailable)(Sensor *self);
-	float (*getRoll)(Sensor *self);
-	float (*getPitch)(Sensor *self);
-	float (*getYaw)(Sensor *self);
-	float (*getQuatReal)(Sensor *self);
-	float (*getQuatI)(Sensor *self);
-	float (*getQuatJ)(Sensor *self);
-	float (*getQuatK)(Sensor *self);
-	float (*getQuatRadianAccuracy)(Sensor *self);
+	bool (*begin)(struct BNO085 *self);
+	void (*enableRotationVector)(struct BNO085 *self,
+			uint16_t timeBetweenReports);
+	bool (*dataAvailable)(struct BNO085 *self);
+	float (*getRoll)(struct BNO085 *self);
+	float (*getPitch)(struct BNO085 *self);
+	float (*getYaw)(struct BNO085 *self);
+	float (*getQuatReal)(struct BNO085 *self);
+	float (*getQuatI)(struct BNO085 *self);
+	float (*getQuatJ)(struct BNO085 *self);
+	float (*getQuatK)(struct BNO085 *self);
+	float (*getQuatRadianAccuracy)(struct BNO085 *self);
 
 } BNO085;
 
+typedef struct PID {
+	// Variables
+	double dispKp;	// * we'll hold on to the tuning parameters in user-entered
+	double dispKi;				//   format for display purposes
+	double dispKd;				//
+	double kp;                  // * (P)roportional Tuning Parameter
+	double ki;                  // * (I)ntegral Tuning Parameter
+	double kd;                  // * (D)erivative Tuning Parameter
+	int controllerDirection;
+	int pOn;
+	double *myInput;  // * Pointers to the Input, Output, and Setpoint variables
+	double *myOutput; //   This creates a hard link between the variables and the
+	double *mySetpoint; //   PID, freeing the user from having to constantly tell us
+						//   what these values are.  with pointers we'll just know.
+	unsigned long lastTime;
+	double outputSum, lastInput;
+	unsigned long SampleTime;
+	double outMin, outMax;
+	bool inAuto, pOnE;
+
+	// Functions
+	void (*initialize)(struct PID);
+	void (*setMode)(struct PID, int);
+	bool (*compute)(struct PID);
+	void (*setOutputLimits)(struct PID, double, double);
+	void (*setTunings)(struct PID, double, double, double);
+	void (*setControllerDirection)(struct PID, int);
+	void (*setSampleTime)(struct PID, int);
+} PID;
 #endif /* SOURCES_SENSORS_H_ */

@@ -7,27 +7,27 @@
 #include "BNO085.h"
 
 void New_BNO085(BNO085 *self, byte addr) {
-	self->sensor.devAddr = addr;
-	self->sensor._hasReset = false;
-	self->sensor.rotationVector_Q1 = 14;
-	self->sensor.rotationVectorAccuracy_Q1 = 12; //Heading accuracy estimate in radians. The Q point is 12.
-	self->sensor.accelerometer_Q1 = 8;
-	self->sensor.linear_accelerometer_Q1 = 8;
-	self->sensor.gyro_Q1 = 9;
-	self->sensor.magnetometer_Q1 = 4;
-	self->sensor.angular_velocity_Q1 = 10;
-	self->sensor.sequenceNumber[0] = 0;
-	self->sensor.sequenceNumber[1] = 0;
-	self->sensor.sequenceNumber[2] = 0;
-	self->sensor.sequenceNumber[3] = 0;
-	self->sensor.sequenceNumber[4] = 0;
-	self->sensor.sequenceNumber[5] = 0;
-	self->sensor.shtpHeader[0] = 0;
-	self->sensor.shtpHeader[1] = 0;
-	self->sensor.shtpHeader[2] = 0;
-	self->sensor.shtpHeader[3] = 0;
+	self->devAddr = addr;
+	self->_hasReset = false;
+	self->rotationVector_Q1 = 14;
+	self->rotationVectorAccuracy_Q1 = 12; //Heading accuracy estimate in radians. The Q point is 12.
+	self->accelerometer_Q1 = 8;
+	self->linear_accelerometer_Q1 = 8;
+	self->gyro_Q1 = 9;
+	self->magnetometer_Q1 = 4;
+	self->angular_velocity_Q1 = 10;
+	self->sequenceNumber[0] = 0;
+	self->sequenceNumber[1] = 0;
+	self->sequenceNumber[2] = 0;
+	self->sequenceNumber[3] = 0;
+	self->sequenceNumber[4] = 0;
+	self->sequenceNumber[5] = 0;
+	self->shtpHeader[0] = 0;
+	self->shtpHeader[1] = 0;
+	self->shtpHeader[2] = 0;
+	self->shtpHeader[3] = 0;
 	for (uint8_t i = 0; i < 128; i++) {
-		self->sensor.shtpData[i] = 0;
+		self->shtpData[i] = 0;
 	}
 	self->begin = &begin;
 	self->enableRotationVector = &enableRotationVector;
@@ -42,7 +42,7 @@ void New_BNO085(BNO085 *self, byte addr) {
 	self->getQuatRadianAccuracy = &getQuatRadianAccuracy;
 }
 
-bool begin(Sensor *self) {
+bool begin(BNO085 *self) {
 	softReset(self);
 	//Check communication with device
 	self->shtpData[0] = SHTP_REPORT_PRODUCT_ID_REQUEST; //Request the product ID and reset info
@@ -57,27 +57,34 @@ bool begin(Sensor *self) {
 	return false;
 }
 
-void softReset(Sensor *self) {
+void softReset(BNO085 *self) {
 	self->shtpData[0] = 1; //Reset
 
 	sendPacket(self, CHANNEL_EXECUTABLE, 1);
 
 	//Read all incoming data and flush it
-	delay(75);
+	for (int counter = 0; counter < 500000; counter++) {
+		__asm volatile ("nop");
+	}
 	while (receivePacket(self) == true)
 		;
-	delay(75);
+	for (int counter = 0; counter < 500000; counter++) {
+		__asm volatile ("nop");
+	}
 	while (receivePacket(self) == true)
 		;
 }
 
-bool receivePacket(Sensor *self) {
+bool receivePacket(BNO085 *self) {
 	CI2C1_SelectSlave(self->devAddr);
 	byte err;
 	word recv;
 	uint8_t data[4];
 	err = CI2C1_RecvBlock(data, 4, &recv);
-
+	if(err != ERR_OK) {
+		//do something
+		;
+	}
 	uint8_t packetLSB = data[0];
 	uint8_t packetMSB = data[1];
 	uint8_t channelNumber = data[2];
@@ -109,7 +116,7 @@ bool receivePacket(Sensor *self) {
 	return true;
 }
 
-bool getData(Sensor *self, uint16_t bytesRemaining) {
+bool getData(BNO085 *self, uint16_t bytesRemaining) {
 	uint16_t dataSpot = 0;
 	byte err;
 	word recv;
@@ -133,11 +140,11 @@ bool getData(Sensor *self, uint16_t bytesRemaining) {
 	return true;
 }
 
-void enableRotationVector(Sensor *self, uint16_t timeBetweenReports) {
+void enableRotationVector(BNO085 *self, uint16_t timeBetweenReports) {
 	setFeatureCommand(self, SENSOR_REPORTID_ROTATION_VECTOR, timeBetweenReports, 0);
 }
 
-void setFeatureCommand(Sensor *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig) {
+void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig) {
 	long microsBetweenReports = (long) timeBetweenReports * 1000L;
 
 	self->shtpData[0] = SHTP_REPORT_SET_FEATURE_COMMAND;//Set feature command. Reference page 55
@@ -162,7 +169,7 @@ void setFeatureCommand(Sensor *self, uint8_t reportID, uint16_t timeBetweenRepor
 	sendPacket(self, CHANNEL_CONTROL, 17);
 }
 
-bool sendPacket(Sensor *self, uint8_t channelNumber, uint8_t dataLength) {
+bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength) {
 	byte err;
 	word sent;
 	uint8_t packetLength = dataLength + 4;
@@ -184,12 +191,12 @@ bool sendPacket(Sensor *self, uint8_t channelNumber, uint8_t dataLength) {
 }
 
 
-bool dataAvailable(Sensor *self) {
+bool dataAvailable(BNO085 *self) {
 	bool dataAvail = (getReadings(self) != 0);
 	return dataAvail;
 }
 
-uint16_t getReadings(Sensor *self) {
+uint16_t getReadings(BNO085 *self) {
 	uint16_t returnVal;
 	if(receivePacket(self) == true) {
 		if(self->shtpHeader[2] == CHANNEL_REPORTS && self->shtpData[0] == SHTP_REPORT_BASE_TIMESTAMP) {
@@ -221,7 +228,7 @@ uint16_t getReadings(Sensor *self) {
 //shtpData[8:9]: k/accel z/gyro z/etc
 //shtpData[10:11]: real/gyro temp/etc
 //shtpData[12:13]: Accuracy estimate
-uint16_t parseInputReport(Sensor *self) {
+uint16_t parseInputReport(BNO085 *self) {
 	int16_t dataLength = ((uint16_t)self->shtpHeader[1] << 8 | self->shtpHeader[0]);
 	dataLength &= ~(1 << 15);
 	dataLength -= 4;
@@ -326,7 +333,7 @@ uint16_t parseInputReport(Sensor *self) {
 	return returnVal;
 }
 
-uint16_t parseCommandReport(Sensor *self) {
+uint16_t parseCommandReport(BNO085 *self) {
 	if(self->shtpData[5] == SHTP_REPORT_COMMAND_RESPONSE) {
 		uint8_t command = self->shtpData[2];
 
@@ -339,7 +346,7 @@ uint16_t parseCommandReport(Sensor *self) {
 }
 
 // Return the roll (rotation around the x-axis) in Radians
-float getRoll(Sensor *self) {
+float getRoll(BNO085 *self) {
 	float dqw = getQuatReal(self);
 	float dqx = getQuatI(self);
 	float dqy = getQuatJ(self);
@@ -360,7 +367,7 @@ float getRoll(Sensor *self) {
 }
 
 // Return the pitch (rotation around the y-axis) in Radians
-float getPitch(Sensor *self)
+float getPitch(BNO085 *self)
 {
 	float dqw = getQuatReal(self);
 	float dqx = getQuatI(self);
@@ -384,7 +391,7 @@ float getPitch(Sensor *self)
 	return pitch;
 }
 
-float getYaw(Sensor *self)
+float getYaw(BNO085 *self)
 {
 	float dqw = getQuatReal(self);
 	float dqx = getQuatI(self);
@@ -407,27 +414,27 @@ float getYaw(Sensor *self)
 	return yaw;
 }
 
-float getQuatReal(Sensor *self) {
+float getQuatReal(BNO085 *self) {
 	float quat = qToFloat(self->rawQuatReal, self->rotationVector_Q1);
 	return quat;
 }
 
-float getQuatI(Sensor *self) {
+float getQuatI(BNO085 *self) {
 	float quat = qToFloat(self->rawQuatI, self->rotationVector_Q1);
 	return quat;
 }
 
-float getQuatJ(Sensor *self) {
+float getQuatJ(BNO085 *self) {
 	float quat = qToFloat(self->rawQuatJ, self->rotationVector_Q1);
 	return quat;
 }
 
-float getQuatK(Sensor *self) {
+float getQuatK(BNO085 *self) {
 	float quat = qToFloat(self->rawQuatK, self->rotationVector_Q1);
 	return quat;
 }
 
-float getQuatRadianAccuracy(Sensor *self) {
+float getQuatRadianAccuracy(BNO085 *self) {
 	float quat = qToFloat(self->rawQuatRadianAccuracy, self->rotationVectorAccuracy_Q1);
 	return quat;
 }

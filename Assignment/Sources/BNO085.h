@@ -14,7 +14,6 @@
 #include "I2C.h"
 #include <stdbool.h>
 #include <math.h>
-#include "Helpers.h"
 
 #ifndef SOURCES_ACCELOROMETER_H_
 #define SOURCES_ACCELOROMETER_H_
@@ -98,25 +97,25 @@
 
 
 void New_BNO085(BNO085 *self, uint8_t addr);
-bool begin(Sensor *self);
-void softReset(Sensor *self);
-bool receivePacket(Sensor *self);
-void enableRotationVector(Sensor *self, uint16_t timeBetweenReports);
-void setFeatureCommand(Sensor *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig);
-bool sendPacket(Sensor *self, uint8_t channelNumber, uint8_t dataLength);
-bool getData(Sensor *self, uint16_t bytesRemaining);
-bool dataAvailable(Sensor *self);
-uint16_t getReadings(Sensor *self);
-uint16_t parseInputReport(Sensor *self);
-uint16_t parseCommandReport(Sensor *self);
-float getRoll(Sensor *self);
-float getPitch(Sensor *self);
-float getYaw(Sensor *self);
-float getQuatReal(Sensor *self);
-float getQuatI(Sensor *self);
-float getQuatJ(Sensor *self);
-float getQuatK(Sensor *self);
-float getQuatRadianAccuracy(Sensor *self);
+bool begin(BNO085 *self);
+void softReset(BNO085 *self);
+bool receivePacket(BNO085 *self);
+void enableRotationVector(BNO085 *self, uint16_t timeBetweenReports);
+void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig);
+bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength);
+bool getData(BNO085 *self, uint16_t bytesRemaining);
+bool dataAvailable(BNO085 *self);
+uint16_t getReadings(BNO085 *self);
+uint16_t parseInputReport(BNO085 *self);
+uint16_t parseCommandReport(BNO085 *self);
+float getRoll(BNO085 *self);
+float getPitch(BNO085 *self);
+float getYaw(BNO085 *self);
+float getQuatReal(BNO085 *self);
+float getQuatI(BNO085 *self);
+float getQuatJ(BNO085 *self);
+float getQuatK(BNO085 *self);
+float getQuatRadianAccuracy(BNO085 *self);
 float qToFloat(int16_t fixedPointValue, uint8_t qPoint);
 
 #endif /* SOURCES_ACCELOROMETER_H_ */

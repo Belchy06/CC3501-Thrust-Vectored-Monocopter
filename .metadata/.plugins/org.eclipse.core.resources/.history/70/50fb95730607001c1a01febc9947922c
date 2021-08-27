@@ -1,0 +1,69 @@
+/*
+ * Sensors.h
+ *
+ *  Created on: Aug 16, 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_SENSORS_H_
+#define SOURCES_SENSORS_H_
+
+typedef struct {
+	// Every sensor has an i2c address
+	uint8_t devAddr;
+	uint8_t sequenceNumber[6];
+	uint8_t shtpHeader[4];
+	uint8_t shtpData[128];
+	uint32_t timeStamp;
+	uint16_t rawAccelX, rawAccelY, rawAccelZ, accelAccuracy;
+	uint16_t rawLinAccelX, rawLinAccelY, rawLinAccelZ, accelLinAccuracy;
+	uint16_t rawGyroX, rawGyroY, rawGyroZ, gyroAccuracy;
+	uint16_t rawMagX, rawMagY, rawMagZ, magAccuracy;
+	uint16_t rawQuatI, rawQuatJ, rawQuatK, rawQuatReal, rawQuatRadianAccuracy,
+			quatAccuracy;
+	uint16_t rawFastGyroX, rawFastGyroY, rawFastGyroZ;
+	uint8_t tapDetector;
+	uint16_t stepCount;
+	uint8_t stabilityClassifier;
+	uint8_t activityClassifier;
+	uint8_t *_activityConfidences; //Array that store the confidences of the 9 possible activities
+	uint8_t calibrationStatus;				//Byte R0 of ME Calibration Response
+	uint16_t memsRawAccelX, memsRawAccelY, memsRawAccelZ; //Raw readings from MEMS sensor
+	uint16_t memsRawGyroX, memsRawGyroY, memsRawGyroZ; //Raw readings from MEMS sensor
+	uint16_t memsRawMagX, memsRawMagY, memsRawMagZ;
+	bool _hasReset;
+	// These Q values are defined in the datasheet but can also be obtained by querying the meta data records
+	// See the read metadata example for more info
+	int16_t rotationVector_Q1;
+	int16_t rotationVectorAccuracy_Q1; //Heading accuracy estimate in radians. The Q point is 12.
+	int16_t accelerometer_Q1;
+	int16_t linear_accelerometer_Q1;
+	int16_t gyro_Q1;
+	int16_t magnetometer_Q1;
+	int16_t angular_velocity_Q1;
+} Sensor;
+
+typedef struct {
+	// Variables
+	Sensor sensor;
+	// Functions
+	bool (*begin)(Sensor *self);
+	void (*enableRotationVector)(Sensor *self, uint16_t timeBetweenReports);
+	bool (*dataAvailable)(Sensor *self);
+	float (*getRoll)(Sensor *self);
+	float (*getPitch)(Sensor *self);
+	float (*getYaw)(Sensor *self);
+	float (*getQuatReal)(Sensor *self);
+	float (*getQuatI)(Sensor *self);
+	float (*getQuatJ)(Sensor *self);
+	float (*getQuatK)(Sensor *self);
+	float (*getQuatRadianAccuracy)(Sensor *self);
+
+} BNO085;
+
+
+typedef struct PID {
+	char *chars;
+	void (*setMode)(PID *self);
+} PID;
+#endif /* SOURCES_SENSORS_H_ */

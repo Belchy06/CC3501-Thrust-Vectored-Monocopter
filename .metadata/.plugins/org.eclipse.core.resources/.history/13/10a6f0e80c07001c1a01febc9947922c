@@ -1,0 +1,71 @@
+/*
+ * PID.c
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+#include "PID.h"
+
+void New_PID(PID *self, double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd, int ControllerDirection) {
+	self->myOutput = Output;
+	self->myInput = Input;
+	self->mySetpoint = Setpoint;
+	self->inAuto = false;
+	setOutputLimits(self, 0, 255); // Default pwm limits
+	self->SampleTime = 100;
+	setControllerDirection(self, ControllerDirection);
+	setTunings(self, Kp, Ki, Kd);
+	self->initialize = &initialize;
+	self->setMode = &setMode;
+	self->compute = &compute;
+	self->setOutputLimits = &setOutputLimits;
+	self->setTunings = &setTunings;
+	self->setSampleTime = &setSampleTime;
+}
+
+void initialize(PID *self) {
+	self->outputSum = *self->myOutput;
+	self->lastInput = *self->myInput;
+	if(self->outputSum > self->outMax) self->outputSum = self->outMax;
+	else if(self->outputSum < self->outMin) self->outputSum = self->outMin;
+}
+
+void setMode(PID *self, int Mode) {
+	bool newAuto = (Mode == AUTOMATIC);
+	if(newAuto && !!self->inAuto) {
+		// We just went from manual to auto mode
+		initialize(self);
+	}
+	self->inAuto = newAuto;
+}
+
+bool compute(PID *self) {
+
+}
+
+void setOutputLimits(PID *self, double Min, double Max) {
+	if(Min > Max) return;
+
+	self->outMin = Min;
+	self->outMax = Max;
+
+	if(self->inAuto) {
+		if(*self->myOutput > Max) *self->myOutput = Max;
+		else if (*self->myOutput < Min) *self->myOutput = Min;
+
+		ifself->outputSum  > Max) *self->myOutput = Max;
+		else if (*self->myOutput < Min) *self->myOutput = Min;
+	}
+}
+
+void setTunings(PID *self, double Ki, double Kp, double Kd) {
+
+}
+
+void setControllerDirection(PID *self, int Direction) {
+
+}
+
+void setSampleTime(PID *self, int NewSampleTime) {
+
+}

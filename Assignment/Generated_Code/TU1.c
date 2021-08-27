@@ -7,31 +7,38 @@
 **     Version     : Component 01.164, Driver 01.11, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-25, 21:13, # CodeGen: 5
+**     Date/Time   : 2021-08-27, 16:59, # CodeGen: 13
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
 **     Settings    :
 **          Component name                                 : TU1
-**          Module name                                    : FTM1
-**          Counter                                        : FTM1_CNT
+**          Module name                                    : FTM3
+**          Counter                                        : FTM3_CNT
 **          Counter direction                              : Up
 **          Counter width                                  : 16 bits
 **          Value type                                     : uint16_t
 **          Input clock source                             : Internal
-**            Counter frequency                            : 20.97152 MHz
+**            Counter frequency                            : 32.768 kHz
 **          Counter restart                                : On-match
-**            Period device                                : FTM1_MOD
-**            Period                                       : 1 ms
-**            Interrupt                                    : Enabled
-**              Interrupt                                  : INT_FTM1
-**              Interrupt priority                         : medium priority
-**          Channel list                                   : 0
+**            Period device                                : FTM3_MOD
+**            Period                                       : 20 ms
+**            Interrupt                                    : Disabled
+**          Channel list                                   : 1
+**            Channel 0                                    : 
+**              Mode                                       : Compare
+**                Compare                                  : FTM3_C3V
+**                Offset                                   : 1.5 ms
+**                Output on compare                        : Clear
+**                  Output on overrun                      : Set
+**                  Initial state                          : High
+**                  Output pin                             : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
+**                Interrupt                                : Disabled
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : no
 **            Event mask                                   : 
-**              OnCounterRestart                           : Enabled
+**              OnCounterRestart                           : Disabled
 **              OnChannel0                                 : Disabled
 **              OnChannel1                                 : Disabled
 **              OnChannel2                                 : Disabled
@@ -50,8 +57,15 @@
 **            Clock configuration 6                        : This component disabled
 **            Clock configuration 7                        : This component disabled
 **     Contents    :
-**         Init         - LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr);
-**         ResetCounter - LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr);
+**         Init               - LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr);
+**         Enable             - LDD_TError TU1_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable            - LDD_TError TU1_Disable(LDD_TDeviceData *DeviceDataPtr);
+**         GetPeriodTicks     - LDD_TError TU1_GetPeriodTicks(LDD_TDeviceData *DeviceDataPtr, TU1_TValueType...
+**         ResetCounter       - LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr);
+**         GetCounterValue    - TU1_TValueType TU1_GetCounterValue(LDD_TDeviceData *DeviceDataPtr);
+**         SetOffsetTicks     - LDD_TError TU1_SetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t...
+**         GetOffsetTicks     - LDD_TError TU1_GetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t...
+**         SelectOutputAction - LDD_TError TU1_SelectOutputAction(LDD_TDeviceData *DeviceDataPtr, uint8_t...
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -98,7 +112,6 @@
 
 /* MODULE TU1. */
 
-#include "RealTimeLdd1.h"
 #include "TU1.h"
 /* {Default RTOS Adapter} No RTOS includes */
 #include "IO_Map.h"
@@ -107,9 +120,15 @@
 extern "C" {
 #endif 
 
+/* List of channels used by component */
+static const uint8_t ChannelDevice[TU1_NUMBER_OF_CHANNELS] = {0x03U};
+
+/* Table of channels mode / 0 - compare mode, 1 - capture mode */
+static const uint8_t ChannelMode[TU1_NUMBER_OF_CHANNELS] = {0x00U};
+
 
 typedef struct {
-  LDD_TEventMask EnEvents;             /* Enable/Disable events mask */
+  uint32_t Source;                     /* Current source clock */
   uint8_t InitCntr;                    /* Number of initialization */
   LDD_TUserData *UserDataPtr;          /* RTOS device data structure */
 } TU1_TDeviceData;
@@ -118,10 +137,9 @@ typedef TU1_TDeviceData *TU1_TDeviceDataPtr; /* Pointer to the device data struc
 
 /* {Default RTOS Adapter} Static object used for simulation of dynamic driver memory allocation */
 static TU1_TDeviceData DeviceDataPrv__DEFAULT_RTOS_ALLOC;
-/* {Default RTOS Adapter} Global variable used for passing a parameter into ISR */
-static TU1_TDeviceDataPtr INT_FTM1__DEFAULT_RTOS_ISRPARAM;
 
-#define AVAILABLE_EVENTS_MASK (LDD_TEventMask)(LDD_TIMERUNIT_ON_COUNTER_RESTART)
+#define AVAILABLE_PIN_MASK (LDD_TPinMask)(TU1_CHANNEL_0_PIN)
+#define LAST_CHANNEL 0x00U
 
 /* Internal method prototypes */
 /*
@@ -166,35 +184,144 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr)
     DeviceDataPrv->InitCntr++;         /* Increment counter of initialization */
     return ((LDD_TDeviceData *)DeviceDataPrv); /* Return pointer to the device data structure */
   }
-  /* Interrupt vector(s) allocation */
-  /* {Default RTOS Adapter} Set interrupt vector: IVT is static, ISR parameter is passed by the global variable */
-  INT_FTM1__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
-  /* SIM_SCGC6: FTM1=1 */
-  SIM_SCGC6 |= SIM_SCGC6_FTM1_MASK;
-  /* FTM1_MODE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,FAULTIE=0,FAULTM=0,CAPTEST=0,PWMSYNC=0,WPDIS=1,INIT=0,FTMEN=0 */
-  FTM1_MODE = (FTM_MODE_FAULTM(0x00) | FTM_MODE_WPDIS_MASK); /* Set up mode register */
-  /* FTM1_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=0,CPWMS=0,CLKS=0,PS=0 */
-  FTM1_SC = (FTM_SC_CLKS(0x00) | FTM_SC_PS(0x00)); /* Clear status and control register */
-  /* FTM1_CNTIN: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,INIT=0 */
-  FTM1_CNTIN = FTM_CNTIN_INIT(0x00);   /* Clear counter initial register */
-  /* FTM1_CNT: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,COUNT=0 */
-  FTM1_CNT = FTM_CNT_COUNT(0x00);      /* Reset counter register */
-  /* FTM1_C0SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM1_C0SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM1_C1SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM1_C1SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM1_MOD: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,MOD=0x51EB */
-  FTM1_MOD = FTM_MOD_MOD(0x51EB);      /* Set up modulo register */
-  DeviceDataPrv->EnEvents = 0x0100U;   /* Enable selected events */
-  /* NVICIP43: PRI43=0x70 */
-  NVICIP43 = NVIC_IP_PRI43(0x70);
-  /* NVICISER1: SETENA|=0x0800 */
-  NVICISER1 |= NVIC_ISER_SETENA(0x0800);
-  /* FTM1_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=1,CPWMS=0,CLKS=1,PS=0 */
-  FTM1_SC = (FTM_SC_TOIE_MASK | FTM_SC_CLKS(0x01) | FTM_SC_PS(0x00)); /* Set up status and control register */
+  /* SIM_SCGC6: FTM3=1 */
+  SIM_SCGC6 |= SIM_SCGC6_FTM3_MASK;
+  /* SIM_SCGC5: PORTD=1 */
+  SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+  /* FTM3_MODE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,FAULTIE=0,FAULTM=0,CAPTEST=0,PWMSYNC=0,WPDIS=1,INIT=0,FTMEN=0 */
+  FTM3_MODE = (FTM_MODE_FAULTM(0x00) | FTM_MODE_WPDIS_MASK); /* Set up mode register */
+  /* FTM3_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=0,CPWMS=0,CLKS=0,PS=0 */
+  FTM3_SC = (FTM_SC_CLKS(0x00) | FTM_SC_PS(0x00)); /* Clear status and control register */
+  /* FTM3_CNTIN: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,INIT=0 */
+  FTM3_CNTIN = FTM_CNTIN_INIT(0x00);   /* Clear counter initial register */
+  /* FTM3_CNT: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,COUNT=0 */
+  FTM3_CNT = FTM_CNT_COUNT(0x00);      /* Reset counter register */
+  /* FTM3_C0SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C0SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C1SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C1SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C2SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C2SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C3SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C3SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C4SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C4SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C5SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C5SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C6SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C6SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_C7SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C7SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM3_MOD: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,MOD=0x028E */
+  FTM3_MOD = FTM_MOD_MOD(0x028E);      /* Set up modulo register */
+  /* FTM3_C3SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=1,MSA=0,ELSB=1,ELSA=0,ICRST=0,DMA=0 */
+  FTM3_C3SC = (FTM_CnSC_MSB_MASK | FTM_CnSC_ELSB_MASK); /* Set up channel status and control register */
+  /* FTM3_C3V: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,VAL=0x31 */
+  FTM3_C3V = FTM_CnV_VAL(0x31);        /* Set up channel value register */
+  /* FTM3_OUTINIT: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CH7OI=0,CH6OI=0,CH5OI=0,CH4OI=0,CH3OI=1,CH2OI=0,CH1OI=0,CH0OI=0 */
+  FTM3_OUTINIT = FTM_OUTINIT_CH3OI_MASK; /* Set up Initial State for Channel Output register */
+  /* FTM3_MODE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,FAULTIE=0,FAULTM=0,CAPTEST=0,PWMSYNC=0,WPDIS=1,INIT=1,FTMEN=0 */
+  FTM3_MODE = (FTM_MODE_FAULTM(0x00) | FTM_MODE_WPDIS_MASK | FTM_MODE_INIT_MASK); /* Initialize the Output Channels */
+  /* PORTD_PCR3: ISF=0,MUX=4 */
+  PORTD_PCR3 = (uint32_t)((PORTD_PCR3 & (uint32_t)~(uint32_t)(
+                PORT_PCR_ISF_MASK |
+                PORT_PCR_MUX(0x03)
+               )) | (uint32_t)(
+                PORT_PCR_MUX(0x04)
+               ));
+  DeviceDataPrv->Source = FTM_PDD_FIXED; /* Store clock source */
+  /* FTM3_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=0,CPWMS=0,CLKS=2,PS=0 */
+  FTM3_SC = (FTM_SC_CLKS(0x02) | FTM_SC_PS(0x00)); /* Set up status and control register */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_TU1_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv); /* Return pointer to the device data structure */
+}
+
+/*
+** ===================================================================
+**     Method      :  TU1_Enable (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Enables the component - it starts the signal generation.
+**         Events may be generated (see SetEventMask). The method is
+**         not available if the counter can't be disabled/enabled by HW.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_Enable(LDD_TDeviceData *DeviceDataPtr)
+{
+  TU1_TDeviceData *DeviceDataPrv = (TU1_TDeviceData *)DeviceDataPtr;
+
+  FTM_PDD_SelectPrescalerSource(FTM3_BASE_PTR, DeviceDataPrv->Source); /* Enable the device */
+  return ERR_OK;
+}
+
+/*
+** ===================================================================
+**     Method      :  TU1_Disable (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Disables the component - it stops signal generation and
+**         events calling. The method is not available if the counter
+**         can't be disabled/enabled by HW.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_Disable(LDD_TDeviceData *DeviceDataPtr)
+{
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  FTM_PDD_SelectPrescalerSource(FTM3_BASE_PTR, FTM_PDD_DISABLED);
+  return ERR_OK;
+}
+
+/*
+** ===================================================================
+**     Method      :  TU1_GetPeriodTicks (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Returns the number of counter ticks before re-initialization.
+**         See also method [SetPeriodTicks]. This method is available
+**         only if the property ["Counter restart"] is switched to
+**         'on-match' value.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @param
+**         TicksPtr        - Pointer to return value of the
+**                           number of counter ticks before
+**                           re-initialization
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK 
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_GetPeriodTicks(LDD_TDeviceData *DeviceDataPtr, TU1_TValueType *TicksPtr)
+{
+  uint16_t tmp;
+
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  tmp = (uint16_t)(FTM_PDD_ReadModuloReg(FTM3_BASE_PTR));
+  *TicksPtr = (TU1_TValueType)++tmp;
+  return ERR_OK;                       /* OK */
 }
 
 /*
@@ -221,35 +348,207 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr)
 LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr)
 {
   (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
-  FTM_PDD_InitializeCounter(FTM1_BASE_PTR);
+  FTM_PDD_InitializeCounter(FTM3_BASE_PTR);
   return ERR_OK;                       /* OK */
 }
 
 /*
 ** ===================================================================
-**     Method      :  TU1_Interrupt (component TimerUnit_LDD)
-**
-**     Description :
-**         The method services the interrupt of the selected peripheral(s)
-**         and eventually invokes event(s) of the component.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
+**     Method      :  TU1_GetCounterValue (component TimerUnit_LDD)
 */
-PE_ISR(TU1_Interrupt)
+/*!
+**     @brief
+**         Returns the content of counter register. This method can be
+**         used both if counter is enabled and if counter is disabled.
+**         The method is not available if HW doesn't allow reading of
+**         the counter.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Counter value (number of counted ticks).
+*/
+/* ===================================================================*/
+TU1_TValueType TU1_GetCounterValue(LDD_TDeviceData *DeviceDataPtr)
 {
-  /* {Default RTOS Adapter} ISR parameter is passed through the global variable */
-  TU1_TDeviceDataPtr DeviceDataPrv = INT_FTM1__DEFAULT_RTOS_ISRPARAM;
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  return (TU1_TValueType)FTM_PDD_ReadCounterReg(FTM3_BASE_PTR);
+}
 
-  LDD_TEventMask State = 0U;
+/*
+** ===================================================================
+**     Method      :  TU1_SetOffsetTicks (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Sets the new offset value to channel specified by the
+**         parameter ChannelIdx. It is user responsibility to use value
+**         below selected period. This method is available when at
+**         least one channel is configured.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @param
+**         ChannelIdx      - Index of the component
+**                           channel.
+**     @param
+**         Ticks           - Number of counter ticks to compare
+**                           match.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK 
+**                           ERR_PARAM_INDEX - ChannelIdx parameter is
+**                           out of possible range.
+**                           ERR_NOTAVAIL -  The compare mode is not
+**                           selected for selected channel
+**                           ERR_PARAM_TICKS - Ticks parameter is out of
+**                           possible range.
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_SetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t ChannelIdx, TU1_TValueType Ticks)
+{
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  /* Parameter test - this test can be disabled by setting the "Ignore range checking"
+     property to the "yes" value in the "Configuration inspector" */
+  if (ChannelIdx > LAST_CHANNEL) {     /* Is the channel index out of range? */
+    return ERR_PARAM_INDEX;            /* If yes then error */
+  }
+  if ((ChannelMode[ChannelIdx]) != 0U) { /* Is the channel in compare mode? */
+    return ERR_NOTAVAIL;               /* If not then error */
+  }
+  FTM_PDD_WriteChannelValueReg(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], (uint16_t)Ticks);
+  return ERR_OK;                       /* OK */
+}
 
-  if ((FTM_PDD_GetOverflowInterruptFlag(FTM1_BASE_PTR)) != 0U) { /* Is the overflow interrupt flag pending? */
-    State |= LDD_TIMERUNIT_ON_COUNTER_RESTART; /* and set mask */
+/*
+** ===================================================================
+**     Method      :  TU1_GetOffsetTicks (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Returns the number of counter ticks to compare match channel
+**         specified by the parameter ChannelIdx. See also method
+**         [SetOffsetTicks]. This method is available when at least one
+**         channel is configured.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @param
+**         ChannelIdx      - Index of the component
+**                           channel.
+**     @param
+**         TicksPtr        - Pointer to return value of the
+**                           number of counter ticks to compare match.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK 
+**                           ERR_PARAM_INDEX - ChannelIdx parameter is
+**                           out of possible range.
+**                           ERR_NOTAVAIL -  The compare mode is not
+**                           selected for selected channel.
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_GetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t ChannelIdx, TU1_TValueType *TicksPtr)
+{
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  /* Parameter test - this test can be disabled by setting the "Ignore range checking"
+     property to the "yes" value in the "Configuration inspector" */
+  if (ChannelIdx > LAST_CHANNEL) {     /* Is the channel index out of range? */
+    return ERR_PARAM_INDEX;            /* If yes then error */
   }
-  State &= DeviceDataPrv->EnEvents;    /* Handle only enabled interrupts */
-  if (State & LDD_TIMERUNIT_ON_COUNTER_RESTART) { /* Is the overflow interrupt flag pending? */
-    FTM_PDD_ClearOverflowInterruptFlag(FTM1_BASE_PTR); /* Clear flag */
-    TU1_OnCounterRestart(DeviceDataPrv->UserDataPtr); /* Invoke OnCounterRestart event */
+  if ((ChannelMode[ChannelIdx]) != 0U) { /* Is the channel in compare mode? */
+    return ERR_NOTAVAIL;               /* If not then error */
   }
+  *TicksPtr = (TU1_TValueType)(FTM_PDD_ReadChannelValueReg(FTM3_BASE_PTR, ChannelDevice[ChannelIdx]));
+  return ERR_OK;                       /* OK */
+}
+
+/*
+** ===================================================================
+**     Method      :  TU1_SelectOutputAction (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Sets the type of compare match and counter overflow action
+**         on channel output. This method is available when at least
+**         one channel is configured.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @param
+**         ChannelIdx      - Index of the component
+**                           channel.
+**     @param
+**         CompareAction   - Select output action
+**                           on compare match
+**     @param
+**         CounterAction   - Select output action
+**                           on counter overflow
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_PARAM_INDEX - ChannelIdx parameter is
+**                           out of possible range
+**                           ERR_NOTAVAIL -  Action is not possible on
+**                           selected channel or counter. Supported
+**                           combinations are HW specific.
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_SelectOutputAction(LDD_TDeviceData *DeviceDataPtr, uint8_t ChannelIdx, LDD_TimerUnit_TOutAction CompareAction, LDD_TimerUnit_TOutAction CounterAction)
+{
+  (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
+  /* Parameter test - this test can be disabled by setting the "Ignore range checking"
+     property to the "yes" value in the "Configuration inspector" */
+  if (ChannelIdx > LAST_CHANNEL) {     /* Is the channel index out of range? */
+    return ERR_PARAM_INDEX;            /* If yes then error */
+  }
+  if ((ChannelMode[ChannelIdx]) != 0U) { /* Is the channel in compare mode? */
+    return ERR_NOTAVAIL;               /* If not then error */
+  }
+  switch (CounterAction) {
+    case OUTPUT_NONE:
+      FTM_PDD_SelectChannelMode(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_OUTPUT_TOGGLE);
+      switch (CompareAction) {
+        case OUTPUT_NONE:
+          FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_NONE);
+          break;
+        case OUTPUT_TOGGLE:
+          FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_RISING);
+          break;
+        case OUTPUT_CLEAR:
+          FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_FALLING);
+          break;
+        case OUTPUT_SET:
+          FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_BOTH);
+          break;
+        default:
+          return ERR_NOTAVAIL;
+      }
+      break;
+    case OUTPUT_CLEAR:
+      if (CompareAction != OUTPUT_SET) {
+        return ERR_NOTAVAIL;
+      }
+      FTM_PDD_SelectChannelMode(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_OUTPUT_CLEAR);
+      FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_BOTH);
+      break;
+    case OUTPUT_SET:
+      if (CompareAction != OUTPUT_CLEAR) {
+        return ERR_NOTAVAIL;
+      }
+      FTM_PDD_SelectChannelMode(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_OUTPUT_SET);
+      FTM_PDD_SelectChannelEdgeLevel(FTM3_BASE_PTR, ChannelDevice[ChannelIdx], FTM_PDD_EDGE_FALLING);
+      break;
+    default:
+      return ERR_NOTAVAIL;
+  }
+  return ERR_OK;                       /* OK */
 }
 
 /* END TU1. */

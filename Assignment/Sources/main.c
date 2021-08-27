@@ -33,9 +33,12 @@
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
-#include "FC32.h"
-#include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "WAIT1.h"
+#include "MCUC1.h"
+#include "SERVO1.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -61,32 +64,33 @@ int main(void)
 
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
+
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
-	if(IMU.begin(&IMU.sensor) == false) {
+	if(IMU.begin(&IMU) == false) {
 		while(1)
 			;
 	}
 
-	IMU.enableRotationVector(&IMU.sensor, 50);
+
+	IMU.enableRotationVector(&IMU, 50);
 
 	for(;;) {
-		if(IMU.dataAvailable(&IMU.sensor)) {
+		if(IMU.dataAvailable(&IMU)) {
 			word time;
-			FC32_Reset();
-			float roll = (IMU.getRoll(&IMU.sensor)) * 180.0 / 3.14159; // Convert roll to degrees
-			float pitch = (IMU.getPitch(&IMU.sensor)) * 180.0 / 3.14159; // Convert pitch to degrees
-			float yaw = (IMU.getYaw(&IMU.sensor)) * 180.0 / 3.14159; // Convert yaw to degrees
-			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor); // Return the rotation vector accuracy
-			FC32_GetTimeUS(&time);
+			SERVO1_SetPWMDutyUs(1000);
+			float roll = (IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
+			float pitch = (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+			float yaw = (IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
+			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
+			SERVO1_SetPWMDutyUs(2000);
 
-			FC32_Reset();
-			float i = IMU.getQuatI(&IMU.sensor);
-			float j = IMU.getQuatJ(&IMU.sensor);
-			float k = IMU.getQuatK(&IMU.sensor);
-			float real = IMU.getQuatReal(&IMU.sensor);
-			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor);
-			FC32_GetTimeUS(&time);
+
+//			float i = IMU.getQuatI(&IMU.sensor);
+//			float j = IMU.getQuatJ(&IMU.sensor);
+//			float k = IMU.getQuatK(&IMU.sensor);
+//			float real = IMU.getQuatReal(&IMU.sensor);
+//			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor);
 
 			for(uint8_t i = 0; i < 1; i++) {
 			 ;

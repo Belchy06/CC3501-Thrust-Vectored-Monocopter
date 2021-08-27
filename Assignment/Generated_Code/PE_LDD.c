@@ -6,7 +6,7 @@
 **     Version     : Component 01.048, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-25, 20:55, # CodeGen: 3
+**     Date/Time   : 2021-08-27, 16:30, # CodeGen: 12
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -138,8 +138,8 @@ bool PE_PeripheralUsed(uint32_t PrphBaseAddress)
   switch (PrphBaseAddress) {
     /* Base address allocated by peripheral(s) I2C0 */
     case 0x40066000UL:
-    /* Base address allocated by peripheral(s) FTM1 */
-    case 0x40039000UL:
+    /* Base address allocated by peripheral(s) FTM3 */
+    case 0x40026000UL:
       result = TRUE;
       break;
     default:

@@ -36,9 +36,12 @@
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
-#include "FC32.h"
-#include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "WAIT1.h"
+#include "MCUC1.h"
+#include "SERVO1.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
 
 #ifdef __cplusplus
 extern "C" {

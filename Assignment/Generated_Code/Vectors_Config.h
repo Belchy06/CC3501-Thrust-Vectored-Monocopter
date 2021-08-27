@@ -52,9 +52,12 @@
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
-#include "FC32.h"
-#include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "WAIT1.h"
+#include "MCUC1.h"
+#include "SERVO1.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
 #include "Events.h"
 
 #ifdef __cplusplus
@@ -123,7 +126,7 @@ extern "C" {
 #define VECTOR_56         (tIsrFunc)&UnhandledInterrupt         /* 0x38 -    ivINT_CMP0                    unused by PE */
 #define VECTOR_57         (tIsrFunc)&UnhandledInterrupt         /* 0x39 -    ivINT_CMP1                    unused by PE */
 #define VECTOR_58         (tIsrFunc)&UnhandledInterrupt         /* 0x3A -    ivINT_FTM0                    unused by PE */
-#define VECTOR_59         (tIsrFunc)&TU1_Interrupt              /* 0x3B 112  ivINT_FTM1                    used by PE */
+#define VECTOR_59         (tIsrFunc)&UnhandledInterrupt         /* 0x3B -    ivINT_FTM1                    unused by PE */
 #define VECTOR_60         (tIsrFunc)&UnhandledInterrupt         /* 0x3C -    ivINT_FTM2                    unused by PE */
 #define VECTOR_61         (tIsrFunc)&UnhandledInterrupt         /* 0x3D -    ivINT_Reserved61              unused by PE */
 #define VECTOR_62         (tIsrFunc)&UnhandledInterrupt         /* 0x3E -    ivINT_RTC                     unused by PE */

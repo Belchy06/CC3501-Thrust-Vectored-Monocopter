@@ -1,0 +1,38 @@
+/*
+ * PID.h
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_PID_H_
+#define SOURCES_PID_H_
+
+#include "PE_Types.h"
+#include "PE_Error.h"
+#include "PE_Const.h"
+#include "IO_Map.h"
+#include "CI2C1.h"
+#include "IntI2cLdd1.h"
+#include "Sensors.h"
+#include <stdbool.h>
+
+#define AUTOMATIC	1
+#define MANUAL	0
+#define DIRECT  0
+#define REVERSE  1
+#define P_ON_M 0
+#define P_ON_E 1
+
+void New_PID(PID *self, float* Input, float* Output, float* Setpoint, float Kp, float Ki, float Kd, int ControllerDir);
+void initialize(PID *self);
+void setMode(PID *self, int Mode);
+bool compute(PID *self);
+void setOutputLimits(PID *self, double Min, double Max);
+void setTunings(PID *self, double Ki, double Kp, double Kd);
+void setControllerDirection(PID *self, int);
+void setSampleTime(PID *self, int);
+
+
+
+#endif /* SOURCES_PID_H_ */

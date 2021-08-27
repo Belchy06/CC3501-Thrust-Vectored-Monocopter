@@ -1,0 +1,24 @@
+/*
+ * PID.h
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_PID_H_
+#define SOURCES_PID_H_
+
+#define AUTOMATIC	1
+#define MANUAL	0
+#define DIRECT  0
+#define REVERSE  1
+#define P_ON_M 0
+#define P_ON_E 1
+
+void PID(float*, float*, float*, float, float, float, int);
+void setMode(int Mode);
+bool Compute();
+
+
+
+#endif /* SOURCES_PID_H_ */

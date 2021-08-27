@@ -1,0 +1,46 @@
+/*
+ * PID.c
+ *
+ *  Created on: 27 Aug 2021
+ *      Author: Will
+ */
+#include "PID.h"
+
+void New_PID(PID *self, float* Input, float* Output, float* Setpoint, float Kp, float Ki, float Kd, int ControllerDir) {
+	self->initialize = &initialize;
+	self->setMode = &setMode;
+	self->compute = &compute;
+	self->setOutputLimits = &setOutputLimits;
+}
+
+void initialize(PID) {
+
+}
+
+void setMode(PID, int) {
+
+}
+
+bool compute(PID) {
+
+}
+
+void setOutputLimits(PID, double, double) {
+
+}
+
+void setTunings(PID, double, double, double) {
+
+}
+
+void setControllerDirection(PID, int) {
+
+}
+
+void setSampleTime(PID, int) {
+
+}
+
+
+
+

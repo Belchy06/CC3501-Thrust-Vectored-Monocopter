@@ -1,34 +1,6 @@
-18:02:49 **** Incremental Build of configuration Debug for project Assignment ****
+09:04:59 **** Incremental Build of configuration Debug for project Assignment ****
 make all 
-Building file: ../Sources/PID.c
-Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/PID.d" -MT"Sources/PID.o" -c -o "Sources/PID.o" "../Sources/PID.c"
-../Sources/PID.c: In function 'New_PID':
-../Sources/PID.c:18:19: warning: assignment from incompatible pointer type [enabled by default]
-  self->initialize = &initialize;
-                   ^
-../Sources/PID.c:19:16: warning: assignment from incompatible pointer type [enabled by default]
-  self->setMode = &setMode;
-                ^
-../Sources/PID.c:20:16: warning: assignment from incompatible pointer type [enabled by default]
-  self->compute = &compute;
-                ^
-../Sources/PID.c:21:24: warning: assignment from incompatible pointer type [enabled by default]
-  self->setOutputLimits = &setOutputLimits;
-                        ^
-../Sources/PID.c:22:19: warning: assignment from incompatible pointer type [enabled by default]
-  self->setTunings = &setTunings;
-                   ^
-../Sources/PID.c:23:22: warning: assignment from incompatible pointer type [enabled by default]
-  self->setSampleTime = &setSampleTime;
-                      ^
-Finished building: ../Sources/PID.c
- 
-Building target: Assignment.elf
-Invoking: Cross ARM C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BNO085.o ./Sources/Events.o ./Sources/I2C.o ./Sources/PID.o ./Sources/main.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm2.o ./Generated_Code/PwmLdd2.o ./Generated_Code/SERVO1.o ./Generated_Code/TU1.o ./Generated_Code/WAIT1.o   
-Finished building target: Assignment.elf
- 
+make: Nothing to be done for 'all'.
 
-18:02:50 Build Finished (took 1s.104ms)
+09:04:59 Build Finished (took 297ms)
 

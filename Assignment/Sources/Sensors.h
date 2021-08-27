@@ -83,12 +83,12 @@ typedef struct PID {
 	bool inAuto, pOnE;
 
 	// Functions
-	void (*initialize)(struct PID);
-	void (*setMode)(struct PID, int);
-	bool (*compute)(struct PID);
-	void (*setOutputLimits)(struct PID, double, double);
-	void (*setTunings)(struct PID, double, double, double);
-	void (*setControllerDirection)(struct PID, int);
-	void (*setSampleTime)(struct PID, int);
+	void (*initialize)(struct PID*);
+	void (*setMode)(struct PID*, int);
+	bool (*compute)(struct PID*);
+	void (*setOutputLimits)(struct PID*, double, double);
+	void (*setTunings)(struct PID*, double, double, double);
+	void (*setControllerDirection)(struct PID*, int);
+	void (*setSampleTime)(struct PID*, int);
 } PID;
 #endif /* SOURCES_SENSORS_H_ */

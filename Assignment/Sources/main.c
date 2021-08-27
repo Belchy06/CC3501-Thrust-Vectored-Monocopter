@@ -47,6 +47,7 @@
 #include "PDD_Includes.h"
 #include "Init_Config.h"
 #include "BNO085.h"
+#include "PID.h"
 #include "Sensors.h"
 #include <stdbool.h>
 /* User includes (#include below this line is not maintained by Processor Expert) */
@@ -64,6 +65,18 @@ int main(void)
 
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
+	double Kp=2, Ki=5, Kd=1;
+	double x, y, z;
+	double setX, setY, setZ;
+	double outX, outY, outZ;
+	PID xPid;
+	PID yPid;
+	PID zPid;
+
+	setX = 0;
+	New_PID(&xPid, &x, &outX, &setX, Kp, Ki, Kd, DIRECT);
+	xPid.setMode(&xPid, AUTOMATIC);
+	xPid.setOutputLimits(&xPid, 1000, 2000);
 
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
@@ -77,15 +90,13 @@ int main(void)
 
 	for(;;) {
 		if(IMU.dataAvailable(&IMU)) {
-			word time;
-			SERVO1_SetPWMDutyUs(1000);
 			float roll = (IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
 			float pitch = (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
 			float yaw = (IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
 			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
-			SERVO1_SetPWMDutyUs(2000);
-
-
+			x = roll;
+			xPid.compute(&xPid);
+			SERVO1_SetPWMDutyUs(outX);
 //			float i = IMU.getQuatI(&IMU.sensor);
 //			float j = IMU.getQuatJ(&IMU.sensor);
 //			float k = IMU.getQuatK(&IMU.sensor);

@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 01.03, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-27, 16:59, # CodeGen: 13
+**     Date/Time   : 2021-08-29, 19:04, # CodeGen: 15
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -16,10 +16,10 @@
 **          component.
 **     Settings    :
 **          Component name                                 : PwmLdd2
-**          Period device                                  : FTM3_MOD
-**          Duty device                                    : FTM3_C3V
-**          Output pin                                     : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
-**          Counter                                        : FTM3_CNT
+**          Period device                                  : FTM2_MOD
+**          Duty device                                    : FTM2_C1V
+**          Output pin                                     : PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB
+**          Counter                                        : FTM2_CNT
 **          Interrupt service/event                        : Disabled
 **          Period                                         : 20 ms
 **          Starting pulse width                           : 1.5 ms
@@ -219,7 +219,7 @@ LDD_TError PwmLdd2_Disable(LDD_TDeviceData *DeviceDataPtr)
     DeviceDataPrv->EnUser = FALSE;     /* If yes then set the flag "device enabled" */
    (void)TU1_Disable(DeviceDataPrv->LinkedDeviceDataPtr); /* Disable TimerUnit component */
    (void)TU1_ResetCounter(DeviceDataPrv->LinkedDeviceDataPtr); /* Reset counter */
-   FTM_PDD_InitializeOutputs(FTM3_BASE_PTR); /* Force output signal level */
+   FTM_PDD_InitializeOutputs(FTM2_BASE_PTR); /* Force output signal level */
   }
   return ERR_OK;
 }

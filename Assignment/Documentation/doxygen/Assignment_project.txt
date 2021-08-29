@@ -29,6 +29,7 @@
 - \subpage IntI2cLdd1
 - \subpage TU1
 - \subpage PwmLdd2
+- \subpage ASerialLdd1
 
 */
 
@@ -64,6 +65,7 @@
 - \subpage IntI2cLdd1
 - \subpage TU1
 - \subpage PwmLdd2
+- \subpage ASerialLdd1
 
 */
 

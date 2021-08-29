@@ -98,6 +98,20 @@ Module "SERVO1"    (component Servo)
    - SERVO1_PWMusToPos8 -Transforms a micro-second PWM time into 8bit position
    - SERVO1_Init -Moves the serve to its initialization position.
 
+Module "BT"        (component Term)
+   - BT_CRLF -Send CRLF to terminal.
+   - BT_SendStr -Send string to terminal.
+   - BT_SendNum -Send number to terminal.
+   - BT_SendFloatNum -Send a float number to the terminal. Due to the transformations the maximum float number is limited 
+                according to the following conditions:     - positive number: 9 digits for integer part with 4 digits for 
+                fractional part.     - negative numbers: 8 digits for integer part with 4 digits for fractional part.
+   - BT_SendChar -Send char to terminal.
+   - BT_Cls -Clear the terminal window.
+   - BT_MoveTo -Move cursor to position x, y. Range of coordinates can be from 1 to the size, which depends on the used 
+                terminal. Position [1,1] represents the upper left corner.
+   - BT_ReadChar -Read char from terminal.
+   - BT_KeyPressed -Test if char was received from the terminal.
+
 Module "Cpu"       (component MK22FN512DC12)
 
 ===================================================================================

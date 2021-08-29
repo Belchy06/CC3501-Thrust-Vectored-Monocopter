@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 01.03, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-27, 16:59, # CodeGen: 13
+**     Date/Time   : 2021-08-29, 19:04, # CodeGen: 15
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -16,10 +16,10 @@
 **          component.
 **     Settings    :
 **          Component name                                 : PwmLdd2
-**          Period device                                  : FTM3_MOD
-**          Duty device                                    : FTM3_C3V
-**          Output pin                                     : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
-**          Counter                                        : FTM3_CNT
+**          Period device                                  : FTM2_MOD
+**          Duty device                                    : FTM2_C1V
+**          Output pin                                     : PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB
+**          Counter                                        : FTM2_CNT
 **          Interrupt service/event                        : Disabled
 **          Period                                         : 20 ms
 **          Starting pulse width                           : 1.5 ms
@@ -119,7 +119,7 @@ extern "C" {
 #define PwmLdd2_PERIOD_VALUE_0 0x028FUL /* Period value in ticks of the timer in clock configuration 0. */
 
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
-#define PwmLdd2_PRPH_BASE_ADDRESS  0x40026000U
+#define PwmLdd2_PRPH_BASE_ADDRESS  0x4003A000U
   
 /*! Device data structure pointer used when auto initialization property is enabled. This constant can be passed as a first parameter to all component's methods. */
 #define PwmLdd2_DeviceData  ((LDD_TDeviceData *)PE_LDD_GetDeviceStructure(PE_LDD_COMPONENT_PwmLdd2_ID))

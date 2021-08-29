@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-27, 16:22, # CodeGen: 11
+**     Date/Time   : 2021-08-29, 19:12, # CodeGen: 17
 **     Abstract    :
 **
 **     Settings    :
@@ -115,6 +115,9 @@ void Components_Init(void)
   (void)PwmLdd2_Init(NULL);
   /* ### Servo "SERVO1" init code ... */
   SERVO1_Init();
+  /* ### Asynchro serial "Inhr1" init code ... */
+  Inhr1_Init();
+  /* ###  "BT" init code ... */
 }
 #endif /* CPU_COMPONENTS_INIT */
 

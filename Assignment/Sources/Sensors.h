@@ -16,6 +16,7 @@ typedef struct BNO085 {
 	// Variables
 	// Every sensor has an i2c address
 	uint8_t devAddr;
+	byte err;
 	uint8_t sequenceNumber[6];
 	uint8_t shtpHeader[4];
 	uint8_t shtpData[128];

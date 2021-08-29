@@ -42,6 +42,9 @@
 #include "SERVO1.h"
 #include "Pwm2.h"
 #include "PwmLdd2.h"
+#include "BT.h"
+#include "Inhr1.h"
+#include "ASerialLdd1.h"
 
 #ifdef __cplusplus
 extern "C" {

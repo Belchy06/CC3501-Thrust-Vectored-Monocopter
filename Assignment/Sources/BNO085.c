@@ -8,6 +8,7 @@
 
 void New_BNO085(BNO085 *self, byte addr) {
 	self->devAddr = addr;
+	self->err = 0x0;
 	self->_hasReset = false;
 	self->rotationVector_Q1 = 14;
 	self->rotationVectorAccuracy_Q1 = 12; //Heading accuracy estimate in radians. The Q point is 12.
@@ -77,11 +78,10 @@ void softReset(BNO085 *self) {
 
 bool receivePacket(BNO085 *self) {
 	CI2C1_SelectSlave(self->devAddr);
-	byte err;
 	word recv;
 	uint8_t data[4];
-	err = CI2C1_RecvBlock(data, 4, &recv);
-	if(err != ERR_OK) {
+	self->err = CI2C1_RecvBlock(data, 4, &recv);
+	if(self->err != ERR_OK) {
 		//do something
 		;
 	}
@@ -118,7 +118,6 @@ bool receivePacket(BNO085 *self) {
 
 bool getData(BNO085 *self, uint16_t bytesRemaining) {
 	uint16_t dataSpot = 0;
-	byte err;
 	word recv;
 	while(bytesRemaining > 0) {
 		uint16_t numberOfBytesToRead = bytesRemaining;
@@ -126,7 +125,7 @@ bool getData(BNO085 *self, uint16_t bytesRemaining) {
 		uint8_t dataLength = numberOfBytesToRead + 4;
 		uint8_t data[dataLength];
 
-		err = CI2C1_RecvBlock(data, dataLength, &recv);
+		self->err = CI2C1_RecvBlock(data, dataLength, &recv);
 
 		for(uint8_t i = 4; i < dataLength; i++) {
 			if(dataSpot < MAX_PACKET_SIZE) {
@@ -170,7 +169,6 @@ void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenRepor
 }
 
 bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength) {
-	byte err;
 	word sent;
 	uint8_t packetLength = dataLength + 4;
 	byte message[packetLength];
@@ -183,11 +181,11 @@ bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength) {
 		message[i] = self->shtpData[i-4];
 	}
 
-	err = CI2C1_SelectSlave(self->devAddr);
-	err = CI2C1_SendBlock(message, packetLength, &sent);
+	self->err = CI2C1_SelectSlave(self->devAddr);
+	self->err = CI2C1_SendBlock(message, packetLength, &sent);
 	CI2C1_SendStop();
 
-	return err ? false : true;
+	return self->err ? false : true;
 }
 
 

@@ -110,7 +110,7 @@
 			</tr>
 			<tr>
 				<td>B3</td><td>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</td><td><small><i>same</i></small></td>
-				<td bgcolor='#B3EAFF'>FTM3</td><td bgcolor='#B3EAFF'>tmr_ch3</td><td bgcolor='#B3EAFF'>alt4</td><td bgcolor='#B3EAFF'>Output</td>
+				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
 			</tr>
 			<tr>
 				<td>B4</td><td>PTC18/LPUART0_RTS_b/FBa_TBST_b/FBa_CS2_b/FBa_BE15_8_BLS23_16_b</td><td><small><i>same</i></small></td>
@@ -158,7 +158,7 @@
 			</tr>
 			<tr>
 				<td>C3</td><td>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
 			</tr>
 			<tr>
 				<td>C4</td><td>PTC17/LPUART0_TX/FBa_CS4_b/FBa_TSIZ0/FBa_BE31_24_BLS7_0_b</td><td><small><i>same</i></small></td>
@@ -187,7 +187,7 @@
 			<tr bgcolor='#EFF174'><td>CMP1</td><td>cmp_in0</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td>C9</td><td>PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#B3EAFF'>FTM2</td><td bgcolor='#B3EAFF'>tmr_ch1</td><td bgcolor='#B3EAFF'>alt3</td><td bgcolor='#B3EAFF'>Output</td>
 			</tr>
 			<tr>
 				<td>C10</td><td>ADC1_SE15/PTB11/SPI1_SCK/LPUART0_TX/FBa_AD18/FTM0_FLT2</td><td><small><i>same</i></small></td>
@@ -2183,7 +2183,7 @@
 			</tr>
 			<tr>
 				<td>B3</td><td>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</td><td><small><i>same</i></small></td>
-				<td bgcolor='#B3EAFF'>FTM3</td><td bgcolor='#B3EAFF'>tmr_ch3</td><td bgcolor='#B3EAFF'>alt4</td><td bgcolor='#B3EAFF'>Output</td>
+				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
 			</tr>
 			<tr>
 				<td>B4</td><td>PTC18/LPUART0_RTS_b/FBa_TBST_b/FBa_CS2_b/FBa_BE15_8_BLS23_16_b</td><td><small><i>same</i></small></td>
@@ -2231,7 +2231,7 @@
 			</tr>
 			<tr>
 				<td>C3</td><td>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
 			</tr>
 			<tr>
 				<td>C4</td><td>PTC17/LPUART0_TX/FBa_CS4_b/FBa_TSIZ0/FBa_BE31_24_BLS7_0_b</td><td><small><i>same</i></small></td>
@@ -2260,7 +2260,7 @@
 			<tr bgcolor='#EFF174'><td>CMP1</td><td>cmp_in0</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td>C9</td><td>PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#B3EAFF'>FTM2</td><td bgcolor='#B3EAFF'>tmr_ch1</td><td bgcolor='#B3EAFF'>alt3</td><td bgcolor='#B3EAFF'>Output</td>
 			</tr>
 			<tr>
 				<td>C10</td><td>ADC1_SE15/PTB11/SPI1_SCK/LPUART0_TX/FBa_AD18/FTM0_FLT2</td><td><small><i>same</i></small></td>

@@ -39,6 +39,9 @@
 #include "SERVO1.h"
 #include "Pwm2.h"
 #include "PwmLdd2.h"
+#include "BT.h"
+#include "Inhr1.h"
+#include "ASerialLdd1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -53,6 +56,26 @@
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #define BNO080_DEFAULT_ADDRESS 0x4A
 #define PI 3.14159
+
+double x, y, z;
+double setX, setY, setZ;
+double outX, outY, outZ;
+
+void sendBT() {
+	BT_SendStr("X: ");
+	BT_SendFloatNum(x);
+	BT_SendStr(" Y: ");
+	BT_SendFloatNum(y);
+	BT_SendStr(" Z: ");
+	BT_SendFloatNum(z);
+	BT_SendStr("\r\n");
+	BT_SendStr("Servo +X: ");
+	BT_SendFloatNum(outX);
+	BT_SendStr(" Servo -X: ");
+	BT_SendFloatNum((3000 - outX));
+	BT_SendStr("\r\n");
+}
+
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
@@ -66,9 +89,9 @@ int main(void)
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
 	double Kp=2, Ki=5, Kd=1;
-	double x, y, z;
-	double setX, setY, setZ;
-	double outX, outY, outZ;
+//	double x, y, z;
+//	double setX, setY, setZ;
+//	double outX, outY, outZ;
 	PID xPid;
 	PID yPid;
 	PID zPid;
@@ -77,6 +100,14 @@ int main(void)
 	New_PID(&xPid, &x, &outX, &setX, Kp, Ki, Kd, DIRECT);
 	xPid.setMode(&xPid, AUTOMATIC);
 	xPid.setOutputLimits(&xPid, 1000, 2000);
+
+	New_PID(&yPid, &y, &outY, &setY, Kp, Ki, Kd, DIRECT);
+	yPid.setMode(&yPid, AUTOMATIC);
+	yPid.setOutputLimits(&yPid, 1000, 2000);
+
+	New_PID(&zPid, &z, &outZ, &setZ, Kp, Ki, Kd, DIRECT);
+	zPid.setMode(&zPid, AUTOMATIC);
+	zPid.setOutputLimits(&zPid, 1000, 2000);
 
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
@@ -90,13 +121,19 @@ int main(void)
 
 	for(;;) {
 		if(IMU.dataAvailable(&IMU)) {
-			float roll = (IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
-			float pitch = (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
-			float yaw = (IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
+			x = (double)(IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
+			y = (double)(IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+			z = (double)(IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
 			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
-			x = roll;
 			xPid.compute(&xPid);
-			SERVO1_SetPWMDutyUs(outX);
+			yPid.compute(&yPid);
+			zPid.compute(&zPid);
+
+
+			sendBT();
+
+
+			// SERVO1_SetPWMDutyUs(outX);
 //			float i = IMU.getQuatI(&IMU.sensor);
 //			float j = IMU.getQuatJ(&IMU.sensor);
 //			float k = IMU.getQuatK(&IMU.sensor);

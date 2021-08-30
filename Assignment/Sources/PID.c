@@ -12,7 +12,7 @@ void New_PID(PID *self, double* Input, double* Output, double* Setpoint,
 	self->myInput = Input;
 	self->mySetpoint = Setpoint;
 	self->inAuto = false;
-	setOutputLimits(self, 0, 255); // Default pwm limits
+	setOutputLimits(self, 1000, 2000); // Default pwm limits
 	self->SampleTime = 100;
 	setControllerDirection(self, ControllerDirection);
 	setTunings(self, Kp, Ki, Kd);

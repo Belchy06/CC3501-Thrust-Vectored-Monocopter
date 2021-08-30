@@ -1,0 +1,15 @@
+/*
+ * Controller.h
+ *
+ *  Created on: Aug 30, 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_CONTROLLER_H_
+#define SOURCES_CONTROLLER_H_
+
+#include "PID.h"
+
+void New
+
+#endif /* SOURCES_CONTROLLER_H_ */

@@ -53,13 +53,14 @@
 #include "PID.h"
 #include "Sensors.h"
 #include <stdbool.h>
+#include "Controller.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #define BNO080_DEFAULT_ADDRESS 0x4A
 #define PI 3.14159
 
-double x, y, z;
-double setX, setY, setZ;
-double outX, outY, outZ;
+double x, y, z, h;
+float quatRadianAccuracy;
+Controller controller;
 
 void sendBT() {
 	BT_SendStr("X: ");
@@ -68,12 +69,30 @@ void sendBT() {
 	BT_SendFloatNum(y);
 	BT_SendStr(" Z: ");
 	BT_SendFloatNum(z);
+	BT_SendStr(" H: ");
+	BT_SendFloatNum(h);
 	BT_SendStr("\r\n");
+
+	BT_SendStr("Accuracy: ");
+	BT_SendFloatNum(quatRadianAccuracy);
+	BT_SendStr("\r\n");
+
 	BT_SendStr("Servo +X: ");
-	BT_SendFloatNum(outX);
+	BT_SendFloatNum(controller.outX);
 	BT_SendStr(" Servo -X: ");
-	BT_SendFloatNum((3000 - outX));
+	BT_SendFloatNum((3000 - controller.outX));
 	BT_SendStr("\r\n");
+
+	BT_SendStr("Servo +Y: ");
+	BT_SendFloatNum(controller.outY);
+	BT_SendStr(" Servo -Y: ");
+	BT_SendFloatNum((3000 - controller.outY));
+	BT_SendStr("\r\n");
+
+	BT_SendStr("Throttle: ");
+	BT_SendFloatNum(controller.outH);
+	BT_SendStr("\r\n");
+
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -88,26 +107,20 @@ int main(void)
 
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
-	double Kp=2, Ki=5, Kd=1;
+
 //	double x, y, z;
 //	double setX, setY, setZ;
 //	double outX, outY, outZ;
-	PID xPid;
-	PID yPid;
-	PID zPid;
+	New_Controller(&controller);
+	// Set the controller gains
+	controller.setGains(&controller);
+	controller.setXPoint(&controller, 0);
+	controller.setYPoint(&controller, 0);
+	controller.setZPoint(&controller, 0);
+	controller.setHPoint(&controller, 1);
+	// Give the controller the memory addresses of the variables that will store our rotation and height data
+	controller.init(&controller, &x, &y, &z, &h);
 
-	setX = 0;
-	New_PID(&xPid, &x, &outX, &setX, Kp, Ki, Kd, DIRECT);
-	xPid.setMode(&xPid, AUTOMATIC);
-	xPid.setOutputLimits(&xPid, 1000, 2000);
-
-	New_PID(&yPid, &y, &outY, &setY, Kp, Ki, Kd, DIRECT);
-	yPid.setMode(&yPid, AUTOMATIC);
-	yPid.setOutputLimits(&yPid, 1000, 2000);
-
-	New_PID(&zPid, &z, &outZ, &setZ, Kp, Ki, Kd, DIRECT);
-	zPid.setMode(&zPid, AUTOMATIC);
-	zPid.setOutputLimits(&zPid, 1000, 2000);
 
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
@@ -124,10 +137,8 @@ int main(void)
 			x = (double)(IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
 			y = (double)(IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
 			z = (double)(IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
-			float quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
-			xPid.compute(&xPid);
-			yPid.compute(&yPid);
-			zPid.compute(&zPid);
+			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
+			controller.calculate(&controller);
 
 
 			sendBT();
@@ -139,10 +150,6 @@ int main(void)
 //			float k = IMU.getQuatK(&IMU.sensor);
 //			float real = IMU.getQuatReal(&IMU.sensor);
 //			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor);
-
-			for(uint8_t i = 0; i < 1; i++) {
-			 ;
-			}
 		}
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/

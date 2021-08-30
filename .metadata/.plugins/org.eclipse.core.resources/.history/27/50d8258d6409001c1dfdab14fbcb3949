@@ -1,0 +1,18 @@
+/*
+ * Controller.h
+ *
+ *  Created on: Aug 30, 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_CONTROLLER_H_
+#define SOURCES_CONTROLLER_H_
+
+#include "PID.h"
+#include "Sensors.h"
+
+void New_Controller(Controller *self, double setX, double setY, double setZ, double setH, double x, double y, double z, double h);
+void init(Controller *self, double *x, double *y, double *z, double *h);
+void calculate(Controller *self);
+
+#endif /* SOURCES_CONTROLLER_H_ */

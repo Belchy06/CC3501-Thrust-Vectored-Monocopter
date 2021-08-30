@@ -92,4 +92,28 @@ typedef struct PID {
 	void (*setControllerDirection)(struct PID*, int);
 	void (*setSampleTime)(struct PID*, int);
 } PID;
+
+
+
+typedef struct Controller {
+	// Variables
+	PID pidX;
+	PID pidY;
+	PID pidZ;
+	PID pidH;
+	double outX, outY, outZ, outH;
+	double setX, setY, setZ, setH;
+	double xKp, xKi, xKd;
+	double yKp, yKi, yKd;
+	double zKp, zKi, zKd;
+	double hKp, hKi, hKd;
+	// Functions
+	void (*setGains)(struct Controller*);
+	void (*init)(struct Controller*, double *x, double *y, double *z, double *h);
+	void (*setXPoint)(struct Controller*, double setX);
+	void (*setYPoint)(struct Controller*, double setY);
+	void (*setZPoint)(struct Controller*, double setZ);
+	void (*setHPoint)(struct Controller*, double setH);
+	void (*calculate)(struct Controller*);
+} Controller;
 #endif /* SOURCES_SENSORS_H_ */

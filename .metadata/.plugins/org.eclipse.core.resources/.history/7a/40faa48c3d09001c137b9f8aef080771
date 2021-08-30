@@ -1,0 +1,43 @@
+/*
+ * Controller.c
+ *
+ *  Created on: Aug 30, 2021
+ *      Author: willi
+ */
+
+#include "Controller.h"
+
+
+void New_Controller(Controller *self, double setX, double setY, double setZ, double setH, double x, double y, double z, double h) {
+	PID xPid, yPid, zPid, hPid;
+	self->pidX = xPid;
+	self->pidY = yPid;
+	self->pidZ = zPid;
+	self->pidH = hPid;
+}
+
+void initialize(Controller *self, double *x, double *y, double *z) {
+	New_PID(&self->xPid, x, &self->outX, &self->setX, Kp, Ki, Kd, DIRECT);
+	xPid.setMode(&xPid, AUTOMATIC);
+	xPid.setOutputLimits(&xPid, 1000, 2000);
+
+	New_PID(&self->yPid, y, &self->outY, &self->setY, Kp, Ki, Kd, DIRECT);
+	yPid.setMode(&yPid, AUTOMATIC);
+	yPid.setOutputLimits(&yPid, 1000, 2000);
+
+	New_PID(&self->zPid, z, &self->outZ, &self->setZ, Kp, Ki, Kd, DIRECT);
+	zPid.setMode(&zPid, AUTOMATIC);
+	zPid.setOutputLimits(&zPid, 1000, 2000);
+
+	New_PID(&self->hPid, &h, &self->outH, &self->setH, Kp, Ki, Kd, DIRECT);
+	hPid.setMode(&hPid, AUTOMATIC);
+	hPid.setOutputLimits(&hPid, 1000, 2000);
+}
+
+void compute(Controller *self) {
+
+}
+
+
+
+

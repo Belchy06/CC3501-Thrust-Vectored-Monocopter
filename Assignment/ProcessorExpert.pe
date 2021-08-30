@@ -3,7 +3,7 @@
   <Header>
     <Name>Assignment</Name>
     <SavedBy>willi</SavedBy>
-    <ModificationStamp>15</ModificationStamp>
+    <ModificationStamp>16</ModificationStamp>
     <Date>2021-08-22</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -21036,7 +21036,7 @@
         <ItemSymbol>Overrundevice</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>FTM3_Free</Value>
+        <Value>FTM2_Free</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -21134,7 +21134,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>CounterInt</ItemSymbol>
-        <Value>INT_FTM3</Value>
+        <Value>INT_FTM2</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>CounterInitPriority</ItemSymbol>
@@ -21358,7 +21358,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntVector0</ItemSymbol>
-        <Value>INT_FTM3</Value>
+        <Value>INT_FTM2</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChannelCmpIntPriority0</ItemSymbol>
@@ -22488,7 +22488,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>CmpInt</ItemSymbol>
-              <Value>INT_FTM3</Value>
+              <Value>INT_FTM2</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>CmpInt1</ItemSymbol>
@@ -22885,7 +22885,7 @@
                     <ItemSymbol>Out</ItemSymbol>
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
-                    <Value>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</Value>
+                    <Value>PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB</Value>
                     <SharedPrphMode>false</SharedPrphMode>
                   </ItemState>
                   <ItemState>
@@ -23981,11 +23981,11 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>SpecInt</ItemSymbol>
-              <Value />
+              <Value>INT_UART2_ERR</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>InpInt</ItemSymbol>
-              <Value>INT_LPUART0</Value>
+              <Value>INT_UART2_RX_TX</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>InitPriority</ItemSymbol>
@@ -24009,7 +24009,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>OutInt</ItemSymbol>
-              <Value>INT_LPUART0</Value>
+              <Value>INT_UART2_RX_TX</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>IntTxDPriority</ItemSymbol>
@@ -24038,7 +24038,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>ErrInt</ItemSymbol>
-              <Value>INT_LPUART0</Value>
+              <Value>INT_UART2_ERR</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>IntErrorPriority</ItemSymbol>
@@ -24827,7 +24827,7 @@
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>InpInt</ItemSymbol>
-                    <Value>INT_LPUART0</Value>
+                    <Value>INT_UART2_RX_TX</Value>
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>InitPriority</ItemSymbol>
@@ -24862,7 +24862,7 @@
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>OutInt</ItemSymbol>
-                    <Value>INT_LPUART0</Value>
+                    <Value>INT_UART2_RX_TX</Value>
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>IntTxDPriority</ItemSymbol>
@@ -24897,7 +24897,7 @@
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>ErrInt</ItemSymbol>
-                    <Value>INT_LPUART0</Value>
+                    <Value>INT_UART2_ERR</Value>
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>IntErrorPriority</ItemSymbol>
@@ -25016,7 +25016,7 @@
                     <ItemSymbol>BdRate</ItemSymbol>
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
-                    <Value>init:;prec:1.5%;RTS:none;clksrc_presc[SpeedMode0]Auto select;clksrc_presc[SpeedMode1]Auto select;clksrc_presc[SpeedMode2]Auto select;clksrc_presc[SpeedMode3]Auto select;clksrc_presc[SpeedMode4]Auto select;clksrc_presc[SpeedMode5]Auto select;clksrc_presc[SpeedMode6]Auto select;clksrc_presc[SpeedMode7]Auto select</Value>
+                    <Value>init:115200 baud;prec:1.5%;RTS:none;clksrc_presc[SpeedMode0]Auto select;clksrc_presc[SpeedMode1]Auto select;clksrc_presc[SpeedMode2]Auto select;clksrc_presc[SpeedMode3]Auto select;clksrc_presc[SpeedMode4]Auto select;clksrc_presc[SpeedMode5]Auto select;clksrc_presc[SpeedMode6]Auto select;clksrc_presc[SpeedMode7]Auto select</Value>
                     <RuntimeSetting>0</RuntimeSetting>
                     <ReqDevPrescHigh>-1</ReqDevPrescHigh>
                     <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -25171,7 +25171,6 @@
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                     <Value>false</Value>
                     <Expanded>false</Expanded>
                   </ItemState>
@@ -25180,7 +25179,6 @@
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <Value />
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                     <SharedPrphMode>false</SharedPrphMode>
                   </ItemState>
                   <ItemState>
@@ -25188,14 +25186,12 @@
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <Value />
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>RTSsupport</ItemSymbol>
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                     <Value>false</Value>
                     <Expanded>false</Expanded>
                   </ItemState>
@@ -25204,7 +25200,6 @@
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <Value />
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                     <SharedPrphMode>false</SharedPrphMode>
                   </ItemState>
                   <ItemState>
@@ -25212,7 +25207,6 @@
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <Value />
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                   </ItemState>
                   <ItemState>
                     <ItemSymbol>RtsBufferSize</ItemSymbol>
@@ -25220,7 +25214,6 @@
                     <UserReadOnly>false</UserReadOnly>
                     <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
                     <Value>1</Value>
-                    <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
                     <Base>DEC</Base>
                   </ItemState>
                   <ItemState>

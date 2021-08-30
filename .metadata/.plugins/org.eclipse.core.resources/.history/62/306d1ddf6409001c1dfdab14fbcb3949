@@ -1,0 +1,49 @@
+/*
+ * Controller.c
+ *
+ *  Created on: Aug 30, 2021
+ *      Author: willi
+ */
+
+#include "Controller.h"
+
+
+void New_Controller(Controller *self) {
+	PID xPid, yPid, zPid, hPid;
+	self->pidX = xPid;
+	self->pidY = yPid;
+	self->pidZ = zPid;
+	self->pidH = hPid;
+	self->init = &init;
+	self->calculate = &calculate;
+
+}
+
+void init(Controller *self, double *x, double *y, double *z, double *h) {
+	New_PID(&self->pidX, x, &self->outX, &self->setX, self->xKp, self->xKi, self->xKd, DIRECT);
+	self->pidX.setMode(&self->pidX, AUTOMATIC);
+	self->pidX.setOutputLimits(&self->pidX, 1000, 2000);
+
+	New_PID(&self->pidY, y, &self->outY, &self->setY, self->yKp, self->yKi, self->yKd, DIRECT);
+	self->pidY.setMode(&self->pidY, AUTOMATIC);
+	self->pidY.setOutputLimits(&self->pidY, 1000, 2000);
+
+	New_PID(&self->pidZ, z, &self->outZ, &self->setZ, self->zKp, self->zKi, self->zKd, DIRECT);
+	self->pidZ.setMode(&self->pidZ, AUTOMATIC);
+	self->pidZ.setOutputLimits(&self->pidZ, 1000, 2000);
+
+	New_PID(&self->pidH, h, &self->outH, &self->setH, self->hKp, self->hKi, self->hKd, DIRECT);
+	self->pidH.setMode(&self->pidH, AUTOMATIC);
+	self->pidH.setOutputLimits(&self->pidH, 1000, 2000);
+}
+
+void calculate(Controller *self) {
+	self->pidX.compute(&self->pidX);
+	self->pidY.compute(&self->pidY);
+	self->pidZ.compute(&self->pidZ);
+	self->pidH.compute(&self->pidH);
+}
+
+
+
+

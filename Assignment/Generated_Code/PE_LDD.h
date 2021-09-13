@@ -6,7 +6,7 @@
 **     Version     : Component 01.048, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-29, 19:12, # CodeGen: 17
+**     Date/Time   : 2021-09-12, 09:50, # CodeGen: 35
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -58,15 +58,13 @@
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
-#include "TU1.h"
-#include "WAIT1.h"
 #include "MCUC1.h"
-#include "SERVO1.h"
-#include "Pwm2.h"
-#include "PwmLdd2.h"
 #include "BT.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
+#include "FC321.h"
+#include "RealTimeLdd1.h"
+#include "TU1.h"
 
 
 /*

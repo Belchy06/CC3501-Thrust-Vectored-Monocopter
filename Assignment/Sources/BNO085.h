@@ -11,7 +11,6 @@
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
 #include "Sensors.h"
-#include "I2C.h"
 #include <stdbool.h>
 #include <math.h>
 
@@ -101,6 +100,9 @@ bool begin(BNO085 *self);
 void softReset(BNO085 *self);
 bool receivePacket(BNO085 *self);
 void enableRotationVector(BNO085 *self, uint16_t timeBetweenReports);
+void enableAccelerometer(BNO085 *self, uint16_t timeBetweenReports);
+void enableGyro(BNO085 *self, uint16_t timeBetweenReports);
+void enableMagnetometer(BNO085 *self, uint16_t timeBetweenReports);
 void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig);
 bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength);
 bool getData(BNO085 *self, uint16_t bytesRemaining);
@@ -116,6 +118,9 @@ float getQuatI(BNO085 *self);
 float getQuatJ(BNO085 *self);
 float getQuatK(BNO085 *self);
 float getQuatRadianAccuracy(BNO085 *self);
+void getAccel(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
+void getGyro(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
+void getMag(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
 float qToFloat(int16_t fixedPointValue, uint8_t qPoint);
 
 #endif /* SOURCES_ACCELOROMETER_H_ */

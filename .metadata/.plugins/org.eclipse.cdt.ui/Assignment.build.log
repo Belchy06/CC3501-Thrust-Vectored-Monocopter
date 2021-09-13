@@ -1,19 +1,107 @@
-17:52:07 **** Incremental Build of configuration Debug for project Assignment ****
+22:54:33 **** Incremental Build of configuration Debug for project Assignment ****
 make all 
-Building file: ../Sources/PID.c
+Building file: ../Static_Code/System/CPU_Init.c
 Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/PID.d" -MT"Sources/PID.o" -c -o "Sources/PID.o" "../Sources/PID.c"
-../Sources/PID.c: In function 'New_PID':
-../Sources/PID.c:21:16: warning: assignment from incompatible pointer type [enabled by default]
-  self->compute = &compute;
-                ^
-Finished building: ../Sources/PID.c
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/CPU_Init.d" -MT"Static_Code/System/CPU_Init.o" -c -o "Static_Code/System/CPU_Init.o" "../Static_Code/System/CPU_Init.c"
+Finished building: ../Static_Code/System/CPU_Init.c
+ 
+Building file: ../Static_Code/System/Peripherals_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Peripherals_Init.d" -MT"Static_Code/System/Peripherals_Init.o" -c -o "Static_Code/System/Peripherals_Init.o" "../Static_Code/System/Peripherals_Init.c"
+Finished building: ../Static_Code/System/Peripherals_Init.c
+ 
+Building file: ../Static_Code/System/Vectors.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Vectors.d" -MT"Static_Code/System/Vectors.o" -c -o "Static_Code/System/Vectors.o" "../Static_Code/System/Vectors.c"
+Finished building: ../Static_Code/System/Vectors.c
+ 
+Building file: ../Sources/BNO085.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BNO085.d" -MT"Sources/BNO085.o" -c -o "Sources/BNO085.o" "../Sources/BNO085.c"
+../Sources/BNO085.c: In function 'New_BNO085':
+../Sources/BNO085.c:33:14: warning: assignment from incompatible pointer type [enabled by default]
+  self->begin = &begin;
+              ^
+../Sources/BNO085.c:38:22: warning: assignment from incompatible pointer type [enabled by default]
+  self->dataAvailable = &dataAvailable;
+                      ^
+Finished building: ../Sources/BNO085.c
+ 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+Finished building: ../Sources/Events.c
+ 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+Finished building: ../Sources/main.c
+ 
+Building file: ../Generated_Code/ASerialLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/ASerialLdd1.d" -MT"Generated_Code/ASerialLdd1.o" -c -o "Generated_Code/ASerialLdd1.o" "../Generated_Code/ASerialLdd1.c"
+Finished building: ../Generated_Code/ASerialLdd1.c
+ 
+Building file: ../Generated_Code/BT.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/BT.d" -MT"Generated_Code/BT.o" -c -o "Generated_Code/BT.o" "../Generated_Code/BT.c"
+Finished building: ../Generated_Code/BT.c
+ 
+Building file: ../Generated_Code/CI2C1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/CI2C1.d" -MT"Generated_Code/CI2C1.o" -c -o "Generated_Code/CI2C1.o" "../Generated_Code/CI2C1.c"
+Finished building: ../Generated_Code/CI2C1.c
+ 
+Building file: ../Generated_Code/Cpu.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Cpu.d" -MT"Generated_Code/Cpu.o" -c -o "Generated_Code/Cpu.o" "../Generated_Code/Cpu.c"
+Finished building: ../Generated_Code/Cpu.c
+ 
+Building file: ../Generated_Code/FC321.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/FC321.d" -MT"Generated_Code/FC321.o" -c -o "Generated_Code/FC321.o" "../Generated_Code/FC321.c"
+Finished building: ../Generated_Code/FC321.c
+ 
+Building file: ../Generated_Code/Inhr1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Inhr1.d" -MT"Generated_Code/Inhr1.o" -c -o "Generated_Code/Inhr1.o" "../Generated_Code/Inhr1.c"
+Finished building: ../Generated_Code/Inhr1.c
+ 
+Building file: ../Generated_Code/IntI2cLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/IntI2cLdd1.d" -MT"Generated_Code/IntI2cLdd1.o" -c -o "Generated_Code/IntI2cLdd1.o" "../Generated_Code/IntI2cLdd1.c"
+Finished building: ../Generated_Code/IntI2cLdd1.c
+ 
+Building file: ../Generated_Code/MCUC1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/MCUC1.d" -MT"Generated_Code/MCUC1.o" -c -o "Generated_Code/MCUC1.o" "../Generated_Code/MCUC1.c"
+Finished building: ../Generated_Code/MCUC1.c
+ 
+Building file: ../Generated_Code/PE_LDD.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PE_LDD.d" -MT"Generated_Code/PE_LDD.o" -c -o "Generated_Code/PE_LDD.o" "../Generated_Code/PE_LDD.c"
+Finished building: ../Generated_Code/PE_LDD.c
+ 
+Building file: ../Generated_Code/Pins1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pins1.d" -MT"Generated_Code/Pins1.o" -c -o "Generated_Code/Pins1.o" "../Generated_Code/Pins1.c"
+Finished building: ../Generated_Code/Pins1.c
+ 
+Building file: ../Generated_Code/RealTimeLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/RealTimeLdd1.d" -MT"Generated_Code/RealTimeLdd1.o" -c -o "Generated_Code/RealTimeLdd1.o" "../Generated_Code/RealTimeLdd1.c"
+Finished building: ../Generated_Code/RealTimeLdd1.c
+ 
+Building file: ../Generated_Code/TU1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/TU1.d" -MT"Generated_Code/TU1.o" -c -o "Generated_Code/TU1.o" "../Generated_Code/TU1.c"
+Finished building: ../Generated_Code/TU1.c
  
 Building target: Assignment.elf
 Invoking: Cross ARM C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BNO085.o ./Sources/Controller.o ./Sources/Events.o ./Sources/I2C.o ./Sources/PID.o ./Sources/main.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/BT.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/Inhr1.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm2.o ./Generated_Code/PwmLdd2.o ./Generated_Code/SERVO1.o ./Generated_Code/TU1.o ./Generated_Code/WAIT1.o   
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BNO085.o ./Sources/Events.o ./Sources/main.o ./Sources/printf.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/BT.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/FC321.o ./Generated_Code/Inhr1.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/TU1.o   
 Finished building target: Assignment.elf
  
 
-17:52:08 Build Finished (took 1s.481ms)
+22:54:40 Build Finished (took 6s.358ms)
 

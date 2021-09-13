@@ -26,22 +26,19 @@
  */
 /* MODULE main */
 
-
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
 #include "Pins1.h"
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
-#include "TU1.h"
-#include "WAIT1.h"
 #include "MCUC1.h"
-#include "SERVO1.h"
-#include "Pwm2.h"
-#include "PwmLdd2.h"
 #include "BT.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
+#include "FC321.h"
+#include "RealTimeLdd1.h"
+#include "TU1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -50,49 +47,53 @@
 #include "PDD_Includes.h"
 #include "Init_Config.h"
 #include "BNO085.h"
-#include "PID.h"
 #include "Sensors.h"
 #include <stdbool.h>
-#include "Controller.h"
+#include "printf.h"
+#include <math.h>
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #define BNO080_DEFAULT_ADDRESS 0x4A
 #define PI 3.14159
+#define RAD_TO_DEGREES 57.2958
+#define MS_TO_GS 0.1019
 
-double x, y, z, h;
+float h;
+float ax, ay, az;
+float gx, gy, gz;
+float gx_cal, gy_cal, gz_cal;
+float mx, my, mz;
+float angle_pitch, angle_roll, angle_yaw;
+float angle_pitch_acc, angle_roll_acc, angle_yaw;
+float pitch, roll, yaw;
+uint8_t accelAccuracy, gyroAccuracy, magAccuracy;
 float quatRadianAccuracy;
-Controller controller;
+float tau = 0.98;
+long timer1, timer2;
+char str[128];
+char level[32];
+bool setGyroAngles;
+
+char* getAccuracyLevel(uint8_t accuracyNumber) {
+	if (accuracyNumber == 0) {
+		snprintf(level, 32, "Unreliable");
+	} else if (accuracyNumber == 1) {
+		snprintf(level, 32, "Low");
+	} else if (accuracyNumber == 2) {
+		snprintf(level, 32, "Medium");
+	} else if (accuracyNumber == 3) {
+		snprintf(level, 32, "High");
+	} else {
+		snprintf(level, 32, "Unknown");
+	}
+	return level;
+}
 
 void sendBT() {
-	BT_SendStr("X: ");
-	BT_SendFloatNum(x);
-	BT_SendStr(" Y: ");
-	BT_SendFloatNum(y);
-	BT_SendStr(" Z: ");
-	BT_SendFloatNum(z);
-	BT_SendStr(" H: ");
-	BT_SendFloatNum(h);
-	BT_SendStr("\r\n");
-
-	BT_SendStr("Accuracy: ");
-	BT_SendFloatNum(quatRadianAccuracy);
-	BT_SendStr("\r\n");
-
-	BT_SendStr("Servo +X: ");
-	BT_SendFloatNum(controller.outX);
-	BT_SendStr(" Servo -X: ");
-	BT_SendFloatNum((3000 - controller.outX));
-	BT_SendStr("\r\n");
-
-	BT_SendStr("Servo +Y: ");
-	BT_SendFloatNum(controller.outY);
-	BT_SendStr(" Servo -Y: ");
-	BT_SendFloatNum((3000 - controller.outY));
-	BT_SendStr("\r\n");
-
-	BT_SendStr("Throttle: ");
-	BT_SendFloatNum(controller.outH);
-	BT_SendStr("\r\n");
-
+	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f\n", roll, pitch, yaw);
+	BT_SendStr(str);
+	for (int counter = 0; counter < 100000; counter++) {
+		__asm volatile ("nop");
+	}
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -106,50 +107,82 @@ int main(void)
 	/*** End of Processor Expert internal initialization.                    ***/
 
 //	/* Write your code here */
+	setGyroAngles = false;
 //	/* For example: for(;;) { } */
-
-//	double x, y, z;
-//	double setX, setY, setZ;
-//	double outX, outY, outZ;
-	New_Controller(&controller);
-	// Set the controller gains
-	controller.setGains(&controller);
-	controller.setXPoint(&controller, 0);
-	controller.setYPoint(&controller, 0);
-	controller.setZPoint(&controller, 0);
-	controller.setHPoint(&controller, 1);
-	// Give the controller the memory addresses of the variables that will store our rotation and height data
-	controller.init(&controller, &x, &y, &z, &h);
-
-
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
-	if(IMU.begin(&IMU) == false) {
-		while(1)
+	if (IMU.begin(&IMU) == false) {
+		while (1)
 			;
 	}
 
+	// IMU.enableRotationVector(&IMU, 50);
+	IMU.enableAccelerometer(&IMU, 50);
+	IMU.enableGyro(&IMU, 50);
+	IMU.enableMagnetometer(&IMU, 50);
+	// TODO Own sensor fusion. Get mag, accel, gyro
+	FC321_Reset();
 
-	IMU.enableRotationVector(&IMU, 50);
+	// Gyro offset calibration
+	for(uint16_t i = 0; i < 2000; i++) {
+		IMU.getGyro(&IMU, &gx, &gy, &gz, &gyroAccuracy);
+		gx_cal += gx;
+		gy_cal += gy;
+		gz_cal += gz;
+	}
 
-	for(;;) {
-		if(IMU.dataAvailable(&IMU)) {
-			x = (double)(IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
-			y = (double)(IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
-			z = (double)(IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
-			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
-			controller.calculate(&controller);
+	gx_cal /= 2000;
+	gy_cal /= 2000;
+	gz_cal /= 2000;
 
+
+
+	for (;;) {
+		if (IMU.dataAvailable(&IMU)) {
+			// x = (double)(IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
+			// y = (double)(IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+			// z = (double)(IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
+			// quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
+			// controller.calculate(&controller);
+			unsigned int time;
+			FC321_GetTimeMS(&time);
+			float dt = time * 1e-6;
+			IMU.getAccel(&IMU, &ax, &ay, &az, &accelAccuracy);
+			IMU.getGyro(&IMU, &gx, &gy, &gz, &gyroAccuracy);
+			IMU.getMag(&IMU, &mx, &my, &mz, &magAccuracy);
+
+			gx -= gx_cal;
+			gy -= gy_cal;
+			gz -= gz_cal;
+
+			//TODO find loop time from FC32
+			angle_pitch += gx * dt / 1000; // convert dt to seconds first
+			angle_roll += gy * dt / 1000;
+
+			angle_pitch += angle_roll * sin(gz * dt * 0.01745); // Convert degrees to radians for sin function
+			angle_roll -= angle_pitch * sin(gz * dt * 0.01745);
+
+			// Accelerometer angle calcs
+			float acc_total_vector = sqrt((ax*ax)+(ay*ay)+(az*az));
+			angle_pitch_acc = asin((float)ay/acc_total_vector) * 57.296; //convert radians to degrees
+			angle_roll_acc = asin((float)ax/acc_total_vector) * -57.296; //convert radians to degrees
+
+			angle_pitch_acc += 0; // TODO: Calibration vals
+			angle_roll_acc += 0;
+
+			if(setGyroAngles) {
+				angle_pitch = angle_pitch * 0.996 + angle_pitch_acc * 0.0004;
+				angle_roll = angle_roll * 0.996 + angle_roll_acc * 0.0004;
+			} else {
+				angle_pitch = angle_pitch_acc;
+				angle_roll = angle_roll_acc;
+				setGyroAngles = true;
+			}
+
+			pitch = angle_pitch;
+			roll = angle_roll;
 
 			sendBT();
-
-
-			// SERVO1_SetPWMDutyUs(outX);
-//			float i = IMU.getQuatI(&IMU.sensor);
-//			float j = IMU.getQuatJ(&IMU.sensor);
-//			float k = IMU.getQuatK(&IMU.sensor);
-//			float real = IMU.getQuatReal(&IMU.sensor);
-//			quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU.sensor);
 		}
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/

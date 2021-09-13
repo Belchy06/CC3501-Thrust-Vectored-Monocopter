@@ -187,7 +187,7 @@
 			<tr bgcolor='#EFF174'><td>CMP1</td><td>cmp_in0</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td>C9</td><td>PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB</td><td><small><i>same</i></small></td>
-				<td bgcolor='#B3EAFF'>FTM2</td><td bgcolor='#B3EAFF'>tmr_ch1</td><td bgcolor='#B3EAFF'>alt3</td><td bgcolor='#B3EAFF'>Output</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>C10</td><td>ADC1_SE15/PTB11/SPI1_SCK/LPUART0_TX/FBa_AD18/FTM0_FLT2</td><td><small><i>same</i></small></td>
@@ -2260,7 +2260,7 @@
 			<tr bgcolor='#EFF174'><td>CMP1</td><td>cmp_in0</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td>C9</td><td>PTB19/FTM2_CH1/I2S0_TX_FS/FBa_OE_b/FTM2_QD_PHB</td><td><small><i>same</i></small></td>
-				<td bgcolor='#B3EAFF'>FTM2</td><td bgcolor='#B3EAFF'>tmr_ch1</td><td bgcolor='#B3EAFF'>alt3</td><td bgcolor='#B3EAFF'>Output</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>C10</td><td>ADC1_SE15/PTB11/SPI1_SCK/LPUART0_TX/FBa_AD18/FTM0_FLT2</td><td><small><i>same</i></small></td>

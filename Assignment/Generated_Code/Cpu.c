@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-29, 19:12, # CodeGen: 17
+**     Date/Time   : 2021-09-12, 09:50, # CodeGen: 35
 **     Abstract    :
 **
 **     Settings    :
@@ -110,14 +110,11 @@ void Components_Init(void)
   CI2C1_Init();
   /* ### McuLibConfig "MCUC1" init code ... */
   MCUC1_Init();
-  WAIT1_Init(); /* ### Wait "WAIT1" init code ... */
-  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)PwmLdd2_Init(NULL);
-  /* ### Servo "SERVO1" init code ... */
-  SERVO1_Init();
   /* ### Asynchro serial "Inhr1" init code ... */
   Inhr1_Init();
   /* ###  "BT" init code ... */
+  /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)RealTimeLdd1_Init(NULL);
 }
 #endif /* CPU_COMPONENTS_INIT */
 

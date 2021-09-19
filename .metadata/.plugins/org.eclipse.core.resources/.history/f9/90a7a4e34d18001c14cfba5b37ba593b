@@ -1,0 +1,19 @@
+/*
+ * Sensors.h
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_SENSORS_H_
+#define SOURCES_SENSORS_H_
+
+
+typedef struct GPS {
+
+} GPS;
+
+
+
+
+#endif /* SOURCES_SENSORS_H_ */

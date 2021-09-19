@@ -1,0 +1,38 @@
+/*
+ * Sensors.h
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_SENSORS_H_
+#define SOURCES_SENSORS_H_
+
+typedef struct GPS {
+	// properties
+	unsigned long _time, _new_time;
+	unsigned long _date, _new_date;
+	long _latitude, _new_latitude;
+	long _longitude, _new_longitude;
+	long _altitude, _new_altitude;
+	unsigned long _speed, _new_speed;
+	unsigned long _course, _new_course;
+	unsigned long _hdop, _new_hdop;
+	unsigned short _numsats, _new_numsats;
+
+	unsigned long _last_time_fix, _new_time_fix;
+	unsigned long _last_position_fix, _new_position_fix;
+
+	// parsing state variables
+	char _parity;
+	bool _is_checksum_term;
+	char _term[15];
+	byte _sentence_type;
+	byte _term_number;
+	byte _term_offset;
+	bool _gps_data_good;
+
+	bool (*encode)(struct GPS *self, char c);
+} GPS;
+
+#endif /* SOURCES_SENSORS_H_ */

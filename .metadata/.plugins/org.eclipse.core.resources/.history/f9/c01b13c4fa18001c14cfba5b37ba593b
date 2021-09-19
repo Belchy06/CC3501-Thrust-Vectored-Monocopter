@@ -1,0 +1,170 @@
+/*
+
+ * GPS.c
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+
+*/
+#include "GPS.h"
+
+void NEW_GPS(GPS *self) {
+	self->_time = GPS_INVALID_TIME;
+	self->_date = GPS_INVALID_DATE;
+	self->_latitude = GPS_INVALID_ANGLE;
+	self->_longitude = GPS_INVALID_ANGLE;
+	self->_altitude = GPS_INVALID_ALTITUDE;
+	self->_speed = GPS_INVALID_SPEED;
+	self->_course = GPS_INVALID_ANGLE;
+	self->_hdop = GPS_INVALID_HDOP;
+	self->_numsats = GPS_INVALID_SATELLITES;
+	self->_last_time_fix = GPS_INVALID_FIX_TIME;
+	self->_last_position_fix = GPS_INVALID_FIX_TIME;
+	self->_parity = 0;
+	self->_is_checksum_term = false;
+	self->_sentence_type = _GPS_SENTENCE_OTHER;
+	self->_term_number = 0;
+	self->_term_offset = 0;
+	self->_gps_data_good = false;
+	self->_term[0] = '\0';
+
+	self->encode = &encode;
+	self->term_complete = &term_complete;
+}
+
+bool encode(GPS *self, char c) {
+	bool valid_sentence = false;
+
+	switch (c) {
+	case ',': // term terminators
+		self->_parity ^= c;
+	case '\r':
+	case '\n':
+	case '*':
+		if (self->_term_offset < sizeof(self->_term)) {
+			self->_term[self->_term_offset] = 0;
+			valid_sentence = term_complete(self);
+		}
+		++self->_term_number;
+		self->_term_offset = 0;
+		self->_is_checksum_term = (c == '*');
+		return valid_sentence;
+
+	case '$': //sentence begin
+		self->_term_number = self->_term_offset = 0;
+		self->_parity = 0;
+		self->_sentence_type = _GPS_SENTENCE_OTHER;
+		self->_is_checksum_term = false;
+		self->_gps_data_good = false;
+		return valid_sentence;
+	}
+
+	// ordinary characters
+	if (self->_term_offset < sizeof(self->_term) - 1)
+		self->_term[self->_term_offset++] = c;
+	if (!self->_is_checksum_term)
+		self->_parity ^= c;
+	return valid_sentence;
+}
+
+bool term_complete(GPS *self) {
+	if (self->_is_checksum_term) {
+		char checksum = 16 * from_hex(self->_term[0])
+				+ from_hex(self->_term[1]);
+		if (checksum == self->_parity) {
+			if (self->_gps_data_good) {
+				self->_last_time_fix = self->_new_time_fix;
+				self->_last_position_fix = self->_new_position_fix;
+
+				switch (self->_sentence_type) {
+				case _GPS_SENTENCE_GPRMC:
+					self->_time = self->_new_time;
+					self->_date = self->_new_date;
+					self->_latitude = self->_new_latitude;
+					self->_longitude = self->_new_longitude;
+					self->_speed = self->_new_speed;
+					self->_course = self->_new_course;
+					break;
+				case _GPS_SENTENCE_GPGGA:
+					self->_altitude = self->_new_altitude;
+					self->_time = self->_new_time;
+					self->_latitude = self->_new_latitude;
+					self->_longitude = self->_new_longitude;
+					self->_numsats = self->_new_numsats;
+					self->_hdop = self->_new_hdop;
+					break;
+				}
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// the first term determines the sentence type
+	if (self->_term_number == 0) {
+		if (!gpsstrcmp(self->_term, _GPRMC_TERM))
+			self->_sentence_type = _GPS_SENTENCE_GPRMC;
+		else if (!gpsstrcmp(self->_term, _GPGGA_TERM))
+			self->_sentence_type = _GPS_SENTENCE_GPGGA;
+		else
+			self->_sentence_type = _GPS_SENTENCE_OTHER;
+		return false;
+	}
+
+	if (self->_sentence_type != _GPS_SENTENCE_OTHER && self->_term[0])
+		switch (COMBINE(self->_sentence_type, self->_term_number)) {
+		case COMBINE(_GPS_SENTENCE_GPRMC, 1): // Time in both sentences
+		case COMBINE(_GPS_SENTENCE_GPGGA, 1):
+			self->_new_time = parse_decimal();
+			self->_new_time_fix = millis();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 2): // GPRMC validity
+			_gps_data_good = _term[0] == 'A';
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 3): // Latitude
+		case COMBINE(_GPS_SENTENCE_GPGGA, 2):
+			self->_new_latitude = parse_degrees();
+			// _new_position_fix = millis();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 4): // N/S
+		case COMBINE(_GPS_SENTENCE_GPGGA, 3):
+			if (_term[0] == 'S')
+				_new_latitude = -_new_latitude;
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 5): // Longitude
+		case COMBINE(_GPS_SENTENCE_GPGGA, 4):
+			_new_longitude = parse_degrees();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 6): // E/W
+		case COMBINE(_GPS_SENTENCE_GPGGA, 5):
+			if (_term[0] == 'W')
+				_new_longitude = -_new_longitude;
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 7): // Speed (GPRMC)
+			_new_speed = parse_decimal();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 8): // Course (GPRMC)
+			_new_course = parse_decimal();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPRMC, 9): // Date (GPRMC)
+			_new_date = gpsatol(_term);
+			break;
+		case COMBINE(_GPS_SENTENCE_GPGGA, 6): // Fix data (GPGGA)
+			_gps_data_good = _term[0] > '0';
+			break;
+		case COMBINE(_GPS_SENTENCE_GPGGA, 7): // Satellites used (GPGGA)
+			_new_numsats = (unsigned char) atoi(_term);
+			break;
+		case COMBINE(_GPS_SENTENCE_GPGGA, 8): // HDOP
+			_new_hdop = parse_decimal();
+			break;
+		case COMBINE(_GPS_SENTENCE_GPGGA, 9): // Altitude (GPGGA)
+			_new_altitude = parse_decimal();
+			break;
+		}
+
+	return false;
+}
+
+

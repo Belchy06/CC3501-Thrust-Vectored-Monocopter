@@ -1,0 +1,33 @@
+/*
+ * GPS.c
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+ */
+
+#include "GPS.h"
+
+void NEW_GPS(GPS *self) {
+	self->_time = GPS_INVALID_TIME;
+	self->_date = GPS_INVALID_DATE;
+	self->_latitude = GPS_INVALID_ANGLE;
+	self->_longitude(GPS_INVALID_ANGLE;
+	self->_altitude = GPS_INVALID_ALTITUDE;
+	self->_speed = GPS_INVALID_SPEED;
+	self->_course = GPS_INVALID_ANGLE;
+	self->_hdop = GPS_INVALID_HDOP;
+	self->_numsats = GPS_INVALID_SATELLITES;
+	self->_last_time_fix = GPS_INVALID_FIX_TIME;
+	self->_last_position_fix = GPS_INVALID_FIX_TIME;
+	self->_parity = 0;
+	self->_is_checksum_term = false;
+	self->_sentence_type = _GPS_SENTENCE_OTHER;
+	self->_term_number = 0;
+	self->_term_offset = 0;
+	self->_gps_data_good = false;
+	self->_term[0] = '\0';
+}
+
+
+
+

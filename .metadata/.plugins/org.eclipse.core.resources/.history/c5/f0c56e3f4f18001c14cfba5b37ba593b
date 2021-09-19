@@ -1,0 +1,16 @@
+/*
+ * GPS.c
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+ */
+
+#include "GPS.h"
+
+void NEW_GPS(GPS *self) {
+	self->_time = GPS_INVALID_TIME;
+}
+
+
+
+

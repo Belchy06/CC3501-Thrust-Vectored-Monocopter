@@ -1,0 +1,21 @@
+/*
+ * Sensors.h
+ *
+ *  Created on: 18 Sep 2021
+ *      Author: willi
+ */
+
+#ifndef SOURCES_SENSORS_H_
+#define SOURCES_SENSORS_H_
+
+#include <stdbool.h>
+
+typedef struct GPS {
+	// parsing state variables
+	char _parity;
+
+	bool (*encode)(struct GPS *self, char c);
+	bool (*term_complete)(struct GPS *self);
+} GPS;
+
+#endif /* SOURCES_SENSORS_H_ */

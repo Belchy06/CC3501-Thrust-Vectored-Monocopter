@@ -1,29 +1,30 @@
 /* ###################################################################
-**     Filename    : Events.c
-**     Project     : Lab_03
-**     Processor   : MK22FN512VDC12
-**     Component   : Events
-**     Version     : Driver 01.00
-**     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-08-13, 13:30, # CodeGen: 0
-**     Abstract    :
-**         This is user's event module.
-**         Put your event handler code here.
-**     Contents    :
-**         Cpu_OnNMI - void Cpu_OnNMI(void);
-**
-** ###################################################################*/
+ **     Filename    : Events.c
+ **     Project     : Assignment
+ **     Processor   : MK22FN512VDC12
+ **     Component   : Events
+ **     Version     : Driver 01.00
+ **     Compiler    : GNU C Compiler
+ **     Date/Time   : 2021-09-20, 19:05, # CodeGen: 44
+ **     Abstract    :
+ **         This is user's event module.
+ **         Put your event handler code here.
+ **     Contents    :
+ **         Inhr1_OnRxChar - void Inhr1_OnRxChar(void);
+ **         Cpu_OnNMI      - void Cpu_OnNMI(void);
+ **
+ ** ###################################################################*/
 /*!
-** @file Events.c
-** @version 01.00
-** @brief
-**         This is user's event module.
-**         Put your event handler code here.
-*/         
+ ** @file Events.c
+ ** @version 01.00
+ ** @brief
+ **         This is user's event module.
+ **         Put your event handler code here.
+ */
 /*!
-**  @addtogroup Events_module Events module documentation
-**  @{
-*/         
+ **  @addtogroup Events_module Events module documentation
+ **  @{
+ */
 /* MODULE Events */
 
 #include "Cpu.h"
@@ -35,60 +36,104 @@
 extern "C" {
 #endif 
 
+#include "GPS.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-#include "stdbool.h"
+extern volatile GPS gps;
+extern volatile uint8_t index;
+extern volatile char buffer[128];
+extern volatile bool complete_command;
 
-extern volatile bool dataReady;
 /*
-** ===================================================================
-**     Event       :  Cpu_OnNMI (module Events)
-**
-**     Component   :  Cpu [MK22FN512DC12]
-*/
-/*!
-**     @brief
-**         This event is called when the Non maskable interrupt had
-**         occurred. This event is automatically enabled when the [NMI
-**         interrupt] property is set to 'Enabled'.
-*/
-/* ===================================================================*/
-void Cpu_OnNMI(void)
-{
-  /* Write your code here ... */
+ ** ===================================================================
+ **     Event       :  Inhr1_OnRxChar (module Events)
+ **
+ **     Component   :  Inhr1 [AsynchroSerial]
+ **     Description :
+ **         This event is called after a correct character is received.
+ **         The event is available only when the <Interrupt
+ **         service/event> property is enabled and either the <Receiver>
+ **         property is enabled or the <SCI output mode> property (if
+ **         supported) is set to Single-wire mode.
+ **     Parameters  : None
+ **     Returns     : Nothing
+ ** ===================================================================
+ */
+void Inhr1_OnRxChar(void) {
+	/* Write your code here ... */
+	/* Write your code here ... */
+	char c;
+	if (ERR_OK == Inhr1_RecvChar(&c)) {
+		switch (c) {
+		case '\r':
+			// new line received
+			if (index > 0) {
+				buffer[index] = '\0';
+				BT_SendChar(c);
+				// complete_command = true;
+				if (gps.encode(&gps, c))
+					complete_command = true;
+			}
+			break;
+
+		case 0x7F:
+			// Backspace
+		{
+			if (index > 0) {
+				buffer[index] = '\0';
+				index--;
+				BT_SendChar(0x7f);
+			}
+		}
+			break;
+
+		default:
+			// Normal characters
+		{
+			if (index < 128) {
+				buffer[index] = c;
+				if (gps.encode(&gps, c))
+					complete_command = true;
+				index++;
+				BT_SendChar(c);
+			}
+		}
+			break;
+		}
+	}
 }
 
 /*
-** ===================================================================
-**     Event       :  EInt1_OnInterrupt (module Events)
-**
-**     Component   :  EInt1 [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void EInt1_OnInterrupt(void)
-{
-  /* Write your code here ... */
+ ** ===================================================================
+ **     Event       :  Cpu_OnNMI (module Events)
+ **
+ **     Component   :  Cpu [MK22FN512DC12]
+ */
+/*!
+ **     @brief
+ **         This event is called when the Non maskable interrupt had
+ **         occurred. This event is automatically enabled when the [NMI
+ **         interrupt] property is set to 'Enabled'.
+ */
+/* ===================================================================*/
+void Cpu_OnNMI(void) {
+	/* Write your code here ... */
 }
 
 /* END Events */
 
 #ifdef __cplusplus
-}  /* extern "C" */
+} /* extern "C" */
 #endif 
 
 /*!
-** @}
-*/
+ ** @}
+ */
 /*
-** ###################################################################
-**
-**     This file was created by Processor Expert 10.5 [05.21]
-**     for the Freescale Kinetis series of microcontrollers.
-**
-** ###################################################################
-*/
+ ** ###################################################################
+ **
+ **     This file was created by Processor Expert 10.5 [05.21]
+ **     for the Freescale Kinetis series of microcontrollers.
+ **
+ ** ###################################################################
+ */

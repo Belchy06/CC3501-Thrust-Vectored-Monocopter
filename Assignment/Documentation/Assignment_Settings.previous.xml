@@ -381,19 +381,32 @@
         <Template v="AsynchroForTerminal" />
         <Properties>
           <Component_name v="Inhr1" />
-          <Channel v="UART2" />
-          <boolgroup name="Interrupt service/event" v="Disabled" />
+          <Channel v="UART1" />
+          <boolgroup name="Interrupt service/event" v="Enabled">
+            <Interrupt_RxD v="INT_UART1_RX_TX" />
+            <Interrupt_RxD_priority v="medium priority" />
+            <Interrupt_TxD v="INT_UART1_RX_TX" />
+            <Interrupt_TxD_priority v="medium priority" />
+            <Interrupt_Error v="INT_UART1_ERR" />
+            <Interrupt_Error_priority v="medium priority" />
+            <Input_buffer_size v="128" />
+            <Output_buffer_size v="128" />
+            <group name="Handshake">
+              <boolgroup name="CTS" v="Disabled" />
+              <boolgroup name="RTS" v="Disabled" />
+            </group>
+          </boolgroup>
           <group name="Settings">
             <Parity v="none" />
             <Width v="8 bits" />
             <Stop_bit v="1" />
             <boolgroup name="Receiver" v="Enabled">
-              <RxD v="PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL" />
+              <RxD v="ADC1_SE5a/PTE1/LLWU_P0/SPI1_SOUT/UART1_RX/I2C1_SCL/SPI1_SIN" />
             </boolgroup>
             <boolgroup name="Transmitter" v="Enabled">
-              <TxD v="PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA" />
+              <TxD v="ADC1_SE4a/PTE0/CLKOUT32K/SPI1_PCS1/UART1_TX/I2C1_SDA/RTC_CLKOUT" />
             </boolgroup>
-            <Baud_rate v="115200 baud" />
+            <Baud_rate v="9600 baud" />
             <Break_signal v="Disabled" />
             <Wakeup_condition v="Idle line wakeup" />
             <Transmitter_output v="Not inverted" />
@@ -416,14 +429,21 @@
               <Enabled v="Y" />
               <Properties>
                 <Component_name v="ASerialLdd1" />
-                <Device v="UART2" />
-                <boolgroup name="Interrupt service/event" v="Disabled" />
+                <Device v="UART1" />
+                <boolgroup name="Interrupt service/event" v="Enabled">
+                  <Interrupt_RxD v="INT_UART1_RX_TX" />
+                  <Interrupt_RxD_priority v="medium priority" />
+                  <Interrupt_TxD v="INT_UART1_RX_TX" />
+                  <Interrupt_TxD_priority v="medium priority" />
+                  <Interrupt_Error v="INT_UART1_ERR" />
+                  <Interrupt_Error_priority v="medium priority" />
+                </boolgroup>
                 <group name="Settings">
                   <Data_width v="8 bits" />
                   <Parity v="None" />
                   <Stop_bits v="1" />
                   <Loop_mode v="Normal" />
-                  <Baud_rate v="115200 baud" />
+                  <Baud_rate v="9600 baud" />
                   <Wakeup_condition v="Idle line wakeup" />
                   <Stop_in_wait_mode v="no" />
                   <Idle_line_mode v="Starts after start bit" />
@@ -431,10 +451,10 @@
                   <Receiver_input v="Not inverted" />
                   <Break_generation_length v="10/11 bits" />
                   <boolgroup name="Receiver" v="Enabled">
-                    <RxD v="PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL" />
+                    <RxD v="ADC1_SE5a/PTE1/LLWU_P0/SPI1_SOUT/UART1_RX/I2C1_SCL/SPI1_SIN" />
                   </boolgroup>
                   <boolgroup name="Transmitter" v="Enabled">
-                    <TxD v="PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA" />
+                    <TxD v="ADC1_SE4a/PTE0/CLKOUT32K/SPI1_PCS1/UART1_TX/I2C1_SDA/RTC_CLKOUT" />
                   </boolgroup>
                   <enumgroup name="Flow control" v="None">
                     <EmptySection_DummyValue />
@@ -443,10 +463,10 @@
                 <group name="Initialization">
                   <Enabled_in_init__code v="yes" />
                   <group name="Event mask">
-                    <OnBlockSent v="Disabled" />
-                    <OnBlockReceived v="Disabled" />
+                    <OnBlockSent v="Enabled" />
+                    <OnBlockReceived v="Enabled" />
                     <OnTxComplete v="Disabled" />
-                    <OnError v="Disabled" />
+                    <OnError v="Enabled" />
                     <OnBreak v="Enabled" />
                   </group>
                 </group>
@@ -462,7 +482,7 @@
                 <CancelBlockReception v="don&amp;apos;t generate code" />
                 <GetError v="generate code" />
                 <GetSentDataNum v="don&amp;apos;t generate code" />
-                <GetReceivedDataNum v="generate code" />
+                <GetReceivedDataNum v="don&amp;apos;t generate code" />
                 <GetTxCompleteStatus v="don&amp;apos;t generate code" />
                 <SetEventMask v="don&amp;apos;t generate code" />
                 <GetEventMask v="don&amp;apos;t generate code" />
@@ -485,18 +505,24 @@
                 <TurnRxOn v="don&amp;apos;t generate code" />
                 <TurnRxOff v="don&amp;apos;t generate code" />
                 <ConnectPin v="don&amp;apos;t generate code" />
-                <Main v="generate code" />
+                <Main v="don&amp;apos;t generate code" />
                 <SetOperationMode v="don&amp;apos;t generate code" />
                 <GetDriverState v="don&amp;apos;t generate code" />
               </Methods>
               <Events>
                 <Event_module_name v="Events" />
-                <event name="OnBlockReceived" v="don&amp;apos;t generate code" />
-                <event name="OnBlockSent" v="don&amp;apos;t generate code" />
+                <event name="OnBlockReceived" v="generate code">
+                  <Event_procedure_name v="ASerialLdd1_OnBlockReceived" />
+                </event>
+                <event name="OnBlockSent" v="generate code">
+                  <Event_procedure_name v="ASerialLdd1_OnBlockSent" />
+                </event>
                 <event name="OnBreak" v="generate code">
                   <Event_procedure_name v="ASerialLdd1_OnBreak" />
                 </event>
-                <event name="OnError" v="don&amp;apos;t generate code" />
+                <event name="OnError" v="generate code">
+                  <Event_procedure_name v="ASerialLdd1_OnError" />
+                </event>
                 <event name="OnTxComplete" v="don&amp;apos;t generate code" />
               </Events>
             </inhrbean>
@@ -533,7 +559,10 @@
           <event name="BeforeNewSpeed" v="don&amp;apos;t generate code" />
           <event name="AfterNewSpeed" v="don&amp;apos;t generate code" />
           <event name="OnError" v="don&amp;apos;t generate code" />
-          <event name="OnRxChar" v="don&amp;apos;t generate code" />
+          <event name="OnRxChar" v="generate code">
+            <Event_procedure_name v="Inhr1_OnRxChar" />
+            <Priority v="interrupts disabled" />
+          </event>
           <event name="OnRxCharExt" v="don&amp;apos;t generate code" />
           <event name="OnTxChar" v="don&amp;apos;t generate code" />
           <event name="OnFullRxBuf" v="don&amp;apos;t generate code" />

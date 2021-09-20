@@ -7,7 +7,7 @@
 **     Version     : Component 01.007, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-13, 22:54, # CodeGen: 37
+**     Date/Time   : 2021-09-20, 18:39, # CodeGen: 40
 **     Abstract    :
 **          This component "RealTime_LDD" implements a free running counter
 **          for time measurement.
@@ -21,9 +21,9 @@
 **          Interrupt service/event                        : Enabled
 **            Interrupt                                    : INT_FTM0
 **            Interrupt priority                           : medium priority
-**          Resolution                                     : 1 ms
+**          Resolution                                     : 50 µs
 **          SW counter                                     : 32-bit
-**          Maximum time of event                          : 4295884.799798673 sec
+**          Maximum time of event                          : 216268.80040265317 sec
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes
@@ -229,7 +229,7 @@ LDD_TError RealTimeLdd1_GetTimeUS(LDD_TDeviceData *DeviceDataPtr, uint16_t *Time
   if (CopyOverflow) {                  /* Testing counter overflow */
     return ERR_OVERFLOW;               /* If yes then error */
   }
-  rtval = CopyTicks * 1000.213623F;    /* Multiply ticks and clock configuration 0 coefficient */
+  rtval = CopyTicks * 50.354004F;      /* Multiply ticks and clock configuration 0 coefficient */
   if (rtval > 0xFFFFUL) {              /* Is the result greater than 65535 ? */
     return ERR_MATH;                   /* If yes then error */
   }
@@ -278,7 +278,7 @@ LDD_TError RealTimeLdd1_GetTimeMS(LDD_TDeviceData *DeviceDataPtr, uint16_t *Time
   if (CopyOverflow) {                  /* Testing counter overflow */
     return ERR_OVERFLOW;               /* If yes then error */
   }
-  rtval = CopyTicks * 1.000213623F;    /* Multiply ticks and clock configuration 0 coefficient */
+  rtval = CopyTicks * 0.050354004F;    /* Multiply ticks and clock configuration 0 coefficient */
   if (rtval > 0xFFFFUL) {              /* Is the result greater than 65535 ? */
     return ERR_MATH;                   /* If yes then error */
   }

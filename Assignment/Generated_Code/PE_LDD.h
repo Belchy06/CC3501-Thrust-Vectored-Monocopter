@@ -6,7 +6,7 @@
 **     Version     : Component 01.048, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-12, 09:50, # CodeGen: 35
+**     Date/Time   : 2021-09-20, 19:43, # CodeGen: 45
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -65,6 +65,9 @@
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "GPSTimer.h"
+#include "RealTimeLdd2.h"
+#include "TU2.h"
 
 
 /*

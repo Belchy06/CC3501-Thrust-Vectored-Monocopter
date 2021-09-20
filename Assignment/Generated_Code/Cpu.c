@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-12, 09:50, # CodeGen: 35
+**     Date/Time   : 2021-09-20, 19:43, # CodeGen: 45
 **     Abstract    :
 **
 **     Settings    :
@@ -115,6 +115,8 @@ void Components_Init(void)
   /* ###  "BT" init code ... */
   /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)RealTimeLdd1_Init(NULL);
+  /* ### RealTime_LDD "RealTimeLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)RealTimeLdd2_Init(NULL);
 }
 #endif /* CPU_COMPONENTS_INIT */
 

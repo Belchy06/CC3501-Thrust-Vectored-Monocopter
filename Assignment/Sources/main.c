@@ -39,6 +39,9 @@
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "GPSTimer.h"
+#include "RealTimeLdd2.h"
+#include "TU2.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -51,27 +54,35 @@
 #include <stdbool.h>
 #include "printf.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "GPS.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #define BNO080_DEFAULT_ADDRESS 0x4A
 #define PI 3.14159
 #define RAD_TO_DEGREES 57.2958
-#define MS_TO_GS 0.1019
 
 float h;
-float ax, ay, az;
-float gx, gy, gz;
-float gx_cal, gy_cal, gz_cal;
-float mx, my, mz;
-float angle_pitch, angle_roll, angle_yaw;
-float angle_pitch_acc, angle_roll_acc, angle_yaw;
 float pitch, roll, yaw;
-uint8_t accelAccuracy, gyroAccuracy, magAccuracy;
+float ax, ay, az;
+float lx, ly, lz;
+uint8_t accelAccuracy, gyroAccuracy, magAccuracy, linAccuracy;
 float quatRadianAccuracy;
-float tau = 0.98;
-long timer1, timer2;
-char str[128];
 char level[32];
-bool setGyroAngles;
+char str[128];
+unsigned int time;
+
+float lat, lon, prevLat, prevLon, distance;
+float courseto;
+float dt;
+unsigned long age;
+float xOff, yOff;
+float xMps, yMps, zMps = 0;
+float mps;
+volatile GPS gps;
+volatile uint8_t index;
+volatile char buffer[128];
+volatile bool complete_command;
 
 char* getAccuracyLevel(uint8_t accuracyNumber) {
 	if (accuracyNumber == 0) {
@@ -89,11 +100,49 @@ char* getAccuracyLevel(uint8_t accuracyNumber) {
 }
 
 void sendBT() {
-	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f\n", roll, pitch, yaw);
+//	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f, dt: %f\r\n", roll, pitch,
+//			yaw, time);
+	snprintf(str, 128, "xAcc: %f, yAcc: %f, xMps: %f, yMps: %f, xOff: %f, yOff: %f, dT: %f\r\n", lx, ly, xMps, yMps, xOff, yOff, dt);
 	BT_SendStr(str);
-	for (int counter = 0; counter < 100000; counter++) {
-		__asm volatile ("nop");
+//	for(uint16_t i = 0; i < 50000; i++) {
+//		__asm("nop");
+//	}
+}
+
+/*
+ * IN: x, y, z orientation in degrees
+ * OUT: The 3x3 DCM in Z,Y,X rotation order
+ */
+float** DCM(float phi, float theta, float psi) {
+	// Initialize empty 3x3 array
+	float* values = calloc(9, sizeof(float));
+	float** C = malloc(3 * sizeof(float*));
+	for (int i = 0; i < 3; ++i) {
+		C[i] = values;
 	}
+	// Convert degrees to radians
+	phi *= 0.0174533;
+	theta *= 0.0174533;
+	psi *= 0.0174533;
+	// Row, col
+	C[0][0] = cos(theta) * cos(psi);
+	C[0][1] = cos(theta) * sin(psi);
+	C[0][2] = -sin(theta);
+
+	C[1][0] = sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi);
+	C[1][1] = sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi);
+	C[1][2] = sin(phi) * cos(theta);
+
+	C[2][0] = cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi);
+	C[2][1] = cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi);
+	C[2][2] = cos(phi) * cos(theta);
+
+	return C;
+}
+
+void destroyArray(float** arr) {
+	free(*arr);
+	free(arr);
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -107,8 +156,11 @@ int main(void)
 	/*** End of Processor Expert internal initialization.                    ***/
 
 //	/* Write your code here */
-	setGyroAngles = false;
 //	/* For example: for(;;) { } */
+	NEW_GPS(&gps);
+	complete_command = false;
+	bool firstTime = true;
+
 	BNO085 IMU;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
 	if (IMU.begin(&IMU) == false) {
@@ -116,84 +168,98 @@ int main(void)
 			;
 	}
 
-	// IMU.enableRotationVector(&IMU, 50);
-	IMU.enableAccelerometer(&IMU, 50);
-	IMU.enableGyro(&IMU, 50);
-	IMU.enableMagnetometer(&IMU, 50);
+	IMU.enableGameRotationVector(&IMU, 300);
+	// IMU.enableAccelerometer(&IMU, 50);
+	IMU.enableLinearAccelerometer(&IMU, 300);
 	// TODO Own sensor fusion. Get mag, accel, gyro
 	FC321_Reset();
-
-	// Gyro offset calibration
-	for(uint16_t i = 0; i < 2000; i++) {
-		IMU.getGyro(&IMU, &gx, &gy, &gz, &gyroAccuracy);
-		gx_cal += gx;
-		gy_cal += gy;
-		gz_cal += gz;
-	}
-
-	gx_cal /= 2000;
-	gy_cal /= 2000;
-	gz_cal /= 2000;
-
-
-
 	for (;;) {
 		if (IMU.dataAvailable(&IMU)) {
-			// x = (double)(IMU.getRoll(&IMU)) * 180.0 / 3.14159; // Convert roll to degrees
-			// y = (double)(IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
-			// z = (double)(IMU.getYaw(&IMU)) * 180.0 / 3.14159; // Convert yaw to degrees
-			// quatRadianAccuracy = IMU.getQuatRadianAccuracy(&IMU); // Return the rotation vector accuracy
-			// controller.calculate(&controller);
-			unsigned int time;
-			FC321_GetTimeMS(&time);
-			float dt = time * 1e-6;
-			IMU.getAccel(&IMU, &ax, &ay, &az, &accelAccuracy);
-			IMU.getGyro(&IMU, &gx, &gy, &gz, &gyroAccuracy);
-			IMU.getMag(&IMU, &mx, &my, &mz, &magAccuracy);
-
-			gx -= gx_cal;
-			gy -= gy_cal;
-			gz -= gz_cal;
-
-			//TODO find loop time from FC32
-			angle_pitch += gx * dt / 1000; // convert dt to seconds first
-			angle_roll += gy * dt / 1000;
-
-			angle_pitch += angle_roll * sin(gz * dt * 0.01745); // Convert degrees to radians for sin function
-			angle_roll -= angle_pitch * sin(gz * dt * 0.01745);
-
-			// Accelerometer angle calcs
-			float acc_total_vector = sqrt((ax*ax)+(ay*ay)+(az*az));
-			angle_pitch_acc = asin((float)ay/acc_total_vector) * 57.296; //convert radians to degrees
-			angle_roll_acc = asin((float)ax/acc_total_vector) * -57.296; //convert radians to degrees
-
-			angle_pitch_acc += 0; // TODO: Calibration vals
-			angle_roll_acc += 0;
-
-			if(setGyroAngles) {
-				angle_pitch = angle_pitch * 0.996 + angle_pitch_acc * 0.0004;
-				angle_roll = angle_roll * 0.996 + angle_roll_acc * 0.0004;
-			} else {
-				angle_pitch = angle_pitch_acc;
-				angle_roll = angle_roll_acc;
-				setGyroAngles = true;
+			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
+			yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+			// IMU.getAccel(&IMU, &ax, &ay, &az, &accelAccuracy);
+			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
+			if(lz > 9) lz = 0;
+		}
+		if (complete_command) {
+			gps.get_position(&gps, &lat, &lon, &age);
+			//gps.get_altitude(&gps, &gAlt);
+			if (!firstTime) {
+				distance = gps.distance_between(&gps, lat, lon, prevLat,
+						prevLon);
+				courseto = gps.course_to(&gps, prevLat, prevLon, lat, lon);
+				// Position
+				if (lat != 999999999 && lon != 999999999) {
+					xOff = distance * cos(courseto);
+					yOff = distance * sin(courseto);
+				}
+				// Velocity
+				mps = gps.speed_mps(&gps);
+				if (mps != -1.0) {
+					xMps = mps * cos(courseto);
+					yMps = mps * sin(courseto);
+				}
 			}
-
-			pitch = angle_pitch;
-			roll = angle_roll;
-
+			prevLat = lat;
+			prevLon = lon;
+			firstTime = false;
+			complete_command = false;
+			index = 0;
 			sendBT();
 		}
+		// Rest of control loop
+		// Estimate XY velocity
+		float** dcm = DCM(roll, pitch, yaw);
+
+		FC321_GetTimeUS(&time);
+		dt = time * 1e-6;
+		// A * prev_state + B * u;
+		/*
+		 * VELOCITY ESTIMATE
+		 */
+		xMps = xMps + lx * dt;
+		yMps = yMps + ly * dt;
+		// TODO
+		zMps = 0;
+
+
+		// Estimate XY position
+		float dcmT[3][3];
+		for(uint8_t i = 0; i < 3; ++i)
+		for(uint8_t j = 0; j < 3; ++j) {
+			dcmT[j][i] = dcm[i][j];
+		}
+
+		float worldVelXY[2];
+		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps + dcmT[0][2] * zMps;
+		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps + dcmT[1][2] * zMps;
+		/*
+		* POSITION ESTIMATE
+		*/
+		xOff = xOff + worldVelXY[0] * dt;
+		yOff = yOff + worldVelXY[1] * dt;
+
+
+
+
+
+
+
+		destroyArray(dcm);
+		FC321_Reset();
+		sendBT();
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-  #ifdef PEX_RTOS_START
-    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-  #endif
-  /*** End of RTOS startup code.  ***/
-  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-  for(;;){}
-  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+#ifdef PEX_RTOS_START
+	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+#endif
+	/*** End of RTOS startup code.  ***/
+	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+	for (;;) {
+	}
+	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

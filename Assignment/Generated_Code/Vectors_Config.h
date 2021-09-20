@@ -59,6 +59,9 @@
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "GPSTimer.h"
+#include "RealTimeLdd2.h"
+#include "TU2.h"
 #include "Events.h"
 
 #ifdef __cplusplus
@@ -117,8 +120,8 @@ extern "C" {
 #define VECTOR_46         (tIsrFunc)&Unhandled_ivINT_LPUART0    /* 0x2E -    ivINT_LPUART0                 unused by PE */
 #define VECTOR_47         (tIsrFunc)&Unhandled_ivINT_UART0_RX_TX /* 0x2F -   ivINT_UART0_RX_TX             unused by PE */
 #define VECTOR_48         (tIsrFunc)&Unhandled_ivINT_UART0_ERR  /* 0x30 -    ivINT_UART0_ERR               unused by PE */
-#define VECTOR_49         (tIsrFunc)&Unhandled_ivINT_UART1_RX_TX /* 0x31 -   ivINT_UART1_RX_TX             unused by PE */
-#define VECTOR_50         (tIsrFunc)&Unhandled_ivINT_UART1_ERR  /* 0x32 -    ivINT_UART1_ERR               unused by PE */
+#define VECTOR_49         (tIsrFunc)&ASerialLdd1_Interrupt      /* 0x31 112  ivINT_UART1_RX_TX             used by PE */
+#define VECTOR_50         (tIsrFunc)&ASerialLdd1_Interrupt      /* 0x32 112  ivINT_UART1_ERR               used by PE */
 #define VECTOR_51         (tIsrFunc)&Unhandled_ivINT_UART2_RX_TX /* 0x33 -   ivINT_UART2_RX_TX             unused by PE */
 #define VECTOR_52         (tIsrFunc)&Unhandled_ivINT_UART2_ERR  /* 0x34 -    ivINT_UART2_ERR               unused by PE */
 #define VECTOR_53         (tIsrFunc)&Unhandled_ivINT_Reserved53 /* 0x35 -    ivINT_Reserved53              unused by PE */
@@ -127,7 +130,7 @@ extern "C" {
 #define VECTOR_56         (tIsrFunc)&Unhandled_ivINT_CMP0       /* 0x38 -    ivINT_CMP0                    unused by PE */
 #define VECTOR_57         (tIsrFunc)&Unhandled_ivINT_CMP1       /* 0x39 -    ivINT_CMP1                    unused by PE */
 #define VECTOR_58         (tIsrFunc)&TU1_Interrupt              /* 0x3A 112  ivINT_FTM0                    used by PE */
-#define VECTOR_59         (tIsrFunc)&Unhandled_ivINT_FTM1       /* 0x3B -    ivINT_FTM1                    unused by PE */
+#define VECTOR_59         (tIsrFunc)&TU2_Interrupt              /* 0x3B 112  ivINT_FTM1                    used by PE */
 #define VECTOR_60         (tIsrFunc)&Unhandled_ivINT_FTM2       /* 0x3C -    ivINT_FTM2                    unused by PE */
 #define VECTOR_61         (tIsrFunc)&Unhandled_ivINT_Reserved61 /* 0x3D -    ivINT_Reserved61              unused by PE */
 #define VECTOR_62         (tIsrFunc)&Unhandled_ivINT_RTC        /* 0x3E -    ivINT_RTC                     unused by PE */

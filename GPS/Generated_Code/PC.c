@@ -7,7 +7,7 @@
 **     Version     : Component 02.611, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-18, 16:52, # CodeGen: 1
+**     Date/Time   : 2021-09-20, 18:25, # CodeGen: 3
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -25,8 +25,8 @@
 **            Interrupt TxD priority                       : medium priority
 **            Interrupt Error                              : INT_UART1_ERR
 **            Interrupt Error priority                     : medium priority
-**            Input buffer size                            : 64
-**            Output buffer size                           : 64
+**            Input buffer size                            : 128
+**            Output buffer size                           : 128
 **            Handshake                                    : 
 **              CTS                                        : Disabled
 **              RTS                                        : Disabled

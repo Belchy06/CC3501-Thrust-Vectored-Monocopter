@@ -43,6 +43,9 @@
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "GPSTimer.h"
+#include "RealTimeLdd2.h"
+#include "TU2.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,6 +79,23 @@ void EInt1_OnInterrupt(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
+
+/*
+** ===================================================================
+**     Event       :  Inhr1_OnRxChar (module Events)
+**
+**     Component   :  Inhr1 [AsynchroSerial]
+**     Description :
+**         This event is called after a correct character is received.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled and either the <Receiver>
+**         property is enabled or the <SCI output mode> property (if
+**         supported) is set to Single-wire mode.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Inhr1_OnRxChar(void);
 
 /* END Events */
 

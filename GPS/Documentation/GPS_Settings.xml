@@ -25,15 +25,6 @@
     <Compiler v="GNU C Compiler" />
     <CompilerProperties>
       <Compiler v="GNU C Compiler" />
-      <enumgroup name="Unhandled vectors" v="One handler for all">
-        <EmptySection_DummyValue />
-      </enumgroup>
-      <boolgroup name="Generate debugger files" v="yes">
-        <Generate_mem_file v="yes" />
-      </boolgroup>
-      <group name="Startup">
-        <Add_startup_file v="yes" />
-      </group>
       <boolgroup name="Generate linker file" v="yes">
         <Stack_size v="1024" />
         <Heap_size v="0" />
@@ -184,8 +175,8 @@
         <Interrupt_TxD_priority v="medium priority" />
         <Interrupt_Error v="INT_UART1_ERR" />
         <Interrupt_Error_priority v="medium priority" />
-        <Input_buffer_size v="64" />
-        <Output_buffer_size v="64" />
+        <Input_buffer_size v="128" />
+        <Output_buffer_size v="128" />
         <group name="Handshake">
           <boolgroup name="CTS" v="Disabled" />
           <boolgroup name="RTS" v="Disabled" />

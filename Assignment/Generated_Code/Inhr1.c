@@ -7,7 +7,7 @@
 **     Version     : Component 02.611, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-11, 19:23, # CodeGen: 31
+**     Date/Time   : 2021-09-20, 19:05, # CodeGen: 44
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -17,17 +17,28 @@
 **         The component requires one on-chip asynchronous serial channel.
 **     Settings    :
 **          Component name                                 : Inhr1
-**          Channel                                        : UART2
-**          Interrupt service/event                        : Disabled
+**          Channel                                        : UART1
+**          Interrupt service/event                        : Enabled
+**            Interrupt RxD                                : INT_UART1_RX_TX
+**            Interrupt RxD priority                       : medium priority
+**            Interrupt TxD                                : INT_UART1_RX_TX
+**            Interrupt TxD priority                       : medium priority
+**            Interrupt Error                              : INT_UART1_ERR
+**            Interrupt Error priority                     : medium priority
+**            Input buffer size                            : 128
+**            Output buffer size                           : 128
+**            Handshake                                    : 
+**              CTS                                        : Disabled
+**              RTS                                        : Disabled
 **          Settings                                       : 
 **            Parity                                       : none
 **            Width                                        : 8 bits
 **            Stop bit                                     : 1
 **            Receiver                                     : Enabled
-**              RxD                                        : PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL
+**              RxD                                        : ADC1_SE5a/PTE1/LLWU_P0/SPI1_SOUT/UART1_RX/I2C1_SCL/SPI1_SIN
 **            Transmitter                                  : Enabled
-**              TxD                                        : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
-**            Baud rate                                    : 115200 baud
+**              TxD                                        : ADC1_SE4a/PTE0/CLKOUT32K/SPI1_PCS1/UART1_TX/I2C1_SDA/RTC_CLKOUT
+**            Baud rate                                    : 9600 baud
 **            Break signal                                 : Disabled
 **            Wakeup condition                             : Idle line wakeup
 **            Transmitter output                           : Not inverted
@@ -99,6 +110,7 @@
 /* MODULE Inhr1. */
 
 #include "Inhr1.h"
+#include "Events.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,6 +127,7 @@ extern "C" {
 #define NOISE_ERR        0x80U         /* Noise error flag bit      */
 #define IDLE_ERR         0x0100U       /* Idle character flag bit   */
 #define BREAK_ERR        0x0200U       /* Break detect              */
+#define COMMON_ERR       0x0800U       /* Common error of RX       */
 
 LDD_TDeviceData *ASerialLdd1_DeviceDataPtr; /* Device data pointer */
 static word SerFlag;                   /* Flags for serial communication */
@@ -123,15 +136,22 @@ static word SerFlag;                   /* Flags for serial communication */
                                        /*       2 - Parity error */
                                        /*       3 - Char in RX buffer */
                                        /*       4 - Full TX buffer */
-                                       /*       5 - Unused */
+                                       /*       5 - Running int from TX */
                                        /*       6 - Full RX buffer */
                                        /*       7 - Noise error */
                                        /*       8 - Idle character  */
                                        /*       9 - Break detected  */
                                        /*      10 - Unused */
                                        /*      11 - Unused */
+static word Inhr1_InpLen;              /* Length of input buffer's content */
+static word InpIndexR;                 /* Index for reading from input buffer */
+static word InpIndexW;                 /* Index for writing to input buffer */
+static Inhr1_TComData InpBuffer[Inhr1_INP_BUF_SIZE]; /* Input buffer for SCI communication */
 static Inhr1_TComData BufferRead;      /* Input char for SCI communication */
-static Inhr1_TComData OutBuffer;       /* Output char for SCI communication */
+static word Inhr1_OutLen;              /* Length of output bufer's content */
+static word OutIndexR;                 /* Index for reading from output buffer */
+static word OutIndexW;                 /* Index for writing to output buffer */
+static Inhr1_TComData OutBuffer[Inhr1_OUT_BUF_SIZE]; /* Output buffer for SCI communication */
 
 /*
 ** ===================================================================
@@ -184,21 +204,20 @@ static void HWEnDi(void)
 byte Inhr1_RecvChar(Inhr1_TComData *Chr)
 {
   byte Result = ERR_OK;                /* Return error code */
-  LDD_SERIAL_TError SerialErrorMask;   /* Serial error mask variable */
 
-  ASerialLdd1_Main(ASerialLdd1_DeviceDataPtr);
-  if (ASerialLdd1_GetError(ASerialLdd1_DeviceDataPtr, &SerialErrorMask) == ERR_OK) { /* Get error state */
-    if (SerialErrorMask != 0U) {
-      Result = ERR_COMMON;             /* If yes then set common error value */
-    } else {
-      if (ASerialLdd1_GetReceivedDataNum(ASerialLdd1_DeviceDataPtr) == 0U) { /* Is not received char? */
-        return ERR_RXEMPTY;            /* If yes then error is returned */
-      }
+  if (Inhr1_InpLen > 0x00U) {          /* Is number of received chars greater than 0? */
+    EnterCritical();                   /* Disable global interrupts */
+    Inhr1_InpLen--;                    /* Decrease number of received chars */
+    *Chr = InpBuffer[InpIndexR++];     /* Received char */
+    if (InpIndexR >= Inhr1_INP_BUF_SIZE) { /* Is the index out of the receive buffer? */
+      InpIndexR = 0x00U;               /* Set index to the first item into the receive buffer */
     }
+    Result = (byte)((SerFlag & (OVERRUN_ERR|COMMON_ERR|FULL_RX))? ERR_COMMON : ERR_OK);
+    SerFlag &= (word)~(word)(OVERRUN_ERR|COMMON_ERR|FULL_RX|CHAR_IN_RX); /* Clear all errors in the status variable */
+    ExitCritical();                    /* Enable global interrupts */
+  } else {
+    return ERR_RXEMPTY;                /* Receiver is empty */
   }
-  *Chr = BufferRead;                   /* Read the char */
-  (void)ASerialLdd1_ReceiveBlock(ASerialLdd1_DeviceDataPtr, &BufferRead, 1U); /* Receive one data byte */
-  ASerialLdd1_Main(ASerialLdd1_DeviceDataPtr);
   return Result;                       /* Return error code */
 }
 
@@ -226,15 +245,20 @@ byte Inhr1_RecvChar(Inhr1_TComData *Chr)
 */
 byte Inhr1_SendChar(Inhr1_TComData Chr)
 {
-  Inhr1_TComData TmpChr = OutBuffer;   /* Save OutBuffer value */
-
-  ASerialLdd1_Main(ASerialLdd1_DeviceDataPtr);
-  OutBuffer = Chr;                     /* Save character */
-  if (ASerialLdd1_SendBlock(ASerialLdd1_DeviceDataPtr, (LDD_TData *)&OutBuffer, 1U) == ERR_BUSY) { /* Send one data byte */
-    OutBuffer = TmpChr;                /* If is device busy, restore OutBuffer value */
-    return ERR_TXFULL;
+  if (Inhr1_OutLen == Inhr1_OUT_BUF_SIZE) { /* Is number of chars in buffer is the same as a size of the transmit buffer */
+    return ERR_TXFULL;                 /* If yes then error */
   }
-  ASerialLdd1_Main(ASerialLdd1_DeviceDataPtr);
+  EnterCritical();                     /* Disable global interrupts */
+  Inhr1_OutLen++;                      /* Increase number of bytes in the transmit buffer */
+  OutBuffer[OutIndexW++] = Chr;        /* Store char to buffer */
+  if (OutIndexW >= Inhr1_OUT_BUF_SIZE) { /* Is the pointer out of the transmit buffer */
+    OutIndexW = 0x00U;                 /* Set index to first item in the transmit buffer */
+  }
+  if ((SerFlag & RUNINT_FROM_TX) == 0U) {
+    SerFlag |= RUNINT_FROM_TX;         /* Set flag "running int from TX"? */
+    (void)ASerialLdd1_SendBlock(ASerialLdd1_DeviceDataPtr, (LDD_TData *)&OutBuffer[OutIndexR], 1U); /* Send one data byte */
+  }
+  ExitCritical();                      /* Enable global interrupts */
   return ERR_OK;                       /* OK */
 }
 
@@ -252,8 +276,7 @@ byte Inhr1_SendChar(Inhr1_TComData Chr)
 */
 word Inhr1_GetCharsInRxBuf(void)
 {
-  ASerialLdd1_Main(ASerialLdd1_DeviceDataPtr);
-  return (word)ASerialLdd1_GetReceivedDataNum(ASerialLdd1_DeviceDataPtr); /* Return number of chars in the receive buffer */
+  return Inhr1_InpLen;                 /* Return number of chars in receive buffer */
 }
 
 /*
@@ -270,8 +293,100 @@ word Inhr1_GetCharsInRxBuf(void)
 void Inhr1_Init(void)
 {
   SerFlag = 0x00U;                     /* Reset flags */
+  Inhr1_InpLen = 0x00U;                /* No char in the receive buffer */
+  InpIndexR = 0x00U;                   /* Set index on the first item in the receive buffer */
+  InpIndexW = 0x00U;
+  Inhr1_OutLen = 0x00U;                /* No char in the transmit buffer */
+  OutIndexR = 0x00U;                   /* Set index on the first item in the transmit buffer */
+  OutIndexW = 0x00U;
   ASerialLdd1_DeviceDataPtr = ASerialLdd1_Init(NULL); /* Calling init method of the inherited component */
   HWEnDi();                            /* Enable/disable device according to status flags */
+}
+
+#define ON_ERROR    0x01U
+#define ON_FULL_RX  0x02U
+#define ON_RX_CHAR  0x04U
+/*
+** ===================================================================
+**     Method      :  Inhr1_ASerialLdd1_OnBlockReceived (component AsynchroSerial)
+**
+**     Description :
+**         This event is called when the requested number of data is 
+**         moved to the input buffer.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd1_OnBlockReceived(LDD_TUserData *UserDataPtr)
+{
+  register byte Flags = 0U;            /* Temporary variable for flags */
+
+  (void)UserDataPtr;                   /* Parameter is not used, suppress unused argument warning */
+  if (Inhr1_InpLen < Inhr1_INP_BUF_SIZE) { /* Is number of bytes in the receive buffer lower than size of buffer? */
+    Inhr1_InpLen++;                    /* Increase number of chars in the receive buffer */
+    InpBuffer[InpIndexW++] = (Inhr1_TComData)BufferRead; /* Save received char to the receive buffer */
+    if (InpIndexW >= Inhr1_INP_BUF_SIZE) { /* Is the index out of the receive buffer? */
+      InpIndexW = 0x00U;               /* Set index on the first item into the receive buffer */
+    }
+    Flags |= ON_RX_CHAR;               /* If yes then set the OnRxChar flag */
+  } else {
+    SerFlag |= FULL_RX;                /* Set flag "full RX buffer" */
+  }
+  if ((Flags & ON_RX_CHAR) != 0U) {    /* Is OnRxChar flag set? */
+    Inhr1_OnRxChar();                  /* Invoke user event */
+  }
+  (void)ASerialLdd1_ReceiveBlock(ASerialLdd1_DeviceDataPtr, &BufferRead, 1U); /* Receive one data byte */
+}
+
+#define ON_FREE_TX  0x01U
+#define ON_TX_CHAR  0x02U
+/*
+** ===================================================================
+**     Method      :  Inhr1_ASerialLdd1_OnBlockSent (component AsynchroSerial)
+**
+**     Description :
+**         This event is called after the last character from the output 
+**         buffer is moved to the transmitter.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd1_OnBlockSent(LDD_TUserData *UserDataPtr)
+{
+  (void)UserDataPtr;                   /* Parameter is not used, suppress unused argument warning */
+  OutIndexR++;
+  if (OutIndexR >= Inhr1_OUT_BUF_SIZE) { /* Is the index out of the transmit buffer? */
+    OutIndexR = 0x00U;                 /* Set index on the first item into the transmit buffer */
+  }
+  Inhr1_OutLen--;                      /* Decrease number of chars in the transmit buffer */
+  if (Inhr1_OutLen != 0U) {            /* Is number of bytes in the transmit buffer greater then 0? */
+    SerFlag |= RUNINT_FROM_TX;         /* Set flag "running int from TX"? */
+    (void)ASerialLdd1_SendBlock(ASerialLdd1_DeviceDataPtr, (LDD_TData *)&OutBuffer[OutIndexR], 1U); /* Send one data byte */
+  } else {
+    SerFlag &= (byte)~(RUNINT_FROM_TX); /* Clear "running int from TX" and "full TX buff" flags */
+  }
+}
+
+/*
+** ===================================================================
+**     Method      :  Inhr1_ASerialLdd1_OnError (component AsynchroSerial)
+**
+**     Description :
+**         This event is called when a channel error (not the error 
+**         returned by a given method) occurs.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd1_OnError(LDD_TUserData *UserDataPtr)
+{
+  LDD_SERIAL_TError SerialErrorMask;   /* Serial error mask variable */
+
+  (void)UserDataPtr;                   /* Parameter is not used, suppress unused argument warning */
+  (void)ASerialLdd1_GetError(ASerialLdd1_DeviceDataPtr, &SerialErrorMask); /* Get error state */
+  if (SerialErrorMask != 0U) {
+    SerFlag |= (((SerialErrorMask & LDD_SERIAL_PARITY_ERROR) != 0U ) ? PARITY_ERR : 0U);
+    SerFlag |= (((SerialErrorMask & LDD_SERIAL_NOISE_ERROR) != 0U ) ? NOISE_ERR : 0U);
+    SerFlag |= (((SerialErrorMask & LDD_SERIAL_RX_OVERRUN) != 0U ) ? OVERRUN_ERR : 0U);
+    SerFlag |= (((SerialErrorMask & LDD_SERIAL_FRAMING_ERROR) != 0U ) ? FRAMING_ERR : 0U);
+  }
 }
 
 /*

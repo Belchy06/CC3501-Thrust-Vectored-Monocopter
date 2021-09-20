@@ -57,13 +57,13 @@ by the component.
 <td class="regResetVal">0x00000000</td>
  <td>FTM0_C7SC register, peripheral RealTimeLdd1.</td></tr>
 <tr><td>0x40038008</td><td>FTM0_MOD</td>
-<td class="regNotResetVal">0x0000051E</td>
+<td class="regNotResetVal">0x00000041</td>
  <td>FTM0_MOD register, peripheral RealTimeLdd1.</td></tr>
 <tr><td>0xE000E42A</td><td>NVICIP42</td>
 <td class="regNotResetVal">0x00000070</td>
  <td>NVICIP42 register, peripheral RealTimeLdd1.</td></tr>
 <tr><td>0xE000E104</td><td>NVICISER1</td>
-<td class="regNotResetVal">0x00000400</td>
+<td class="regNotResetVal">0x00000406</td>
  <td>NVICISER1 register, peripheral RealTimeLdd1.</td></tr>
 </table>
 Color Denotes Reset Value
@@ -871,7 +871,7 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0x40038008</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x0000051E</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000041</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>0 - 15</td><td>MOD</td><td>0x00</td><td>Modulo Value</td>
@@ -937,7 +937,7 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0xE000E104</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000400</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000406</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>0 - 31</td><td>SETENA</td><td>0x00</td><td>Interrupt set enable bits</td>
@@ -952,9 +952,9 @@ registers of the peripheral(s) configured by the component.
 **          Interrupt service/event                        : Enabled
 **            Interrupt                                    : INT_FTM0
 **            Interrupt priority                           : medium priority
-**          Resolution                                     : 1 ms
+**          Resolution                                     : 50 µs
 **          SW counter                                     : 32-bit
-**          Maximum time of event                          : 4295884.799798673 sec
+**          Maximum time of event                          : 216268.80040265317 sec
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes

@@ -33,8 +33,10 @@ void New_BNO085(BNO085 *self, byte addr) {
 	self->begin = &begin;
 	self->enableRotationVector = &enableRotationVector;
 	self->enableAccelerometer = &enableAccelerometer;
+	self->enableLinearAccelerometer = &enableLinearAccelerometer;
 	self->enableGyro = &enableGyro;
 	self->enableMagnetometer = &enableMagnetometer;
+	self->enableGameRotationVector = &enableGameRotationVector;
 	self->dataAvailable = &dataAvailable;
 	self->getRoll = &getRoll;
 	self->getYaw = &getYaw;
@@ -45,6 +47,7 @@ void New_BNO085(BNO085 *self, byte addr) {
 	self->getQuatK = &getQuatK;
 	self->getQuatRadianAccuracy = &getQuatRadianAccuracy;
 	self->getAccel = &getAccel;
+	self->getLinAccel = &getLinAccel;
 	self->getGyro = &getGyro;
 	self->getMag = &getMag;
 }
@@ -153,6 +156,10 @@ void enableAccelerometer(BNO085 *self, uint16_t timeBetweenReports) {
 	setFeatureCommand(self, SENSOR_REPORTID_ACCELEROMETER, timeBetweenReports, 0);
 }
 
+void enableLinearAccelerometer(BNO085 *self, uint16_t timeBetweenReports) {
+	setFeatureCommand(self, SENSOR_REPORTID_LINEAR_ACCELERATION, timeBetweenReports, 0);
+}
+
 void enableGyro(BNO085 *self, uint16_t timeBetweenReports) {
 	setFeatureCommand(self, SENSOR_REPORTID_GYROSCOPE, timeBetweenReports, 0);
 }
@@ -160,6 +167,11 @@ void enableGyro(BNO085 *self, uint16_t timeBetweenReports) {
 void enableMagnetometer(BNO085 *self, uint16_t timeBetweenReports) {
 	setFeatureCommand(self, SENSOR_REPORTID_MAGNETIC_FIELD, timeBetweenReports, 0);
 }
+
+void enableGameRotationVector(BNO085 *self, uint16_t timeBetweenReports) {
+	setFeatureCommand(self, SENSOR_REPORTID_AR_VR_STABILIZED_GAME_ROTATION_VECTOR, timeBetweenReports, 0);
+}
+
 
 void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig) {
 	long microsBetweenReports = (long) timeBetweenReports * 1000L;
@@ -468,6 +480,13 @@ void getAccel(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy) {
 	*accuracy = self->accelAccuracy;
 }
 
+void getLinAccel(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy) {
+	*x = qToFloat(self->rawLinAccelX, self->linear_accelerometer_Q1);
+	*y = qToFloat(self->rawLinAccelY, self->linear_accelerometer_Q1);
+	*z = qToFloat(self->rawLinAccelZ, self->linear_accelerometer_Q1);
+	*accuracy = self->accelLinAccuracy;
+}
+
 void getGyro(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy) {
 	*x = qToFloat(self->rawGyroX, self->gyro_Q1);
 	*y = qToFloat(self->rawGyroY, self->gyro_Q1);
@@ -481,3 +500,4 @@ void getMag(BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy) {
 	*z = qToFloat(self->rawMagZ, self->magnetometer_Q1);
 	*accuracy = self->magAccuracy;
 }
+

@@ -58,16 +58,20 @@
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\CI2C1.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Cpu.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\FC321.c</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\GPSTimer.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Inhr1.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\IntI2cLdd1.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\MCUC1.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\PE_LDD.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Pins1.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\RealTimeLdd1.c</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\RealTimeLdd2.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\TU1.c</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\TU2.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Project_Settings\Startup_Code\startup.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\BNO085.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\Events.c</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\GPS.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\main.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\printf.c</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Static_Code\System\CPU_Init.c</PathName>
@@ -81,6 +85,7 @@
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\CPU_Config.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Cpu.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\FC321.h</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\GPSTimer.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\IO_Map.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Inhr1.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Init_Config.h</PathName>
@@ -93,10 +98,13 @@
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\PE_Types.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Pins1.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\RealTimeLdd1.h</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\RealTimeLdd2.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\TU1.h</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\TU2.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Generated_Code\Vectors_Config.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\BNO085.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\Events.h</PathName>
+      <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\GPS.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\Sensors.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Sources\printf.h</PathName>
       <PathName>C:\Users\willi\Desktop\Uni\Year 3\SP2\CC3501\group-assignment-cairns-group-1\Assignment\Static_Code\IO_Map\MK22F51212.h</PathName>

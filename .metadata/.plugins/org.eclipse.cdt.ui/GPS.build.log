@@ -1,25 +1,6 @@
-15:43:16 **** Incremental Build of configuration Debug for project GPS ****
+19:44:54 **** Incremental Build of configuration Debug for project GPS ****
 make all 
-Building file: ../Sources/Events.c
-Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
-Finished building: ../Sources/Events.c
- 
-Building file: ../Sources/GPS.c
-Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Generated_Code" -std=c99 -MMD -MP -MF"Sources/GPS.d" -MT"Sources/GPS.o" -c -o "Sources/GPS.o" "../Sources/GPS.c"
-Finished building: ../Sources/GPS.c
- 
-Building file: ../Sources/main.c
-Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
-Finished building: ../Sources/main.c
- 
-Building target: GPS.elf
-Invoking: Cross ARM C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/GPS/Project_Settings/Linker_Files" -Wl,-Map,"GPS.map" -specs=nano.specs -specs=nosys.specs -o "GPS.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/Events.o ./Sources/GPS.o ./Sources/main.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd2.o ./Generated_Code/Cpu.o ./Generated_Code/PC.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o   
-Finished building target: GPS.elf
- 
+make: Nothing to be done for 'all'.
 
-15:43:18 Build Finished (took 1s.432ms)
+19:44:54 Build Finished (took 234ms)
 

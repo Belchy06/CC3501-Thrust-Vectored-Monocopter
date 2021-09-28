@@ -13,15 +13,22 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="0xF" key="selection"/>
+		<item value="time" key="selection"/>
 		<list key="findhistory">
-			<item value="0xf"/>
-			<item value="0xfa"/>
-			<item value="oxfa"/>
-			<item value="reference manual"/>
-			<item value="double"/>
+			<item value="_GPS_SENTENCE_GPRMC"/>
+			<item value="time"/>
+			<item value="courseto"/>
+			<item value="GSV"/>
+			<item value="send"/>
+			<item value="BT"/>
+			<item value="atan2"/>
+			<item value="cos"/>
 		</list>
 		<list key="replacehistory">
+			<item value="gYaw"/>
+			<item value="atan2f"/>
+			<item value="cosf"/>
+			<item value="sinf"/>
 			<item value="float"/>
 		</list>
 	</section>

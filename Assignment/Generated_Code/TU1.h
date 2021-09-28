@@ -7,24 +7,24 @@
 **     Version     : Component 01.164, Driver 01.11, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 18:39, # CodeGen: 40
+**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
 **     Settings    :
 **          Component name                                 : TU1
-**          Module name                                    : FTM0
-**          Counter                                        : FTM0_CNT
+**          Module name                                    : FTM2
+**          Counter                                        : FTM2_CNT
 **          Counter direction                              : Up
 **          Counter width                                  : 16 bits
 **          Value type                                     : uint16_t
 **          Input clock source                             : Internal
-**            Counter frequency                            : 1.31072 MHz
+**            Counter frequency                            : Auto select
 **          Counter restart                                : On-match
-**            Period device                                : FTM0_MOD
+**            Period device                                : FTM2_MOD
 **            Period                                       : 50 µs
 **            Interrupt                                    : Enabled
-**              Interrupt                                  : INT_FTM0
+**              Interrupt                                  : INT_FTM2
 **              Interrupt priority                         : medium priority
 **          Channel list                                   : 0
 **          Initialization                                 : 
@@ -120,15 +120,15 @@ extern "C" {
 #define __BWUserType_TU1_TValueType
   typedef uint16_t TU1_TValueType ;    /* Type for data parameters of methods */
 #endif
-#define TU1_CNT_INP_FREQ_U_0 0x00140000UL /* Counter input frequency in Hz */
-#define TU1_CNT_INP_FREQ_R_0 1310720.778463285F /* Counter input frequency in Hz */
+#define TU1_CNT_INP_FREQ_U_0 0x01400000UL /* Counter input frequency in Hz */
+#define TU1_CNT_INP_FREQ_R_0 20971395.017196544F /* Counter input frequency in Hz */
 #define TU1_CNT_INP_FREQ_COUNT 0U      /* Count of predefined counter input frequencies */
-#define TU1_PERIOD_TICKS   0x42UL      /* Initialization value of period in 'counter ticks' */
+#define TU1_PERIOD_TICKS   0x0419UL    /* Initialization value of period in 'counter ticks' */
 #define TU1_NUMBER_OF_CHANNELS 0x00U   /* Count of predefined channels */
 #define TU1_COUNTER_WIDTH  0x10U       /* Counter width in bits  */
 #define TU1_COUNTER_DIR    DIR_UP      /* Direction of counting */
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
-#define TU1_PRPH_BASE_ADDRESS  0x40038000U
+#define TU1_PRPH_BASE_ADDRESS  0x4003A000U
   
 /* Methods configuration constants - generated for all enabled component's methods */
 #define TU1_Init_METHOD_ENABLED        /*!< Init method of the component TU1 is enabled (generated) */

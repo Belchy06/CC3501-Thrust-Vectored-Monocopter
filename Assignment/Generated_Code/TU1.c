@@ -7,24 +7,24 @@
 **     Version     : Component 01.164, Driver 01.11, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 18:39, # CodeGen: 40
+**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
 **     Settings    :
 **          Component name                                 : TU1
-**          Module name                                    : FTM0
-**          Counter                                        : FTM0_CNT
+**          Module name                                    : FTM2
+**          Counter                                        : FTM2_CNT
 **          Counter direction                              : Up
 **          Counter width                                  : 16 bits
 **          Value type                                     : uint16_t
 **          Input clock source                             : Internal
-**            Counter frequency                            : 1.31072 MHz
+**            Counter frequency                            : Auto select
 **          Counter restart                                : On-match
-**            Period device                                : FTM0_MOD
+**            Period device                                : FTM2_MOD
 **            Period                                       : 50 µs
 **            Interrupt                                    : Enabled
-**              Interrupt                                  : INT_FTM0
+**              Interrupt                                  : INT_FTM2
 **              Interrupt priority                         : medium priority
 **          Channel list                                   : 0
 **          Initialization                                 : 
@@ -119,7 +119,7 @@ typedef TU1_TDeviceData *TU1_TDeviceDataPtr; /* Pointer to the device data struc
 /* {Default RTOS Adapter} Static object used for simulation of dynamic driver memory allocation */
 static TU1_TDeviceData DeviceDataPrv__DEFAULT_RTOS_ALLOC;
 /* {Default RTOS Adapter} Global variable used for passing a parameter into ISR */
-static TU1_TDeviceDataPtr INT_FTM0__DEFAULT_RTOS_ISRPARAM;
+static TU1_TDeviceDataPtr INT_FTM2__DEFAULT_RTOS_ISRPARAM;
 
 #define AVAILABLE_EVENTS_MASK (LDD_TEventMask)(LDD_TIMERUNIT_ON_COUNTER_RESTART)
 
@@ -168,42 +168,30 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr)
   }
   /* Interrupt vector(s) allocation */
   /* {Default RTOS Adapter} Set interrupt vector: IVT is static, ISR parameter is passed by the global variable */
-  INT_FTM0__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
-  /* SIM_SCGC6: FTM0=1 */
-  SIM_SCGC6 |= SIM_SCGC6_FTM0_MASK;
-  /* FTM0_MODE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,FAULTIE=0,FAULTM=0,CAPTEST=0,PWMSYNC=0,WPDIS=1,INIT=0,FTMEN=0 */
-  FTM0_MODE = (FTM_MODE_FAULTM(0x00) | FTM_MODE_WPDIS_MASK); /* Set up mode register */
-  /* FTM0_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=0,CPWMS=0,CLKS=0,PS=0 */
-  FTM0_SC = (FTM_SC_CLKS(0x00) | FTM_SC_PS(0x00)); /* Clear status and control register */
-  /* FTM0_CNTIN: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,INIT=0 */
-  FTM0_CNTIN = FTM_CNTIN_INIT(0x00);   /* Clear counter initial register */
-  /* FTM0_CNT: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,COUNT=0 */
-  FTM0_CNT = FTM_CNT_COUNT(0x00);      /* Reset counter register */
-  /* FTM0_C0SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C0SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C1SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C1SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C2SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C2SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C3SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C3SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C4SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C4SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C5SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C5SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C6SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C6SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_C7SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
-  FTM0_C7SC = 0x00U;                   /* Clear channel status and control register */
-  /* FTM0_MOD: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,MOD=0x41 */
-  FTM0_MOD = FTM_MOD_MOD(0x41);        /* Set up modulo register */
+  INT_FTM2__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
+  /* SIM_SCGC6: FTM2=1 */
+  SIM_SCGC6 |= SIM_SCGC6_FTM2_MASK;
+  /* FTM2_MODE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,FAULTIE=0,FAULTM=0,CAPTEST=0,PWMSYNC=0,WPDIS=1,INIT=0,FTMEN=0 */
+  FTM2_MODE = (FTM_MODE_FAULTM(0x00) | FTM_MODE_WPDIS_MASK); /* Set up mode register */
+  /* FTM2_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=0,CPWMS=0,CLKS=0,PS=0 */
+  FTM2_SC = (FTM_SC_CLKS(0x00) | FTM_SC_PS(0x00)); /* Clear status and control register */
+  /* FTM2_CNTIN: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,INIT=0 */
+  FTM2_CNTIN = FTM_CNTIN_INIT(0x00);   /* Clear counter initial register */
+  /* FTM2_CNT: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,COUNT=0 */
+  FTM2_CNT = FTM_CNT_COUNT(0x00);      /* Reset counter register */
+  /* FTM2_C0SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM2_C0SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM2_C1SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=0,MSB=0,MSA=0,ELSB=0,ELSA=0,ICRST=0,DMA=0 */
+  FTM2_C1SC = 0x00U;                   /* Clear channel status and control register */
+  /* FTM2_MOD: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,MOD=0x0418 */
+  FTM2_MOD = FTM_MOD_MOD(0x0418);      /* Set up modulo register */
   DeviceDataPrv->EnEvents = 0x0100U;   /* Enable selected events */
-  /* NVICIP42: PRI42=0x70 */
-  NVICIP42 = NVIC_IP_PRI42(0x70);
-  /* NVICISER1: SETENA|=0x0400 */
-  NVICISER1 |= NVIC_ISER_SETENA(0x0400);
-  /* FTM0_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=1,CPWMS=0,CLKS=1,PS=4 */
-  FTM0_SC = (FTM_SC_TOIE_MASK | FTM_SC_CLKS(0x01) | FTM_SC_PS(0x04)); /* Set up status and control register */
+  /* NVICIP44: PRI44=0x70 */
+  NVICIP44 = NVIC_IP_PRI44(0x70);
+  /* NVICISER1: SETENA|=0x1000 */
+  NVICISER1 |= NVIC_ISER_SETENA(0x1000);
+  /* FTM2_SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,TOF=0,TOIE=1,CPWMS=0,CLKS=1,PS=0 */
+  FTM2_SC = (FTM_SC_TOIE_MASK | FTM_SC_CLKS(0x01) | FTM_SC_PS(0x00)); /* Set up status and control register */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_TU1_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv); /* Return pointer to the device data structure */
@@ -233,7 +221,7 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr)
 LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr)
 {
   (void)DeviceDataPtr;                 /* Parameter is not used, suppress unused argument warning */
-  FTM_PDD_InitializeCounter(FTM0_BASE_PTR);
+  FTM_PDD_InitializeCounter(FTM2_BASE_PTR);
   return ERR_OK;                       /* OK */
 }
 
@@ -250,16 +238,16 @@ LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr)
 PE_ISR(TU1_Interrupt)
 {
   /* {Default RTOS Adapter} ISR parameter is passed through the global variable */
-  TU1_TDeviceDataPtr DeviceDataPrv = INT_FTM0__DEFAULT_RTOS_ISRPARAM;
+  TU1_TDeviceDataPtr DeviceDataPrv = INT_FTM2__DEFAULT_RTOS_ISRPARAM;
 
   LDD_TEventMask State = 0U;
 
-  if ((FTM_PDD_GetOverflowInterruptFlag(FTM0_BASE_PTR)) != 0U) { /* Is the overflow interrupt flag pending? */
+  if ((FTM_PDD_GetOverflowInterruptFlag(FTM2_BASE_PTR)) != 0U) { /* Is the overflow interrupt flag pending? */
     State |= LDD_TIMERUNIT_ON_COUNTER_RESTART; /* and set mask */
   }
   State &= DeviceDataPrv->EnEvents;    /* Handle only enabled interrupts */
   if (State & LDD_TIMERUNIT_ON_COUNTER_RESTART) { /* Is the overflow interrupt flag pending? */
-    FTM_PDD_ClearOverflowInterruptFlag(FTM0_BASE_PTR); /* Clear flag */
+    FTM_PDD_ClearOverflowInterruptFlag(FTM2_BASE_PTR); /* Clear flag */
     TU1_OnCounterRestart(DeviceDataPrv->UserDataPtr); /* Invoke OnCounterRestart event */
   }
 }

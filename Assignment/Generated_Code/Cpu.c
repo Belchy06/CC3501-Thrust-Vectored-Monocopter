@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 19:43, # CodeGen: 45
+**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
 **     Abstract    :
 **
 **     Settings    :
@@ -106,17 +106,28 @@ void Common_Init(void)
 #if CPU_COMPONENTS_INIT
 void Components_Init(void)
 {
+  /* ### Asynchro serial "Inhr2" init code ... */
+  Inhr2_Init();
+  /* ###  "PC" init code ... */
   /* ### InternalI2C "CI2C1" init code ... */
   CI2C1_Init();
   /* ### McuLibConfig "MCUC1" init code ... */
   MCUC1_Init();
-  /* ### Asynchro serial "Inhr1" init code ... */
-  Inhr1_Init();
-  /* ###  "BT" init code ... */
-  /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)RealTimeLdd1_Init(NULL);
   /* ### RealTime_LDD "RealTimeLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)RealTimeLdd2_Init(NULL);
+  /* ### Asynchro serial "Inhr1" init code ... */
+  Inhr1_Init();
+  /* ###  "GPS" init code ... */
+  /* ### PWM_LDD "PwmLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd1_Init(NULL);
+  /* ### Servo "SERVO1" init code ... */
+  SERVO1_Init();
+  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd2_Init(NULL);
+  /* ### Servo "SERVO2" init code ... */
+  SERVO2_Init();
+  /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)RealTimeLdd1_Init(NULL);
 }
 #endif /* CPU_COMPONENTS_INIT */
 

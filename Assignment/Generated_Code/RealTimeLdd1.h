@@ -7,7 +7,7 @@
 **     Version     : Component 01.007, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 18:39, # CodeGen: 40
+**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
 **     Abstract    :
 **          This component "RealTime_LDD" implements a free running counter
 **          for time measurement.
@@ -16,14 +16,14 @@
 **          component.
 **     Settings    :
 **          Component name                                 : RealTimeLdd1
-**          Periodic interrupt source                      : FTM0_MOD
-**          Counter                                        : FTM0_CNT
+**          Periodic interrupt source                      : FTM2_MOD
+**          Counter                                        : FTM2_CNT
 **          Interrupt service/event                        : Enabled
-**            Interrupt                                    : INT_FTM0
+**            Interrupt                                    : INT_FTM2
 **            Interrupt priority                           : medium priority
 **          Resolution                                     : 50 µs
 **          SW counter                                     : 32-bit
-**          Maximum time of event                          : 216268.80040265317 sec
+**          Maximum time of event                          : 214835.20044879054 sec
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes
@@ -111,7 +111,7 @@ extern "C" {
 
 
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
-#define RealTimeLdd1_PRPH_BASE_ADDRESS  0x40038000U
+#define RealTimeLdd1_PRPH_BASE_ADDRESS  0x4003A000U
   
 /*! Device data structure pointer used when auto initialization property is enabled. This constant can be passed as a first parameter to all component's methods. */
 #define RealTimeLdd1_DeviceData  ((LDD_TDeviceData *)PE_LDD_GetDeviceStructure(PE_LDD_COMPONENT_RealTimeLdd1_ID))

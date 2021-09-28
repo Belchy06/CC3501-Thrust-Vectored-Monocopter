@@ -7,15 +7,15 @@
 **     Version     : Component 02.070, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 18:39, # CodeGen: 40
+**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
 **     Abstract    :
 **         This device "FreeCntr32" implements 32-bit Free Running Counter
 **     Settings    :
 **          Component name                                 : FC321
-**          Periodic interrupt source                      : FTM0_MOD
-**          Counter                                        : FTM0_CNT
+**          Periodic interrupt source                      : FTM2_MOD
+**          Counter                                        : FTM2_CNT
 **          Interrupt service/event                        : Enabled
-**            Interrupt                                    : INT_FTM0
+**            Interrupt                                    : INT_FTM2
 **            Interrupt priority                           : medium priority
 **          Resolution                                     : 50 µs
 **          Same resolution in modes                       : yes

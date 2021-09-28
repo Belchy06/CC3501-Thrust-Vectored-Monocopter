@@ -7,7 +7,7 @@
 **     Version     : Component 02.611, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-20, 19:05, # CodeGen: 44
+**     Date/Time   : 2021-09-21, 20:00, # CodeGen: 49
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -17,13 +17,13 @@
 **         The component requires one on-chip asynchronous serial channel.
 **     Settings    :
 **          Component name                                 : Inhr1
-**          Channel                                        : UART1
+**          Channel                                        : UART2
 **          Interrupt service/event                        : Enabled
-**            Interrupt RxD                                : INT_UART1_RX_TX
+**            Interrupt RxD                                : INT_UART2_RX_TX
 **            Interrupt RxD priority                       : medium priority
-**            Interrupt TxD                                : INT_UART1_RX_TX
+**            Interrupt TxD                                : INT_UART2_RX_TX
 **            Interrupt TxD priority                       : medium priority
-**            Interrupt Error                              : INT_UART1_ERR
+**            Interrupt Error                              : INT_UART2_ERR
 **            Interrupt Error priority                     : medium priority
 **            Input buffer size                            : 128
 **            Output buffer size                           : 128
@@ -35,9 +35,9 @@
 **            Width                                        : 8 bits
 **            Stop bit                                     : 1
 **            Receiver                                     : Enabled
-**              RxD                                        : ADC1_SE5a/PTE1/LLWU_P0/SPI1_SOUT/UART1_RX/I2C1_SCL/SPI1_SIN
+**              RxD                                        : PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL
 **            Transmitter                                  : Enabled
-**              TxD                                        : ADC1_SE4a/PTE0/CLKOUT32K/SPI1_PCS1/UART1_TX/I2C1_SDA/RTC_CLKOUT
+**              TxD                                        : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
 **            Baud rate                                    : 9600 baud
 **            Break signal                                 : Disabled
 **            Wakeup condition                             : Idle line wakeup

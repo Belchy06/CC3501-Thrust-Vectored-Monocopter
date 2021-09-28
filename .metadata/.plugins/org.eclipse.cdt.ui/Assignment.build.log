@@ -1,6 +1,7 @@
-22:42:35 **** Incremental Build of configuration Debug for project Assignment ****
-make all 
-make: Nothing to be done for 'all'.
+18:46:19 **** Clean-only build of configuration Debug for project Assignment ****
+make clean 
+rm -rf  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/main.o ./Sources/printf.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PC.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/SERVO1.o ./Generated_Code/SERVO2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o  ./Static_Code/System/CPU_Init.d ./Static_Code/System/Peripherals_Init.d ./Static_Code/System/Vectors.d  ./Sources/BNO085.d ./Sources/Events.d ./Sources/GPS.d ./Sources/main.d ./Sources/printf.d  ./Project_Settings/Startup_Code/startup.d  ./Generated_Code/ASerialLdd1.d ./Generated_Code/ASerialLdd2.d ./Generated_Code/CI2C1.d ./Generated_Code/Cpu.d ./Generated_Code/FC321.d ./Generated_Code/GPS.d ./Generated_Code/GPSTimer.d ./Generated_Code/Inhr1.d ./Generated_Code/Inhr2.d ./Generated_Code/IntI2cLdd1.d ./Generated_Code/MCUC1.d ./Generated_Code/PC.d ./Generated_Code/PE_LDD.d ./Generated_Code/Pins1.d ./Generated_Code/Pwm1.d ./Generated_Code/Pwm2.d ./Generated_Code/PwmLdd1.d ./Generated_Code/PwmLdd2.d ./Generated_Code/RealTimeLdd1.d ./Generated_Code/RealTimeLdd2.d ./Generated_Code/SERVO1.d ./Generated_Code/SERVO2.d ./Generated_Code/TU1.d ./Generated_Code/TU2.d ./Generated_Code/TU3.d  Assignment.elf
+ 
 
-22:42:35 Build Finished (took 298ms)
+18:46:19 Build Finished (took 248ms)
 

@@ -33,9 +33,18 @@
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
 #include "MCUC1.h"
-#include "BT.h"
+#include "PC.h"
+#include "Inhr2.h"
+#include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
+#include "SERVO1.h"
+#include "Pwm1.h"
+#include "PwmLdd1.h"
+#include "TU3.h"
+#include "SERVO2.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
@@ -59,11 +68,11 @@
 #include "GPS.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #define BNO080_DEFAULT_ADDRESS 0x4A
-#define PI 3.14159
-#define RAD_TO_DEGREES 57.2958
+#define BMPXXX_DEFAULT_ADDRESS 0x00
 
 float h;
 float pitch, roll, yaw;
+float p, q, r;
 float ax, ay, az;
 float lx, ly, lz;
 uint8_t accelAccuracy, gyroAccuracy, magAccuracy, linAccuracy;
@@ -73,7 +82,7 @@ char str[128];
 unsigned int time;
 
 float lat, lon, prevLat, prevLon, distance;
-float courseto;
+float gYaw;
 float dt;
 unsigned long age;
 float xOff, yOff;
@@ -83,6 +92,22 @@ volatile GPS gps;
 volatile uint8_t index;
 volatile char buffer[128];
 volatile bool complete_command;
+
+struct setpoints {
+	float x;
+	float y;
+	float z;
+	float yaw;
+};
+
+float clamp(float f, float min, float max) {
+	const float t = f < min ? min : f;
+	return f > max ? max : f;
+}
+
+float servoScale(float f) {
+	return (((f + 1) * (1000)) / (2)) + 1000;
+}
 
 char* getAccuracyLevel(uint8_t accuracyNumber) {
 	if (accuracyNumber == 0) {
@@ -100,49 +125,13 @@ char* getAccuracyLevel(uint8_t accuracyNumber) {
 }
 
 void sendBT() {
-//	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f, dt: %f\r\n", roll, pitch,
-//			yaw, time);
-	snprintf(str, 128, "xAcc: %f, yAcc: %f, xMps: %f, yMps: %f, xOff: %f, yOff: %f, dT: %f\r\n", lx, ly, xMps, yMps, xOff, yOff, dt);
-	BT_SendStr(str);
-//	for(uint16_t i = 0; i < 50000; i++) {
-//		__asm("nop");
-//	}
-}
-
-/*
- * IN: x, y, z orientation in degrees
- * OUT: The 3x3 DCM in Z,Y,X rotation order
- */
-float** DCM(float phi, float theta, float psi) {
-	// Initialize empty 3x3 array
-	float* values = calloc(9, sizeof(float));
-	float** C = malloc(3 * sizeof(float*));
-	for (int i = 0; i < 3; ++i) {
-		C[i] = values;
-	}
-	// Convert degrees to radians
-	phi *= 0.0174533;
-	theta *= 0.0174533;
-	psi *= 0.0174533;
-	// Row, col
-	C[0][0] = cos(theta) * cos(psi);
-	C[0][1] = cos(theta) * sin(psi);
-	C[0][2] = -sin(theta);
-
-	C[1][0] = sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi);
-	C[1][1] = sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi);
-	C[1][2] = sin(phi) * cos(theta);
-
-	C[2][0] = cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi);
-	C[2][1] = cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi);
-	C[2][2] = cos(phi) * cos(theta);
-
-	return C;
-}
-
-void destroyArray(float** arr) {
-	free(*arr);
-	free(arr);
+//	snprintf(str, 128,
+//			"xAcc: %f, yAcc: %f, xMps: %f, yMps: %f, xOff: %f, yOff: %f, dT: %f\r\n",
+//			lx, ly, xMps, yMps, xOff, yOff, dt);
+//	PC_SendStr(str);
+	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f, gYaw: %f\r\n", roll,
+			pitch, yaw, gYaw);
+	PC_SendStr(str);
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -157,6 +146,10 @@ int main(void)
 
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
+	// Initialize setpoints
+	struct setpoints setpoint;
+	setpoint.x = setpoint.y = setpoint.z = setpoint.yaw = 0;
+
 	NEW_GPS(&gps);
 	complete_command = false;
 	bool firstTime = true;
@@ -168,37 +161,38 @@ int main(void)
 			;
 	}
 
+	IMU.enableGyro(&IMU, 300);
 	IMU.enableGameRotationVector(&IMU, 300);
-	// IMU.enableAccelerometer(&IMU, 50);
 	IMU.enableLinearAccelerometer(&IMU, 300);
-	// TODO Own sensor fusion. Get mag, accel, gyro
 	FC321_Reset();
 	for (;;) {
 		if (IMU.dataAvailable(&IMU)) {
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
 			yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
-			// IMU.getAccel(&IMU, &ax, &ay, &az, &accelAccuracy);
+			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
-			if(lz > 9) lz = 0;
+			if (lz > 9)
+				lz = 0;
 		}
+
 		if (complete_command) {
 			gps.get_position(&gps, &lat, &lon, &age);
 			//gps.get_altitude(&gps, &gAlt);
 			if (!firstTime) {
 				distance = gps.distance_between(&gps, lat, lon, prevLat,
 						prevLon);
-				courseto = gps.course_to(&gps, prevLat, prevLon, lat, lon);
+				gYaw = gps.course_to(&gps, prevLat, prevLon, lat, lon);
 				// Position
 				if (lat != 999999999 && lon != 999999999) {
-					xOff = distance * cos(courseto);
-					yOff = distance * sin(courseto);
+					xOff = distance * cosf(gYaw);
+					yOff = distance * sinf(gYaw);
 				}
 				// Velocity
 				mps = gps.speed_mps(&gps);
 				if (mps != -1.0) {
-					xMps = mps * cos(courseto);
-					yMps = mps * sin(courseto);
+					xMps = mps * cosf(gYaw);
+					yMps = mps * sinf(gYaw);
 				}
 			}
 			prevLat = lat;
@@ -206,11 +200,28 @@ int main(void)
 			firstTime = false;
 			complete_command = false;
 			index = 0;
-			sendBT();
+			//sendBT();
 		}
 		// Rest of control loop
 		// Estimate XY velocity
-		float** dcm = DCM(roll, pitch, yaw);
+		// float** dcm = DCM(roll, pitch, yaw);
+		// Convert degrees to radians
+		float dcm[3][3];
+		float phi = roll * 0.0174533;
+		float theta = pitch * 0.0174533;
+		float psi = yaw * 0.0174533;
+		// Row, col
+		dcm[0][0] = cosf(theta) * cosf(psi);
+		dcm[0][1] = cosf(theta) * sinf(psi);
+		dcm[0][2] = -sinf(theta);
+
+		dcm[1][0] = sinf(phi) * sinf(theta) * cosf(psi) - cosf(phi) * sinf(psi);
+		dcm[1][1] = sinf(phi) * sinf(theta) * sinf(psi) + cosf(phi) * cosf(psi);
+		dcm[1][2] = sinf(phi) * cosf(theta);
+
+		dcm[2][0] = cosf(phi) * sinf(theta) * cosf(psi) + sinf(phi) * sinf(psi);
+		dcm[2][1] = cosf(phi) * sinf(theta) * sinf(psi) - sinf(phi) * cosf(psi);
+		dcm[2][2] = cosf(phi) * cosf(theta);
 
 		FC321_GetTimeUS(&time);
 		dt = time * 1e-6;
@@ -223,43 +234,127 @@ int main(void)
 		// TODO
 		zMps = 0;
 
-
 		// Estimate XY position
 		float dcmT[3][3];
-		for(uint8_t i = 0; i < 3; ++i)
-		for(uint8_t j = 0; j < 3; ++j) {
-			dcmT[j][i] = dcm[i][j];
-		}
+		for (uint8_t i = 0; i < 3; ++i)
+			for (uint8_t j = 0; j < 3; ++j) {
+				dcmT[j][i] = dcm[i][j];
+			}
 
 		float worldVelXY[2];
-		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps + dcmT[0][2] * zMps;
-		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps + dcmT[1][2] * zMps;
+		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps
+				+ dcmT[0][2] * zMps;
+		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps
+				+ dcmT[1][2] * zMps;
 		/*
-		* POSITION ESTIMATE
-		*/
+		 * POSITION ESTIMATE
+		 */
 		xOff = xOff + worldVelXY[0] * dt;
 		yOff = yOff + worldVelXY[1] * dt;
 
+		/*
+		 * XY-to-world setpoint
+		 */
+		float PRcmd[2];
+		{
+			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
+			float P = 0.24;
+			float P_xy[2] = { -P
+					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
+							3), P
+					* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3,
+							3) };
+			float D = 0.1;
+			float D_xy[2] = { D * xMps, -D * yMps };
+			// PD Controller
+			PRcmd[0] = P_xy[0] + D_xy[0];
+			PRcmd[1] = P_xy[1] + D_xy[1];
+		}
+		/*
+		 * Attitude Controller
+		 */
+		float tau_pitch, tau_roll;
+		{
+			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			// Proportional
+			float P[2] = { 0.013, 0.01 };
+			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
+			// Integral
+			float I = 0.01;
+			float I_pr[2] = { I * PRErr[0] * dt, I * PRErr[1] * dt };
+			// Derivative
+			float D[2] = { -0.002, -0.0028 };
+			float D_pr[2] = { D[0] * q, D[1] * p };
 
+			tau_pitch = P_pr[0] + I_pr[0] + D_pr[0];
+			tau_roll = P_pr[1] + I_pr[1] + D_pr[1];
+		}
 
+		/*
+		 * Yaw Controller
+		 */
+		float tau_yaw;
+		{
+			float yawErr = setpoint.yaw - yaw;
+			float P = 0.004;
+			float P_yaw = P * yawErr;
+			float D = -0.03 * 0.004;
+			float D_yaw = D * r;
+			tau_yaw = P_yaw + D_yaw;
+		}
 
+		float altitude_cmd;
+		{
+			float altErr = setpoint.z - h;
+			float P = 0.08;
+			float P_alt = P * altErr;
+			float D = -0.03;
+			float D_alt = D * lz;
+			altitude_cmd = P_alt + D_alt + 0.5;
+			altitude_cmd += -9.81f * 1.50f;
+		}
 
+		// Clamp all the outputs between -1 and 1
+		tau_roll = clamp(tau_roll, -1, 1);
+		tau_pitch = clamp(tau_pitch, -1, 1);
+		tau_yaw = clamp(tau_yaw, -1, 1);
+		altitude_cmd = clamp(altitude_cmd, 0, 1);
 
+		/*
+		 * Servo mixing
+		 */
+		// TODO: Scale the last term based on thrust to counteract gyroscopic effect
+//		float s1 = tau_yaw + tau_roll - tau_pitch;
+//		float s2 = tau_yaw - tau_roll + tau_pitch;
+//		float s3 = tau_yaw - tau_roll + tau_pitch;
+//		float s4 = tau_yaw + tau_roll - tau_pitch;
 
-		destroyArray(dcm);
+		float s1 = tau_yaw + tau_roll;
+		float s2 = tau_yaw - tau_roll;
+		float s3 = tau_yaw + tau_pitch;
+		float s4 = tau_yaw - tau_pitch;
+		float s5 = altitude_cmd;
+
+		snprintf(str, 128, "s1: %f, s2: %f, s3: %f, s4: %f\r\n", servoScale(s1),
+				servoScale(s2), servoScale(s3), servoScale(s4));
+		float servo1 = servoScale(s1);
+		float servo2 = servoScale(s2);
+		SERVO1_SetPWMDutyUs(servo1);
+		SERVO2_SetPWMDutyUs(servo2);
+
+		PC_SendStr(str);
 		FC321_Reset();
-		sendBT();
+		//sendBT();
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-#ifdef PEX_RTOS_START
-	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-#endif
-	/*** End of RTOS startup code.  ***/
-	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-	for (;;) {
-	}
-	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+  #ifdef PEX_RTOS_START
+    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+  #endif
+  /*** End of RTOS startup code.  ***/
+  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+  for(;;){}
+  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

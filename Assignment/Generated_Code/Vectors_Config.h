@@ -72,6 +72,9 @@
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
+#include "WAIT1.h"
+#include "EInt1.h"
+#include "ExtIntLdd1.h"
 #include "Events.h"
 
 #ifdef __cplusplus
@@ -157,7 +160,7 @@ extern "C" {
 #define VECTOR_73         (tIsrFunc)&Unhandled_ivINT_MCG        /* 0x49 -    ivINT_MCG                     unused by PE */
 #define VECTOR_74         (tIsrFunc)&Unhandled_ivINT_LPTMR0     /* 0x4A -    ivINT_LPTMR0                  unused by PE */
 #define VECTOR_75         (tIsrFunc)&Unhandled_ivINT_PORTA      /* 0x4B -    ivINT_PORTA                   unused by PE */
-#define VECTOR_76         (tIsrFunc)&Unhandled_ivINT_PORTB      /* 0x4C -    ivINT_PORTB                   unused by PE */
+#define VECTOR_76         (tIsrFunc)&ExtIntLdd1_Interrupt       /* 0x4C 112  ivINT_PORTB                   used by PE */
 #define VECTOR_77         (tIsrFunc)&Unhandled_ivINT_PORTC      /* 0x4D -    ivINT_PORTC                   unused by PE */
 #define VECTOR_78         (tIsrFunc)&Unhandled_ivINT_PORTD      /* 0x4E -    ivINT_PORTD                   unused by PE */
 #define VECTOR_79         (tIsrFunc)&Unhandled_ivINT_PORTE      /* 0x4F -    ivINT_PORTE                   unused by PE */

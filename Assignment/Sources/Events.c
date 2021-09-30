@@ -37,12 +37,15 @@ extern "C" {
 #endif 
 
 #include "GPS.h"
+#include "BNO085.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 extern volatile GPS gps;
+extern volatile BNO085 IMU;
 extern volatile uint8_t index;
 extern volatile char buffer[128];
 extern volatile bool complete_command;
+extern volatile bool newLinAcc, newGyro, newRot;
 
 /*
  ** ===================================================================
@@ -118,6 +121,42 @@ void Inhr1_OnRxChar(void) {
 /* ===================================================================*/
 void Cpu_OnNMI(void) {
 	/* Write your code here ... */
+}
+
+/*
+ ** ===================================================================
+ **     Event       :  EInt1_OnInterrupt (module Events)
+ **
+ **     Component   :  EInt1 [ExtInt]
+ **     Description :
+ **         This event is called when an active signal edge/level has
+ **         occurred.
+ **     Parameters  : None
+ **     Returns     : Nothing
+ ** ===================================================================
+ */
+void EInt1_OnInterrupt(void) {
+	/* Write your code here ... */
+	uint16_t res = IMU.getReadings(&IMU);
+	switch (res) {
+	case SENSOR_REPORTID_LINEAR_ACCELERATION: {
+		newLinAcc = 1;
+	}
+		break;
+
+	case SENSOR_REPORTID_ROTATION_VECTOR:
+	case SENSOR_REPORTID_GAME_ROTATION_VECTOR: {
+		newRot = 1;
+	}
+		break;
+	case SENSOR_REPORTID_GYROSCOPE: {
+		newGyro = 1;
+	}
+	break;
+	default:
+		// Unhandled Input Report
+		break;
+	}
 }
 
 /* END Events */

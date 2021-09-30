@@ -50,6 +50,7 @@ void New_BNO085(BNO085 *self, byte addr) {
 	self->getLinAccel = &getLinAccel;
 	self->getGyro = &getGyro;
 	self->getMag = &getMag;
+	self->getReadings = &getReadings;
 }
 
 bool begin(BNO085 *self) {
@@ -161,6 +162,7 @@ void enableLinearAccelerometer(BNO085 *self, uint16_t timeBetweenReports) {
 }
 
 void enableGyro(BNO085 *self, uint16_t timeBetweenReports) {
+	// SENSOR_REPORTID_GYROSCOPE
 	setFeatureCommand(self, SENSOR_REPORTID_GYROSCOPE, timeBetweenReports, 0);
 }
 

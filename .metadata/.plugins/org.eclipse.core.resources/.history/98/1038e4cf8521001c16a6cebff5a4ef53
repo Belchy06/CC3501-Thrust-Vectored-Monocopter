@@ -1,0 +1,21 @@
+/*
+ * VelocityEstimator.h
+ *
+ *  Created on: 30 Sep 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_ESTIMATOR_H_
+#define SOURCES_ESTIMATOR_H_
+
+#include "Controllers.h"
+#include <math.h>
+#include <string.h>
+#include <stdint.h>
+
+void initializeVelocityEstimator(Estimator *self);
+void estimateVelocity(Estimator *self, const float measurements[4], const float delta_t);
+void getVelocityEstimate(Estimator *self, float *xVel, float *yVel);
+
+
+#endif /* SOURCES_ESTIMATOR_H_ */

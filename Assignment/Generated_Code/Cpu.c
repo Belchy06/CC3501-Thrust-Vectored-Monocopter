@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
+**     Date/Time   : 2021-09-30, 13:30, # CodeGen: 55
 **     Abstract    :
 **
 **     Settings    :
@@ -128,6 +128,9 @@ void Components_Init(void)
   SERVO2_Init();
   /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)RealTimeLdd1_Init(NULL);
+  WAIT1_Init(); /* ### Wait "WAIT1" init code ... */
+  /* ### ExtInt_LDD "ExtIntLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)ExtIntLdd1_Init(NULL);
 }
 #endif /* CPU_COMPONENTS_INIT */
 

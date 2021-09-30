@@ -1462,5 +1462,90 @@
       <event name="OnChannel7" v="don&amp;apos;t generate code" />
     </Events>
   </Bean>
+  <Bean name="WAIT1" type="Wait">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="WAIT1" />
+      <SDK v="MCUC1" />
+      <boolgroup name="Use Cycle Counter" v="Disabled" />
+      <boolgroup name="Manual Clock Values" v="Disabled" />
+      <Delay100usFunction v="Delay100US" />
+      <boolgroup name="RTOS" v="Disabled" />
+      <boolgroup name="Watchdog" v="Disabled" />
+    </Properties>
+    <Methods>
+      <Wait10Cycles v="generate code" />
+      <Wait100Cycles v="generate code" />
+      <WaitCycles v="generate code" />
+      <WaitLongCycles v="generate code" />
+      <Waitms v="generate code" />
+      <Waitus v="generate code" />
+      <Waitns v="generate code" />
+      <WaitOSms v="generate code" />
+      <Init v="generate code" />
+      <DeInit v="generate code" />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
+    </Events>
+  </Bean>
+  <Bean name="EInt1" type="ExtInt">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="EInt1" />
+      <Pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
+      <inhrbean type="ExtInt_LDD">
+        <Enabled v="Y" />
+        <Template v="ExtInt_LDD" />
+        <Properties>
+          <Component_name v="ExtIntLdd1" />
+          <Pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
+          <Generate_interrupt_on v="falling edge" />
+          <Interrupt v="INT_PORTB" />
+          <Interrupt_priority v="medium priority" />
+          <group name="Initialization">
+            <Enabled_in_init__code v="yes" />
+          </group>
+        </Properties>
+        <Methods>
+          <Init v="generate code" />
+          <Deinit v="don&amp;apos;t generate code" />
+          <Enable v="generate code" />
+          <Disable v="generate code" />
+          <GetVal v="generate code" />
+          <SetEdge v="don&amp;apos;t generate code" />
+          <SetOperationMode v="don&amp;apos;t generate code" />
+          <GetDriverState v="don&amp;apos;t generate code" />
+          <ConnectPin v="don&amp;apos;t generate code" />
+        </Methods>
+        <Events>
+          <Event_module_name v="Events" />
+          <event name="OnInterrupt" v="generate code">
+            <Event_procedure_name v="ExtIntLdd1_OnInterrupt" />
+          </event>
+        </Events>
+      </inhrbean>
+      <Generate_interrupt_on v="falling edge" />
+      <Interrupt v="INT_PORTB" />
+      <Interrupt_priority v="medium priority" />
+      <group name="Initialization">
+        <Enabled_in_init__code v="yes" />
+      </group>
+    </Properties>
+    <Methods>
+      <Enable v="generate code" />
+      <Disable v="generate code" />
+      <GetVal v="generate code" />
+      <SetEdge v="don&amp;apos;t generate code" />
+      <ConnectPin v="don&amp;apos;t generate code" />
+    </Methods>
+    <Events>
+      <Event_module_name v="Events" />
+      <event name="OnInterrupt" v="generate code">
+        <Event_procedure_name v="EInt1_OnInterrupt" />
+        <Priority v="same as interrupt" />
+      </event>
+    </Events>
+  </Bean>
 </PE_PROJECT_SETTINGS_DOCUMENTATION>
 

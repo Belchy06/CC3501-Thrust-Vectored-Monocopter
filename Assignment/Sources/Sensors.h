@@ -72,6 +72,7 @@ typedef struct BNO085 {
 	void (*getLinAccel)(struct BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
 	void (*getGyro)(struct BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
 	void (*getMag)(struct BNO085 *self, float *x, float *y, float *z, uint8_t *accuracy);
+	uint16_t (*getReadings)(struct BNO085 *self);
 } BNO085;
 
 typedef struct GPS {
@@ -108,57 +109,4 @@ typedef struct GPS {
 	float (*speed_mps)(struct GPS *self);
 } GPS;
 
-typedef struct PID {
-	// Variables
-	float dispKp;	// * we'll hold on to the tuning parameters in user-entered
-	float dispKi;				//   format for display purposes
-	float dispKd;				//
-	float kp;                  // * (P)roportional Tuning Parameter
-	float ki;                  // * (I)ntegral Tuning Parameter
-	float kd;                  // * (D)erivative Tuning Parameter
-	int controllerDirection;
-	int pOn;
-	float *myInput;  // * Pointers to the Input, Output, and Setpoint variables
-	float *myOutput; //   This creates a hard link between the variables and the
-	float *mySetpoint; //   PID, freeing the user from having to constantly tell us
-						//   what these values are.  with pointers we'll just know.
-	unsigned long lastTime;
-	float outputSum, lastInput;
-	unsigned long SampleTime;
-	float outMin, outMax;
-	bool inAuto, pOnE;
-
-	// Functions
-	void (*initialize)(struct PID*);
-	void (*setMode)(struct PID*, int);
-	bool (*compute)(struct PID*);
-	void (*setOutputLimits)(struct PID*, float, float);
-	void (*setTunings)(struct PID*, float, float, float);
-	void (*setControllerDirection)(struct PID*, int);
-	void (*setSampleTime)(struct PID*, int);
-} PID;
-
-
-
-typedef struct Controller {
-	// Variables
-	PID pidX;
-	PID pidY;
-	PID pidZ;
-	PID pidH;
-	float outX, outY, outZ, outH;
-	float setX, setY, setZ, setH;
-	float xKp, xKi, xKd;
-	float yKp, yKi, yKd;
-	float zKp, zKi, zKd;
-	float hKp, hKi, hKd;
-	// Functions
-	void (*setGains)(struct Controller*);
-	void (*init)(struct Controller*, float *x, float *y, float *z, float *h);
-	void (*setXPoint)(struct Controller*, float setX);
-	void (*setYPoint)(struct Controller*, float setY);
-	void (*setZPoint)(struct Controller*, float setZ);
-	void (*setHPoint)(struct Controller*, float setH);
-	void (*calculate)(struct Controller*);
-} Controller;
 #endif /* SOURCES_SENSORS_H_ */

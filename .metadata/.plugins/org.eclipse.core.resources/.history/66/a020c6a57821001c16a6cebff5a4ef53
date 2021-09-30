@@ -1,0 +1,17 @@
+/*
+ * fpmath.h
+ *
+ *  Created on: 21 Sep 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_FPMATH_H_
+#define SOURCES_FPMATH_H_
+
+#include <stdint.h>
+
+int16_t fpsin(int16_t i);
+int16_t fpcos(int16_t i);
+
+
+#endif /* SOURCES_FPMATH_H_ */

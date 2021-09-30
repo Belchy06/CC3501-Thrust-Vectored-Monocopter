@@ -1,0 +1,23 @@
+/*
+ * Controllers.h
+ *
+ *  Created on: 30 Sep 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_CONTROLLERS_H_
+#define SOURCES_CONTROLLERS_H_
+
+typedef struct Estimator {
+	float x[4];
+	float P[16];
+	float Q[16];
+
+	void (*setQ)(struct Estimator *self, float Q[16]);
+	void (*estimate)(struct Estimator *self, const float measurements[4], const float delta_t);
+	void (*getEstimate)(struct Estimator *self, float *xEst, float *yEst);
+} Estimator;
+
+
+
+#endif /* SOURCES_CONTROLLERS_H_ */

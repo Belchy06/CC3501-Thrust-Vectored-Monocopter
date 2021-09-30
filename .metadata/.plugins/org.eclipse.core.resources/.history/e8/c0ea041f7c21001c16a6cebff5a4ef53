@@ -1,0 +1,18 @@
+/*
+ * VelocityEstimator.c
+ *
+ *  Created on: 30 Sep 2021
+ *      Author: Will
+ */
+
+#include "VelocityEstimator.h"
+
+
+void initializeVelocityEstimator(VelocityEstimator *self) {
+	for(uint8_t i = 0; i < 4; i++) {
+		self->x[i] = 0;
+	}
+}
+
+void estimateVelocity(VelocityEstimator *self, const float measurements[4], const float delta_t);
+void getVelocityEstimate(VelocityEstimator *self, float *xVel, float *yVel);

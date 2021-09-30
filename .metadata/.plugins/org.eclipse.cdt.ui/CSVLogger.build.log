@@ -1,36 +1,6 @@
-21:36:11 **** Incremental Build of configuration Debug for project CSVLogger ****
+14:58:21 **** Incremental Build of configuration Debug for project CSVLogger ****
 make all 
-Building file: ../Sources/main.c
-Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
-../Sources/main.c: In function 'main':
-../Sources/main.c:123:2: warning: passing argument 1 of 'NEW_GPS' discards 'volatile' qualifier from pointer target type [enabled by default]
-  NEW_GPS(&gps);
-  ^
-In file included from ../Sources/Events.h:52:0,
-                 from ../Sources/main.c:31:
-../Sources/GPS.h:43:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
- void NEW_GPS(GPS *self);
-      ^
-../Sources/main.c:163:4: warning: passing argument 1 of 'gps.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
-    gps.get_position(&gps, &lat, &lon, &age);
-    ^
-../Sources/main.c:163:4: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
-../Sources/main.c:175:5: warning: passing argument 1 of 'gps.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
-     float gYaw = gps.course_to(&gps, startLat, startLon, lat, lon);
-     ^
-../Sources/main.c:175:5: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
-../Sources/main.c:177:5: warning: passing argument 1 of 'gps.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
-     mps = gps.speed_mps(&gps);
-     ^
-../Sources/main.c:177:5: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
-Finished building: ../Sources/main.c
- 
-Building target: Assignment.elf
-Invoking: Cross ARM C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/CSVLogger/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PC.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/WAIT1.o   
-Finished building target: Assignment.elf
- 
+make: Nothing to be done for 'all'.
 
-21:36:12 Build Finished (took 1s.14ms)
+14:58:22 Build Finished (took 749ms)
 

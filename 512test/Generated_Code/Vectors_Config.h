@@ -54,6 +54,8 @@
 #include "IntI2cLdd1.h"
 #include "Bit1.h"
 #include "BitIoLdd1.h"
+#include "Status1.h"
+#include "BitIoLdd2.h"
 #include "Events.h"
 
 #ifdef __cplusplus

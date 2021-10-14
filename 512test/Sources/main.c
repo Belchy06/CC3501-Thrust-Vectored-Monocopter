@@ -35,6 +35,8 @@
 #include "IntI2cLdd1.h"
 #include "Bit1.h"
 #include "BitIoLdd1.h"
+#include "Status1.h"
+#include "BitIoLdd2.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -45,9 +47,11 @@
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #include "Sensors.h"
 #include "BMP384.h"
+#include <stdbool.h>
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 
 #define BMP384_DEFAULT_ADDRESS 0x77
+
 
 
 int main(void)
@@ -67,8 +71,14 @@ int main(void)
   baro.start(&baro);
   baro.setTimeStandby(&baro, TIME_STANDBY_1280MS);
   baro.startNormalConversion(&baro);
+
+  bool status = false;
+  float temperature, pressure, altitude;
   for(;;) {
-	  ;
+	  if(baro.getMeasurements(&baro, &temperature, &pressure, &altitude)) {
+		  Status1_PutVal(status);
+		  status = !status;
+	  }
   }
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

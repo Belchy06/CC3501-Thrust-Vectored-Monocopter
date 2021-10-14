@@ -28,6 +28,7 @@
 \page page_components Components 
 - \subpage IntI2cLdd1
 - \subpage BitIoLdd1
+- \subpage BitIoLdd2
 
 */
 
@@ -62,6 +63,7 @@
 \page page_components Components 
 - \subpage IntI2cLdd1
 - \subpage BitIoLdd1
+- \subpage BitIoLdd2
 
 */
 

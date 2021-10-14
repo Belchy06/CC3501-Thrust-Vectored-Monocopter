@@ -178,6 +178,16 @@ typedef struct BMP384 {
 		uint8_t reg;
 	} pwr_ctrl;
 
+	volatile union {		// Copy of the BMP388's interrupt status register
+		struct {
+			uint8_t fwm_int : 1;
+			uint8_t ffull_int : 1;
+			uint8_t : 1;
+			uint8_t drdy : 1;
+		} bit;
+		uint8_t reg;
+	} int_status;
+
 	struct {		// The BMP388 compensation trim parameters (coefficients)
 		uint16_t param_T1;
 		uint16_t param_T2;
@@ -215,7 +225,9 @@ typedef struct BMP384 {
 	uint8_t (*start)(struct BMP384 *self);
 	void (*setTimeStandby)(struct BMP384 *self, TimeStandby timeStandby);
 	void (*startNormalConversion)(struct BMP384 *self);
+	uint8_t (*getMeasurements)(struct BMP384 *self, float *temperature,
+			float *pressure, float *altitude);
 
-} BMP384;
+}BMP384;
 
 #endif /* SOURCES_SENSORS_H_ */

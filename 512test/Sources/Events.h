@@ -38,6 +38,8 @@
 #include "IntI2cLdd1.h"
 #include "Bit1.h"
 #include "BitIoLdd1.h"
+#include "Status1.h"
+#include "BitIoLdd2.h"
 
 #ifdef __cplusplus
 extern "C" {

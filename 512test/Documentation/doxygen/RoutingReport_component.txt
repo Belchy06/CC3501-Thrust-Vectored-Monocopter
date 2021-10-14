@@ -85,9 +85,10 @@
 			<tr bgcolor='#EFF174'><td>CMP0</td><td>cmp_neg2</td><td>alt0</td><td>Input</td></tr>
 			<tr bgcolor='#EFF174'><td>CMP0</td><td>cmp_in2</td><td>alt0</td><td>Input</td></tr>
 			<tr>
-				<td>A8</td><td>PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FBa_AD11/CMP1_OUT/LPUART0_TX</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td rowspan='2'>A8</td><td rowspan='2'>PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FBa_AD11/CMP1_OUT/LPUART0_TX</td><td rowspan='2'><small><i>same</i></small></td>
+				<td bgcolor='#F7DCFF'>PTC</td><td bgcolor='#F7DCFF'>port4</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Output</td>
 			</tr>
+			<tr bgcolor='#CCB6A0'><td>LLWU</td><td>llwu_wakeup8</td><td>alt1</td><td>Input</td></tr>
 			<tr>
 				<td>A9</td><td>PTD9/I2C0_SDA/LPUART0_TX/FBa_A17</td><td><small><i>same</i></small></td>
 				<td></td><td></td><td></td><td></td>
@@ -2156,9 +2157,10 @@
 			<tr bgcolor='#EFF174'><td>CMP0</td><td>cmp_neg2</td><td>alt0</td><td>Input</td></tr>
 			<tr bgcolor='#EFF174'><td>CMP0</td><td>cmp_in2</td><td>alt0</td><td>Input</td></tr>
 			<tr>
-				<td>A8</td><td>PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FBa_AD11/CMP1_OUT/LPUART0_TX</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td rowspan='2'>A8</td><td rowspan='2'>PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FBa_AD11/CMP1_OUT/LPUART0_TX</td><td rowspan='2'><small><i>same</i></small></td>
+				<td bgcolor='#F7DCFF'>PTC</td><td bgcolor='#F7DCFF'>port4</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Output</td>
 			</tr>
+			<tr bgcolor='#CCB6A0'><td>LLWU</td><td>llwu_wakeup8</td><td>alt1</td><td>Input</td></tr>
 			<tr>
 				<td>A9</td><td>PTD9/I2C0_SDA/LPUART0_TX/FBa_A17</td><td><small><i>same</i></small></td>
 				<td></td><td></td><td></td><td></td>

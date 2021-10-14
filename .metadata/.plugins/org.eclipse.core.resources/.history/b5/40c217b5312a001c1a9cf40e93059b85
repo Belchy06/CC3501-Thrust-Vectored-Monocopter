@@ -1,0 +1,440 @@
+/* ###################################################################
+ **     Filename    : main.c
+ **     Project     : Lab_03
+ **     Processor   : MK22FN512VDC12
+ **     Version     : Driver 01.01
+ **     Compiler    : GNU C Compiler
+ **     Date/Time   : 2021-08-13, 13:30, # CodeGen: 0
+ **     Abstract    :
+ **         Main module.
+ **         This module contains user's application code.
+ **     Settings    :
+ **     Contents    :
+ **         No public methods
+ **
+ ** ###################################################################*/
+/*!
+ ** @file main.c
+ ** @version 01.01
+ ** @brief
+ **         Main module.
+ **         This module contains user's application code.
+ */
+/*!
+ **  @addtogroup main_module main module documentation
+ **  @{
+ */
+/* MODULE main */
+
+/* Including needed modules to compile this module/procedure */
+#include "Cpu.h"
+#include "Events.h"
+#include "Pins1.h"
+#include "CI2C1.h"
+#include "IntI2cLdd1.h"
+#include "MCUC1.h"
+#include "PC.h"
+#include "Inhr2.h"
+#include "ASerialLdd2.h"
+#include "Inhr1.h"
+#include "ASerialLdd1.h"
+#include "Pwm1.h"
+#include "PwmLdd1.h"
+#include "XNeg.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
+#include "TU4.h"
+#include "FC321.h"
+#include "RealTimeLdd1.h"
+#include "TU1.h"
+#include "WAIT1.h"
+#include "EInt1.h"
+#include "ExtIntLdd1.h"
+#include "XPos.h"
+#include "GPSTimer.h"
+#include "RealTimeLdd2.h"
+#include "TU2.h"
+/* Including shared modules, which are used for whole project */
+#include "PE_Types.h"
+#include "PE_Error.h"
+#include "PE_Const.h"
+#include "IO_Map.h"
+#include "PDD_Includes.h"
+#include "Init_Config.h"
+#include "BNO085.h"
+#include "Sensors.h"
+#include <stdbool.h>
+#include "printf.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "GPS.h"
+#include "Controllers.h"
+#include "VelocityEstimator.h"
+#include "PositionEstimator.h"
+#include "utm.h"
+/* User includes (#include below this line is not maintained by Processor Expert) */
+#define BNO080_DEFAULT_ADDRESS 0x4A
+#define BMPXXX_DEFAULT_ADDRESS 0x00
+
+float h;
+float pitch, roll, yaw;
+float p, q, r;
+float ax, ay, az;
+float lx, ly, lz;
+uint8_t accelAccuracy, gyroAccuracy, magAccuracy, linAccuracy;
+float quatRadianAccuracy;
+char level[32];
+char str[256];
+unsigned int time;
+
+float lat, lon, prevLat, prevLon, distance;
+float gYaw;
+float dt;
+unsigned long age;
+float xOff, yOff;
+float xMps, yMps, zMps = 0;
+float mps;
+volatile GPS gps;
+volatile BNO085 IMU;
+volatile uint8_t index;
+volatile char buffer[128];
+volatile bool complete_command;
+volatile bool newAcc, newGyro, newRot;
+bool haveGps = false;
+
+struct setpoints {
+	float x;
+	float y;
+	float z;
+	float yaw;
+};
+
+struct GPSStats {
+	float dx;
+	float dy;
+	float x;
+	float y;
+};
+
+double easting;
+double northing;
+
+float clamp(float f, float min, float max) {
+	const float t = f < min ? min : f;
+	return f > max ? max : f;
+}
+
+float servoScale(float f) {
+	// + 1000
+	return (((f) * (1000)) / (500)) + 500;
+}
+
+void sendBT() {
+	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f, gYaw: %f\r\n", roll,
+			pitch, yaw, gYaw);
+	PC_SendStr(str);
+}
+
+/*lint -save  -e970 Disable MISRA rule (6.3) checking. */
+int main(void)
+/*lint -restore Enable MISRA rule (6.3) checking. */
+{
+	/* Write your local variable definition here */
+
+	/*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
+	PE_low_level_init();
+	/*** End of Processor Expert internal initialization.                    ***/
+	EInt1_Disable();
+//	/* Write your code here */
+//	/* For example: for(;;) { } */
+	// Initialize setpoints
+	struct setpoints setpoint;
+	setpoint.x = setpoint.y = setpoint.z = setpoint.yaw = 0;
+
+	// Controller Init
+	VelocityEstimator EstimatorVelocity;
+	initializeVelocityEstimator(&EstimatorVelocity);
+
+	PositionEstimator EstimatorPosition;
+	initializePositionEstimator(&EstimatorPosition);
+
+	NEW_GPS(&gps);
+	complete_command = false;
+	bool firstTime = true;
+	struct GPSStats GPSstats;
+	GPSstats.x = 0;
+	GPSstats.y = 0;
+	GPSstats.dx = 0;
+	GPSstats.dy = 0;
+
+	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+	if (IMU.begin(&IMU) == false) {
+		while (1)
+			;
+	}
+
+	EInt1_Enable();
+	IMU.enableLinearAccelerometer(&IMU, 50);
+	//IMU.enableAccelerometer(&IMU, 50);
+	//IMU.enableRotationVector(&IMU, 100);
+	IMU.enableRotationVector(&IMU, 100);
+	IMU.enableGyro(&IMU, 50);
+
+	FC321_Reset();
+	for (;;) {
+		if (newAcc) {
+			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
+			newAcc = 0;
+		}
+		if (newRot) {
+			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
+			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
+			newRot = 0;
+		}
+		if (newGyro) {
+			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
+			newGyro = 0;
+		}
+
+		if (complete_command) {
+			gps.get_position(&gps, &lat, &lon, &age);
+			long zone;
+			char hemisphere;
+			long res = Convert_Geodetic_To_UTM(lat * 0.0174533f,
+					lon * 0.0174533f, &zone, &hemisphere, &easting, &northing);
+			if (res == UTM_NO_ERROR) {
+				GPSstats.x = (float) easting;
+				GPSstats.y = (float) northing;
+				if (!firstTime) {
+					float gYaw = gps.course_to(&gps, prevLat, prevLon, lat,
+							lon);
+					// Velocity
+					mps = gps.speed_mps(&gps);
+					if (mps != -1.0) {
+						GPSstats.dx = mps * cosf(gYaw);
+						GPSstats.dy = mps * sinf(gYaw);
+					}
+				}
+				prevLat = lat;
+				prevLon = lon;
+				firstTime = false;
+				haveGps = true;
+			} else {
+				haveGps = false;
+			}
+			complete_command = false;
+			index = 0;
+		}
+		// Rest of control loop
+		FC321_GetTimeUS(&time);
+		dt = time * 1e-6;
+		/*
+		 * Acceleration Handling
+		 */
+		float dcm[3][3];
+		float phi = yaw * 0.0174533;
+		float theta = pitch * 0.0174533;
+		float psi = roll * 0.0174533;
+		// Row, col
+		dcm[0][0] = cosf(theta) * cosf(phi);
+		dcm[0][1] = cosf(theta) * sinf(phi);
+		dcm[0][2] = -sinf(theta);
+		dcm[1][0] = sinf(psi) * sinf(theta) * cosf(phi) - cosf(psi) * sinf(phi);
+		dcm[1][1] = sinf(psi) * sinf(theta) * sinf(phi) + cosf(psi) * cosf(phi);
+		dcm[1][2] = sinf(psi) * cosf(theta);
+		dcm[2][0] = cosf(psi) * sinf(theta) * cosf(phi) + sinf(psi) * sinf(phi);
+		dcm[2][1] = cosf(psi) * sinf(theta) * sinf(phi) - sinf(psi) * cosf(phi);
+		dcm[2][2] = cosf(psi) * cosf(theta);
+
+		// Calculate dcm transpose
+		float dcmT[3][3];
+		for (uint8_t i = 0; i < 3; ++i) {
+			for (uint8_t j = 0; j < 3; ++j) {
+				dcmT[j][i] = dcm[i][j];
+			}
+		}
+
+		float gVector[3] = { dcm[0][2] * -9.81, dcm[1][2] * -9.81, dcm[2][2]
+				* -9.81 };
+		// z = gVector[0]
+		float worldAcceleration[3] = { ax - gVector[0], ay - gVector[1], az
+				- gVector[2] };
+
+		/*
+		 * VELOCITY ESTIMATE
+		 */
+		if (haveGps) {
+			float measurements[4] = { GPSstats.dx, GPSstats.dy,
+					worldAcceleration[0], worldAcceleration[1] };
+			// float measurements[4] = { GPSstats.dx, GPSstats.dy, lx, ly };
+			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
+					dt);
+			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
+					&yMps);
+		} else {
+			float measurements[4] = { 999999999, 999999999,
+					worldAcceleration[0], worldAcceleration[1] };
+//			float measurements[4] = { 999999999, 999999999, lx, ly };
+			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
+					dt);
+			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
+					&yMps);
+		}
+//		snprintf(str, 256,
+//				"GPS.dx: %f, GPS.dy: %f, lx: %f, ly: %f, Estimator.dx: %f, Estimator.dy: %f, dT: %f, Estimating: %d\r\n",
+//				GPSstats.dx, GPSstats.dy, lx, ly, xMps, yMps, dt, !haveGps);
+//		PC_SendStr(str);
+
+		// Estimate XY position
+		float worldVelXY[2];
+		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps
+				+ dcmT[0][2] * zMps;
+		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps
+				+ dcmT[1][2] * zMps;
+		if (haveGps) {
+			float measurements[4] = { GPSstats.x, GPSstats.y, xMps, yMps };
+			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
+					dt);
+			EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff,
+					&yOff);
+		} else {
+			float measurements[4] = { 999999999, 999999999, xMps, yMps };
+			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
+					dt);
+			EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff,
+					&yOff);
+		}
+
+		/*
+		 * XY-to-world setpoint
+		 */
+		float PRcmd[2];
+		{
+			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
+			float P = 0.24;
+			float P_xy[2] = { -P
+					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
+							3), P
+					* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3,
+							3) };
+			float D = 0.1;
+			float D_xy[2] = { D * xMps, -D * yMps };
+			// PD Controller
+			PRcmd[0] = P_xy[0] + D_xy[0];
+			PRcmd[1] = P_xy[1] + D_xy[1];
+		}
+		/*
+		 * Attitude Controller
+		 */
+		float tau_pitch, tau_roll;
+		{
+			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			// Proportional
+			float P[2] = { 0.013, 0.01 };
+			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
+			// Integral
+			float I = 0.01;
+			float I_pr[2] = { I * PRErr[0] * dt, I * PRErr[1] * dt };
+			// Derivative
+			float D[2] = { -0.002, -0.0028 };
+			float D_pr[2] = { D[0] * q, D[1] * p };
+
+			tau_pitch = P_pr[0] + I_pr[0] + D_pr[0];
+			tau_roll = P_pr[1] + I_pr[1] + D_pr[1];
+		}
+
+		/*
+		 * Yaw Controller
+		 */
+		float tau_yaw;
+		{
+			float yawErr = setpoint.yaw - yaw;
+			float P = 0.004;
+			float P_yaw = P * yawErr;
+			float D = -0.03 * 0.004;
+			float D_yaw = D * r;
+			tau_yaw = P_yaw + D_yaw;
+		}
+
+		float altitude_cmd;
+//		{
+//			float altErr = setpoint.z - h;
+//			float P = 0.08;
+//			float P_alt = P * altErr;
+//			float D = -0.03;
+//			float D_alt = D * lz;
+//			altitude_cmd = P_alt + D_alt + 0.5;
+//			altitude_cmd += -9.81f * 1.50f;
+//		}
+
+		// Clamp all the outputs between -1 and 1
+//		tau_roll = clamp(tau_roll, -1, 1);
+//		tau_pitch = clamp(tau_pitch, -1, 1);
+//		tau_yaw = clamp(tau_yaw, -1, 1);
+		//altitude_cmd = clamp(altitude_cmd, 0, 1);
+//
+//		/*
+//		 * Servo mixing
+//		 */
+//		// TODO: Scale the last term based on thrust to counteract gyroscopic effect
+////		float s1 = tau_yaw + tau_roll - tau_pitch;
+////		float s2 = tau_yaw - tau_roll + tau_pitch;
+////		float s3 = tau_yaw - tau_roll + tau_pitch;
+////		float s4 = tau_yaw + tau_roll - tau_pitch;
+		// total thrust, yaw, pitch, roll
+		float servoWeights[4] = { 0, 56, 150, 150 };
+		float s1 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				+ servoWeights[3] * tau_roll;
+		float s2 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				- servoWeights[3] * tau_roll;
+		float s3 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				+ servoWeights[4] * tau_pitch;
+		float s4 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				- servoWeights[4] * tau_pitch;
+		float s5 = altitude_cmd;
+//
+//		snprintf(str, 128, "s1: %f, s2: %f, s3: %f, s4: %f\r\n", servoScale(s1),
+//				servoScale(s2), servoScale(s3), servoScale(s4));
+		float servo1 = clamp(1500 + s1, 1000, 2000); // servoScale(clamp(s1, 0, 500));
+		float servo2 = clamp(1500 + s2, 1000, 2000); // servoScale(clamp(s2, 0, 500));
+		XPos_SetPWMDutyUs(1500);
+		XNeg_SetPWMDutyUs(1500);
+
+//		snprintf(str, 256,
+//				"GPS.x: %f, GPS.y: %f, xMps: %f, yMps: %f, Estimator.x: %f, Estimator.y: %f, lx: %f, ly: %f, dT: %f, Estimating: %d\r\n",
+//				GPSstats.x, GPSstats.y, xMps, yMps, xOff, yOff, lx, ly, dt,
+//				!haveGps);
+		snprintf(str, 256,
+				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
+				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
+				pitch, roll);
+		PC_SendStr(str);
+		FC321_Reset();
+		haveGps = false;
+	}
+	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
+	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+#ifdef PEX_RTOS_START
+	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+#endif
+	/*** End of RTOS startup code.  ***/
+	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+	for (;;) {
+	}
+	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+} /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
+
+/* END main */
+/*!
+ ** @}
+ */
+/*
+ ** ###################################################################
+ **
+ **     This file was created by Processor Expert 10.5 [05.21]
+ **     for the Freescale Kinetis series of microcontrollers.
+ **
+ ** ###################################################################
+ */

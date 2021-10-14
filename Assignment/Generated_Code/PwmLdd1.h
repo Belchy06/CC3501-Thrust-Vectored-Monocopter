@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 01.03, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-25, 12:52, # CodeGen: 50
+**     Date/Time   : 2021-10-08, 16:14, # CodeGen: 57
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -17,8 +17,8 @@
 **     Settings    :
 **          Component name                                 : PwmLdd1
 **          Period device                                  : FTM0_MOD
-**          Duty device                                    : FTM0_C6V
-**          Output pin                                     : ADC0_SE7b/PTD6/LLWU_P15/SPI0_PCS3/UART0_RX/FTM0_CH6/FBa_AD0/FTM0_FLT0/SPI1_SOUT
+**          Duty device                                    : FTM0_C4V
+**          Output pin                                     : PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FBa_AD2/EWM_IN/SPI1_PCS0
 **          Counter                                        : FTM0_CNT
 **          Interrupt service/event                        : Disabled
 **          Period                                         : 20 ms
@@ -39,7 +39,7 @@
 **            Clock configuration 6                        : This component disabled
 **            Clock configuration 7                        : This component disabled
 **          Referenced components                          : 
-**            Linked component                             : TU3
+**            Linked component                             : TU4
 **     Contents    :
 **         Init       - LDD_TDeviceData* PwmLdd1_Init(LDD_TUserData *UserDataPtr);
 **         Enable     - LDD_TError PwmLdd1_Enable(LDD_TDeviceData *DeviceDataPtr);
@@ -105,7 +105,7 @@
 #include "PE_Const.h"
 #include "IO_Map.h"
 /* Include inherited beans */
-#include "TU3.h"
+#include "TU4.h"
 #include "FTM_PDD.h"
 
 #include "Cpu.h"

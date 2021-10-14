@@ -1,6 +1,6 @@
-19:44:54 **** Incremental Build of configuration Debug for project GPS ****
+20:39:40 **** Incremental Build of configuration Debug for project GPS ****
 make all 
 make: Nothing to be done for 'all'.
 
-19:44:54 Build Finished (took 234ms)
+20:39:41 Build Finished (took 509ms)
 

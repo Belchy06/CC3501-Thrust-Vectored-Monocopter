@@ -38,19 +38,19 @@
 #include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
-#include "SERVO1.h"
 #include "Pwm1.h"
 #include "PwmLdd1.h"
-#include "TU3.h"
-#include "SERVO2.h"
+#include "XNeg.h"
 #include "Pwm2.h"
 #include "PwmLdd2.h"
+#include "TU4.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
 #include "WAIT1.h"
 #include "EInt1.h"
 #include "ExtIntLdd1.h"
+#include "XPos.h"
 #include "GPSTimer.h"
 #include "RealTimeLdd2.h"
 #include "TU2.h"
@@ -100,7 +100,7 @@ volatile BNO085 IMU;
 volatile uint8_t index;
 volatile char buffer[128];
 volatile bool complete_command;
-volatile bool newLinAcc, newGyro, newRot;
+volatile bool newAcc, newGyro, newRot;
 bool haveGps = false;
 
 struct setpoints {
@@ -126,7 +126,8 @@ float clamp(float f, float min, float max) {
 }
 
 float servoScale(float f) {
-	return (((f + 1) * (1000)) / (2)) + 1000;
+	// + 1000
+	return (((f) * (1000)) / (500)) + 500;
 }
 
 void sendBT() {
@@ -173,23 +174,23 @@ int main(void)
 			;
 	}
 
-
 	EInt1_Enable();
 	IMU.enableLinearAccelerometer(&IMU, 50);
+	//IMU.enableAccelerometer(&IMU, 50);
 	//IMU.enableRotationVector(&IMU, 100);
 	IMU.enableRotationVector(&IMU, 100);
 	IMU.enableGyro(&IMU, 50);
 
 	FC321_Reset();
 	for (;;) {
-		if (newLinAcc) {
+		if (newAcc) {
 			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
-			newLinAcc = 0;
+			newAcc = 0;
 		}
 		if (newRot) {
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
-			yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
 			newRot = 0;
 		}
 		if (newGyro) {
@@ -237,35 +238,52 @@ int main(void)
 		float theta = pitch * 0.0174533;
 		float psi = roll * 0.0174533;
 		// Row, col
-		dcm[0][0] = cosf(theta) * cosf(psi);
-		dcm[0][1] = cosf(theta) * sinf(psi);
+		dcm[0][0] = cosf(theta) * cosf(phi);
+		dcm[0][1] = cosf(theta) * sinf(phi);
 		dcm[0][2] = -sinf(theta);
-		dcm[1][0] = sinf(phi) * sinf(theta) * cosf(psi) - cosf(phi) * sinf(psi);
-		dcm[1][1] = sinf(phi) * sinf(theta) * sinf(psi) + cosf(phi) * cosf(psi);
-		dcm[1][2] = sinf(phi) * cosf(theta);
-		dcm[2][0] = cosf(phi) * sinf(theta) * cosf(psi) + sinf(phi) * sinf(psi);
-		dcm[2][1] = cosf(phi) * sinf(theta) * sinf(psi) - sinf(phi) * cosf(psi);
-		dcm[2][2] = cosf(phi) * cosf(theta);
+		dcm[1][0] = sinf(psi) * sinf(theta) * cosf(phi) - cosf(psi) * sinf(phi);
+		dcm[1][1] = sinf(psi) * sinf(theta) * sinf(phi) + cosf(psi) * cosf(phi);
+		dcm[1][2] = sinf(psi) * cosf(theta);
+		dcm[2][0] = cosf(psi) * sinf(theta) * cosf(phi) + sinf(psi) * sinf(phi);
+		dcm[2][1] = cosf(psi) * sinf(theta) * sinf(phi) - sinf(psi) * cosf(phi);
+		dcm[2][2] = cosf(psi) * cosf(theta);
+
+		// Calculate dcm transpose
+		float dcmT[3][3];
+		for (uint8_t i = 0; i < 3; ++i) {
+			for (uint8_t j = 0; j < 3; ++j) {
+				dcmT[j][i] = dcm[i][j];
+			}
+		}
 
 		float gVector[3] = { dcm[0][2] * -9.81, dcm[1][2] * -9.81, dcm[2][2]
 				* -9.81 };
 		// z = gVector[0]
-		float worldAcceleration[3] = { ax - gVector[2], ay - gVector[1], az
-				- gVector[0] };
+		float worldAcceleration[3];
+		worldAcceleration[0] = dcmT[0][0] * lx + dcmT[0][1] * ly
+				+ dcmT[0][2] * lz;
+
+		worldAcceleration[1] = dcmT[1][0] * lx + dcmT[1][1] * ly
+				+ dcmT[1][2] * lz;
+
+		worldAcceleration[2] = dcmT[2][0] * lx + dcmT[2][1] * ly
+				+ dcmT[2][2] * lz;
 
 		/*
 		 * VELOCITY ESTIMATE
 		 */
 		if (haveGps) {
-//			float measurements[4] = { GPSstats.dx, GPSstats.dy, worldAcceleration[0], worldAcceleration[1] };
-			float measurements[4] = { GPSstats.dx, GPSstats.dy, lx, ly };
+			float measurements[4] = { GPSstats.dx, GPSstats.dy,
+					worldAcceleration[0], worldAcceleration[1] };
+			// float measurements[4] = { GPSstats.dx, GPSstats.dy, lx, ly };
 			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
 					dt);
 			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
 					&yMps);
 		} else {
-//			float measurements[4] = { 999999999, 999999999, worldAcceleration[0], worldAcceleration[1] };
-			float measurements[4] = { 999999999, 999999999, lx, ly };
+			float measurements[4] = { 999999999, 999999999,
+					worldAcceleration[0], worldAcceleration[1] };
+//			float measurements[4] = { 999999999, 999999999, lx, ly };
 			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
 					dt);
 			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
@@ -277,19 +295,13 @@ int main(void)
 //		PC_SendStr(str);
 
 		// Estimate XY position
-		// Calculate dcm transpose
-		float dcmT[3][3];
-		for (uint8_t i = 0; i < 3; ++i) {
-			for (uint8_t j = 0; j < 3; ++j) {
-				dcmT[j][i] = dcm[i][j];
-			}
-		}
-
 		float worldVelXY[2];
-		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps
-				+ dcmT[0][2] * zMps;
-		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps
-				+ dcmT[1][2] * zMps;
+//		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps
+//				+ dcmT[0][2] * zMps;
+//		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps
+//				+ dcmT[1][2] * zMps;
+		worldVelXY[0] = xMps;
+		worldVelXY[1] = yMps;
 		if (haveGps) {
 			float measurements[4] = { GPSstats.x, GPSstats.y, xMps, yMps };
 			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
@@ -303,71 +315,59 @@ int main(void)
 			EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff,
 					&yOff);
 		}
-		snprintf(str, 256,
-				"GPS.x: %f, GPS.y: %f, xMps: %f, yMps: %f, Estimator.x: %f, Estimator.y: %f, lx: %f, ly: %f, dT: %f, Estimating: %d\r\n",
-				GPSstats.x, GPSstats.y, xMps, yMps, xOff, yOff, lx, ly, dt,
-				!haveGps);
-		PC_SendStr(str);
-		haveGps = false;
 
-//		/*
-//		 * POSITION ESTIMATE
-//		 */
-//		xOff = xOff + worldVelXY[0] * dt;
-//		yOff = yOff + worldVelXY[1] * dt;
-//
-//		/*
-//		 * XY-to-world setpoint
-//		 */
-//		float PRcmd[2];
-//		{
-//			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
-//			float P = 0.24;
-//			float P_xy[2] = { -P
-//					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
-//							3), P
-//					* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3,
-//							3) };
-//			float D = 0.1;
-//			float D_xy[2] = { D * xMps, -D * yMps };
-//			// PD Controller
-//			PRcmd[0] = P_xy[0] + D_xy[0];
-//			PRcmd[1] = P_xy[1] + D_xy[1];
-//		}
-//		/*
-//		 * Attitude Controller
-//		 */
-//		float tau_pitch, tau_roll;
-//		{
-//			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
-//			// Proportional
-//			float P[2] = { 0.013, 0.01 };
-//			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
-//			// Integral
-//			float I = 0.01;
-//			float I_pr[2] = { I * PRErr[0] * dt, I * PRErr[1] * dt };
-//			// Derivative
-//			float D[2] = { -0.002, -0.0028 };
-//			float D_pr[2] = { D[0] * q, D[1] * p };
-//
-//			tau_pitch = P_pr[0] + I_pr[0] + D_pr[0];
-//			tau_roll = P_pr[1] + I_pr[1] + D_pr[1];
-//		}
-//
-//		/*
-//		 * Yaw Controller
-//		 */
-//		float tau_yaw;
-//		{
-//			float yawErr = setpoint.yaw - yaw;
-//			float P = 0.004;
-//			float P_yaw = P * yawErr;
-//			float D = -0.03 * 0.004;
-//			float D_yaw = D * r;
-//			tau_yaw = P_yaw + D_yaw;
-//		}
-//
-//		float altitude_cmd;
+		/*
+		 * XY-to-world setpoint
+		 */
+		float PRcmd[2];
+		{
+			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
+			float P = 0.24;
+			float P_xy[2] = { -P
+					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
+							3), P
+					* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3,
+							3) };
+			float D = 0.1;
+			float D_xy[2] = { D * xMps, -D * yMps };
+			// PD Controller
+			PRcmd[0] = P_xy[0] + D_xy[0];
+			PRcmd[1] = P_xy[1] + D_xy[1];
+		}
+		/*
+		 * Attitude Controller
+		 */
+		float tau_pitch, tau_roll;
+		{
+			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			// Proportional
+			float P[2] = { 0.013, 0.01 };
+			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
+			// Integral
+			float I = 0.01;
+			float I_pr[2] = { I * PRErr[0] * dt, I * PRErr[1] * dt };
+			// Derivative
+			float D[2] = { -0.002, -0.0028 };
+			float D_pr[2] = { D[0] * q, D[1] * p };
+
+			tau_pitch = P_pr[0] + I_pr[0] + D_pr[0];
+			tau_roll = P_pr[1] + I_pr[1] + D_pr[1];
+		}
+
+		/*
+		 * Yaw Controller
+		 */
+		float tau_yaw;
+		{
+			float yawErr = setpoint.yaw - yaw;
+			float P = 0.004;
+			float P_yaw = P * yawErr;
+			float D = -0.03 * 0.004;
+			float D_yaw = D * r;
+			tau_yaw = P_yaw + D_yaw;
+		}
+
+		float altitude_cmd;
 //		{
 //			float altErr = setpoint.z - h;
 //			float P = 0.08;
@@ -377,12 +377,12 @@ int main(void)
 //			altitude_cmd = P_alt + D_alt + 0.5;
 //			altitude_cmd += -9.81f * 1.50f;
 //		}
-//
-//		// Clamp all the outputs between -1 and 1
+
+		// Clamp all the outputs between -1 and 1
 //		tau_roll = clamp(tau_roll, -1, 1);
 //		tau_pitch = clamp(tau_pitch, -1, 1);
 //		tau_yaw = clamp(tau_yaw, -1, 1);
-//		altitude_cmd = clamp(altitude_cmd, 0, 1);
+		//altitude_cmd = clamp(altitude_cmd, 0, 1);
 //
 //		/*
 //		 * Servo mixing
@@ -392,22 +392,36 @@ int main(void)
 ////		float s2 = tau_yaw - tau_roll + tau_pitch;
 ////		float s3 = tau_yaw - tau_roll + tau_pitch;
 ////		float s4 = tau_yaw + tau_roll - tau_pitch;
-//		float s1 = tau_yaw + tau_roll;
-//		float s2 = tau_yaw - tau_roll;
-//		float s3 = tau_yaw + tau_pitch;
-//		float s4 = tau_yaw - tau_pitch;
-//		float s5 = altitude_cmd;
+		// total thrust, yaw, pitch, roll
+		float servoWeights[4] = { 0, 56, 150, 150 };
+		float s1 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				+ servoWeights[3] * tau_roll;
+		float s2 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				- servoWeights[3] * tau_roll;
+		float s3 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				+ servoWeights[4] * tau_pitch;
+		float s4 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+				- servoWeights[4] * tau_pitch;
+		float s5 = altitude_cmd;
 //
 //		snprintf(str, 128, "s1: %f, s2: %f, s3: %f, s4: %f\r\n", servoScale(s1),
 //				servoScale(s2), servoScale(s3), servoScale(s4));
-//		float servo1 = servoScale(s1);
-//		float servo2 = servoScale(s2);
-//		SERVO1_SetPWMDutyUs(servo1);
-//		SERVO2_SetPWMDutyUs(servo2);
-//
-//		PC_SendStr(str);
+		float servo1 = clamp(1500 + s1, 1000, 2000); // servoScale(clamp(s1, 0, 500));
+		float servo2 = clamp(1500 + s2, 1000, 2000); // servoScale(clamp(s2, 0, 500));
+		XPos_SetPWMDutyUs(1500);
+		XNeg_SetPWMDutyUs(1500);
+
+//		snprintf(str, 256,
+//				"GPS.x: %f, GPS.y: %f, xMps: %f, yMps: %f, Estimator.x: %f, Estimator.y: %f, lx: %f, ly: %f, dT: %f, Estimating: %d\r\n",
+//				GPSstats.x, GPSstats.y, xMps, yMps, xOff, yOff, lx, ly, dt,
+//				!haveGps);
+		snprintf(str, 256,
+				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
+				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
+				pitch, roll);
+		PC_SendStr(str);
 		FC321_Reset();
-		//sendBT();
+		haveGps = false;
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

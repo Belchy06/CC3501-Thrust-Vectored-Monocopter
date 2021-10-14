@@ -1,0 +1,26 @@
+/*
+ * BMP384.h
+ *
+ *  Created on: 13 Oct 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_BMP384_H_
+#define SOURCES_BMP384_H_
+
+#include "Sensors.h"
+
+#define BMP388_I2C_ADDR		 		0x77				// The BMP388 I2C address
+#define BMP388_I2C_ALT_ADDR 	0x76				// The BMP388 I2C alternate address
+#define BMP388_ID 						0x50				// The BMP388 device ID
+#define BMP390_ID							0x60				// The BMP390 device ID
+#define RESET_CODE						0xB6				// The BMP388 reset code
+#define FIFO_FLUSH						0xB0				// The BMP388 flush FIFO code
+
+
+
+
+void New_BMP384(BMP384 *self);
+void start(BMP384 *self);
+
+#endif /* SOURCES_BMP384_H_ */

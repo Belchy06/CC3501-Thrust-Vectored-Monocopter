@@ -1510,8 +1510,8 @@
         <Methods>
           <Init v="generate code" />
           <Deinit v="don&amp;apos;t generate code" />
-          <Enable v="don&amp;apos;t generate code" />
-          <Disable v="don&amp;apos;t generate code" />
+          <Enable v="generate code" />
+          <Disable v="generate code" />
           <GetVal v="generate code" />
           <SetEdge v="don&amp;apos;t generate code" />
           <SetOperationMode v="don&amp;apos;t generate code" />
@@ -1533,8 +1533,8 @@
       </group>
     </Properties>
     <Methods>
-      <Enable v="don&amp;apos;t generate code" />
-      <Disable v="don&amp;apos;t generate code" />
+      <Enable v="generate code" />
+      <Disable v="generate code" />
       <GetVal v="generate code" />
       <SetEdge v="don&amp;apos;t generate code" />
       <ConnectPin v="don&amp;apos;t generate code" />

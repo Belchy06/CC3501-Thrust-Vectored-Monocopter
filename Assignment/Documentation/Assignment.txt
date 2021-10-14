@@ -97,42 +97,6 @@ Module "GPS"       (component Term)
    - GPS_ReadChar -Read char from terminal.
    - GPS_KeyPressed -Test if char was received from the terminal.
 
-Module "SERVO1"    (component Servo)
-   - SERVO1_SetPWMDutyUs -Sets the servo PWM duty cycle in micro seconds (us)
-   - SERVO1_SetPos -Sets the servo position
-   - SERVO1_PWMusToPos8 -Transforms a micro-second PWM time into 8bit position
-   - SERVO1_Init -Moves the serve to its initialization position.
-
-Module "TU3"       (component TimerUnit_LDD)
-   - TU3_Init -Initializes the device. Allocates memory for the device data structure, allocates interrupt vectors and sets 
-                interrupt priority, sets pin routing, sets timing, etc. If the property <"Enable in init. code"> is set to 
-                "yes" value then the device is also enabled (see the description of the <Enable> method). In this case the 
-                <Enable> method is not necessary and needn't to be generated. This method can be called only once. Before the 
-                second call of Init the <Deinit> must be called first.
-   - TU3_Enable -Enables the component - it starts the signal generation. Events may be generated (see SetEventMask). The 
-                method is not available if the counter can't be disabled/enabled by HW.
-   - TU3_Disable -Disables the component - it stops signal generation and events calling. The method is not available if the 
-                counter can't be disabled/enabled by HW.
-   - TU3_GetPeriodTicks -Returns the number of counter ticks before re-initialization. See also method <SetPeriodTicks>. This 
-                method is available only if the property <"Counter restart"> is switched to 'on-match' value.
-   - TU3_ResetCounter -Resets counter. If counter is counting up then it is set to zero. If counter is counting down then 
-                counter is updated to the reload value.   The method is not available if HW doesn't allow resetting of the 
-                counter.
-   - TU3_GetCounterValue -Returns the content of counter register. This method can be used both if counter is enabled and if 
-                counter is disabled. The method is not available if HW doesn't allow reading of the counter.
-   - TU3_SetOffsetTicks -Sets the new offset value to channel specified by the parameter ChannelIdx. It is user responsibility 
-                to use value below selected period. This method is available when at least one channel is configured.
-   - TU3_GetOffsetTicks -Returns the number of counter ticks to compare match channel specified by the parameter ChannelIdx. 
-                See also method <SetOffsetTicks>. This method is available when at least one channel is configured.
-   - TU3_SelectOutputAction -Sets the type of compare match and counter overflow action on channel output. This method is 
-                available when at least one channel is configured.
-
-Module "SERVO2"    (component Servo)
-   - SERVO2_SetPWMDutyUs -Sets the servo PWM duty cycle in micro seconds (us)
-   - SERVO2_SetPos -Sets the servo position
-   - SERVO2_PWMusToPos8 -Transforms a micro-second PWM time into 8bit position
-   - SERVO2_Init -Moves the serve to its initialization position.
-
 Module "FC321"     (component FreeCntr32)
    - FC321_Reset -This method clears the counter.
    - FC321_GetTimeUS -This method returns the time (as a 16-bit unsigned integer) in microseconds since the last resetting 
@@ -169,6 +133,42 @@ Module "EInt1"     (component ExtInt)
    - EInt1_Disable -Disable the component - the external events are not accepted. This method is available only if HW module 
                 allows enable/disable of the interrupt.
    - EInt1_GetVal -Returns the actual value of the input pin of the component.
+
+Module "XPos"      (component Servo)
+   - XPos_SetPWMDutyUs -Sets the servo PWM duty cycle in micro seconds (us)
+   - XPos_SetPos -Sets the servo position
+   - XPos_PWMusToPos8 -Transforms a micro-second PWM time into 8bit position
+   - XPos_Init -Moves the serve to its initialization position.
+
+Module "XNeg"      (component Servo)
+   - XNeg_SetPWMDutyUs -Sets the servo PWM duty cycle in micro seconds (us)
+   - XNeg_SetPos -Sets the servo position
+   - XNeg_PWMusToPos8 -Transforms a micro-second PWM time into 8bit position
+   - XNeg_Init -Moves the serve to its initialization position.
+
+Module "TU4"       (component TimerUnit_LDD)
+   - TU4_Init -Initializes the device. Allocates memory for the device data structure, allocates interrupt vectors and sets 
+                interrupt priority, sets pin routing, sets timing, etc. If the property <"Enable in init. code"> is set to 
+                "yes" value then the device is also enabled (see the description of the <Enable> method). In this case the 
+                <Enable> method is not necessary and needn't to be generated. This method can be called only once. Before the 
+                second call of Init the <Deinit> must be called first.
+   - TU4_Enable -Enables the component - it starts the signal generation. Events may be generated (see SetEventMask). The 
+                method is not available if the counter can't be disabled/enabled by HW.
+   - TU4_Disable -Disables the component - it stops signal generation and events calling. The method is not available if the 
+                counter can't be disabled/enabled by HW.
+   - TU4_GetPeriodTicks -Returns the number of counter ticks before re-initialization. See also method <SetPeriodTicks>. This 
+                method is available only if the property <"Counter restart"> is switched to 'on-match' value.
+   - TU4_ResetCounter -Resets counter. If counter is counting up then it is set to zero. If counter is counting down then 
+                counter is updated to the reload value.   The method is not available if HW doesn't allow resetting of the 
+                counter.
+   - TU4_GetCounterValue -Returns the content of counter register. This method can be used both if counter is enabled and if 
+                counter is disabled. The method is not available if HW doesn't allow reading of the counter.
+   - TU4_SetOffsetTicks -Sets the new offset value to channel specified by the parameter ChannelIdx. It is user responsibility 
+                to use value below selected period. This method is available when at least one channel is configured.
+   - TU4_GetOffsetTicks -Returns the number of counter ticks to compare match channel specified by the parameter ChannelIdx. 
+                See also method <SetOffsetTicks>. This method is available when at least one channel is configured.
+   - TU4_SelectOutputAction -Sets the type of compare match and counter overflow action on channel output. This method is 
+                available when at least one channel is configured.
 
 Module "Cpu"       (component MK22FN512DC12)
 

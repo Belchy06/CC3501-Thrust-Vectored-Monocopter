@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item value="257" key="DIALOG_WIDTH"/>
-		<item value="274" key="DIALOG_Y_ORIGIN"/>
-		<item value="381" key="DIALOG_HEIGHT"/>
-		<item value="840" key="DIALOG_X_ORIGIN"/>
-		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="399" key="DIALOG_WIDTH"/>
+		<item value="189" key="DIALOG_Y_ORIGIN"/>
+		<item value="581" key="DIALOG_HEIGHT"/>
+		<item value="2305" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-21|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
@@ -13,23 +13,23 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="time" key="selection"/>
+		<item value="ERR_OK" key="selection"/>
 		<list key="findhistory">
+			<item value="0x1f"/>
+			<item value="fa"/>
+			<item value="readings"/>
+			<item value="gyro"/>
+			<item value="getReadings"/>
+			<item value="double"/>
 			<item value="_GPS_SENTENCE_GPRMC"/>
 			<item value="time"/>
-			<item value="courseto"/>
-			<item value="GSV"/>
-			<item value="send"/>
-			<item value="BT"/>
-			<item value="atan2"/>
-			<item value="cos"/>
 		</list>
 		<list key="replacehistory">
+			<item value="float"/>
 			<item value="gYaw"/>
 			<item value="atan2f"/>
 			<item value="cosf"/>
 			<item value="sinf"/>
-			<item value="float"/>
 		</list>
 	</section>
 </section>

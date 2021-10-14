@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-30, 13:30, # CodeGen: 55
+**     Date/Time   : 2021-10-08, 16:14, # CodeGen: 57
 **     Abstract    :
 **
 **     Settings    :
@@ -118,19 +118,19 @@ void Components_Init(void)
   /* ### Asynchro serial "Inhr1" init code ... */
   Inhr1_Init();
   /* ###  "GPS" init code ... */
-  /* ### PWM_LDD "PwmLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)PwmLdd1_Init(NULL);
-  /* ### Servo "SERVO1" init code ... */
-  SERVO1_Init();
-  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)PwmLdd2_Init(NULL);
-  /* ### Servo "SERVO2" init code ... */
-  SERVO2_Init();
   /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)RealTimeLdd1_Init(NULL);
   WAIT1_Init(); /* ### Wait "WAIT1" init code ... */
   /* ### ExtInt_LDD "ExtIntLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)ExtIntLdd1_Init(NULL);
+  /* ### PWM_LDD "PwmLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd1_Init(NULL);
+  /* ### Servo "XPos" init code ... */
+  XPos_Init();
+  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd2_Init(NULL);
+  /* ### Servo "XNeg" init code ... */
+  XNeg_Init();
 }
 #endif /* CPU_COMPONENTS_INIT */
 

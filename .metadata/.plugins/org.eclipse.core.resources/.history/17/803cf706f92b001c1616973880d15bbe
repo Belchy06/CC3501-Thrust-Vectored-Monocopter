@@ -1,0 +1,32 @@
+/*
+ * BMP384.c
+ *
+ *  Created on: 13 Oct 2021
+ *      Author: Will
+ */
+
+#ifndef SOURCES_BMP384_C_
+#define SOURCES_BMP384_C_
+
+#include "BMP384.h"
+
+void New_BMP384(BMP384 *self, uint8_t devAddr) {
+	self->devAddr = devAddr;;
+	self->start = &start;
+}
+
+uint8_t start(BMP384 *self) {
+	if(!reset(self)) {
+		return 0;
+	}
+}
+
+uint8_t reset(BMP384 *self) {
+	writeByte(self->devAddr, BMP388_CMD, RESET_CODE);
+	for(uint32_t i = 0; i < 1000000; i++) {
+		_asm("nop");
+	}
+
+}
+
+#endif /* SOURCES_BMP384_C_ */

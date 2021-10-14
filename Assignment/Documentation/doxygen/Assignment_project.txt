@@ -31,12 +31,12 @@
 - \subpage TU2
 - \subpage RealTimeLdd2
 - \subpage ASerialLdd1
-- \subpage TU3
-- \subpage PwmLdd1
-- \subpage PwmLdd2
 - \subpage TU1
 - \subpage RealTimeLdd1
 - \subpage ExtIntLdd1
+- \subpage TU4
+- \subpage PwmLdd1
+- \subpage PwmLdd2
 
 */
 
@@ -74,12 +74,12 @@
 - \subpage TU2
 - \subpage RealTimeLdd2
 - \subpage ASerialLdd1
-- \subpage TU3
-- \subpage PwmLdd1
-- \subpage PwmLdd2
 - \subpage TU1
 - \subpage RealTimeLdd1
 - \subpage ExtIntLdd1
+- \subpage TU4
+- \subpage PwmLdd1
+- \subpage PwmLdd2
 
 */
 

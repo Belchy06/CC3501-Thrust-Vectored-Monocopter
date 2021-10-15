@@ -372,21 +372,20 @@
 			</tr>
 			<tr>
 				<td>G8</td><td>ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0</td><td><small><i>same</i></small></td>
-				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sda</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
+				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se13</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
 			</tr>
 			<tr>
 				<td>G9</td><td>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</td><td><small><i>same</i></small></td>
-				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sclk</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
+				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port2</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
 			</tr>
 			<tr>
 				<td>G10</td><td>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</td><td><small><i>same</i></small></td>
-				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port1</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
+				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sda</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
 			</tr>
 			<tr>
-				<td rowspan='2'>G11</td><td rowspan='2'>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</td><td rowspan='2'><small><i>same</i></small></td>
-				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se8</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
+				<td>G11</td><td>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</td><td><small><i>same</i></small></td>
+				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sclk</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
 			</tr>
-			<tr bgcolor='#F8FF9A'><td>ADC1</td><td>adc_se8</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td rowspan='2'>H1</td><td rowspan='2'>ADC0_DP1</td><td rowspan='2'><small><i>same</i></small></td>
 				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_dp1</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
@@ -2444,21 +2443,20 @@
 			</tr>
 			<tr>
 				<td>G8</td><td>ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0</td><td><small><i>same</i></small></td>
-				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sda</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
+				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se13</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
 			</tr>
 			<tr>
 				<td>G9</td><td>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</td><td><small><i>same</i></small></td>
-				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sclk</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
+				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port2</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
 			</tr>
 			<tr>
 				<td>G10</td><td>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</td><td><small><i>same</i></small></td>
-				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port1</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
+				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sda</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
 			</tr>
 			<tr>
-				<td rowspan='2'>G11</td><td rowspan='2'>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</td><td rowspan='2'><small><i>same</i></small></td>
-				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se8</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
+				<td>G11</td><td>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</td><td><small><i>same</i></small></td>
+				<td bgcolor='#AFFF8E'>I2C0</td><td bgcolor='#AFFF8E'>i2c_sclk</td><td bgcolor='#AFFF8E'>alt2</td><td bgcolor='#AFFF8E'>Input/Output</td>
 			</tr>
-			<tr bgcolor='#F8FF9A'><td>ADC1</td><td>adc_se8</td><td>alt0</td><td>Input</td></tr>
 			<tr>
 				<td rowspan='2'>H1</td><td rowspan='2'>ADC0_DP1</td><td rowspan='2'><small><i>same</i></small></td>
 				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_dp1</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>

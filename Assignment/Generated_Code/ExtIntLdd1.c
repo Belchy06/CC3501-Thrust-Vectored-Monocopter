@@ -7,7 +7,7 @@
 **     Version     : Component 02.156, Driver 01.02, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-30, 14:28, # CodeGen: 56
+**     Date/Time   : 2021-10-15, 11:02, # CodeGen: 62
 **     Abstract    :
 **         This component, "ExtInt_LDD", provide a low level API 
 **         for unified access of external interrupts handling
@@ -16,7 +16,7 @@
 **         selected edge.
 **     Settings    :
 **          Component name                                 : ExtIntLdd1
-**          Pin                                            : ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB
+**          Pin                                            : ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3
 **          Generate interrupt on                          : falling edge
 **          Interrupt                                      : INT_PORTB
 **          Interrupt priority                             : medium priority
@@ -129,15 +129,15 @@ LDD_TDeviceData* ExtIntLdd1_Init(LDD_TUserData *UserDataPtr)
   /* SIM_SCGC5: PORTB=1 */
   SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
   /* Initialization of pin routing */
-  /* PORTB_PCR1: ISF=0,MUX=1 */
-  PORTB_PCR1 = (uint32_t)((PORTB_PCR1 & (uint32_t)~(uint32_t)(
+  /* PORTB_PCR2: ISF=0,MUX=1 */
+  PORTB_PCR2 = (uint32_t)((PORTB_PCR2 & (uint32_t)~(uint32_t)(
                 PORT_PCR_ISF_MASK |
                 PORT_PCR_MUX(0x06)
                )) | (uint32_t)(
                 PORT_PCR_MUX(0x01)
                ));
-  /* PORTB_PCR1: ISF=1,IRQC=0x0A */
-  PORTB_PCR1 = (uint32_t)((PORTB_PCR1 & (uint32_t)~(uint32_t)(
+  /* PORTB_PCR2: ISF=1,IRQC=0x0A */
+  PORTB_PCR2 = (uint32_t)((PORTB_PCR2 & (uint32_t)~(uint32_t)(
                 PORT_PCR_IRQC(0x05)
                )) | (uint32_t)(
                 PORT_PCR_ISF_MASK |

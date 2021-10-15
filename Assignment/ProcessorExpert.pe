@@ -3,7 +3,7 @@
   <Header>
     <Name>Assignment</Name>
     <SavedBy>willi</SavedBy>
-    <ModificationStamp>43</ModificationStamp>
+    <ModificationStamp>44</ModificationStamp>
     <Date>2021-08-22</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -20955,7 +20955,7 @@
               <ItemSymbol>SDA</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0</Value>
+              <Value>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>
@@ -20979,7 +20979,7 @@
               <ItemSymbol>SCL</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</Value>
+              <Value>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>
@@ -22393,7 +22393,7 @@
         <ItemSymbol>SDA</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0</Value>
+        <Value>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -22411,7 +22411,7 @@
         <ItemSymbol>SCL</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</Value>
+        <Value>ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -30782,7 +30782,7 @@
         <ItemSymbol>_Pin</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</Value>
+        <Value>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -30828,7 +30828,7 @@
               <ItemSymbol>_Pin</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</Value>
+              <Value>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>

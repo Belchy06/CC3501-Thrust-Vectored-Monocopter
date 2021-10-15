@@ -382,10 +382,10 @@
             <boolgroup name="SLAVE mode" v="Disabled" />
             <group name="Pins">
               <group name="SDA pin">
-                <SDA_pin v="ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0" />
+                <SDA_pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
               </group>
               <group name="SCL pin">
-                <SCL_pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
+                <SCL_pin v="ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA" />
               </group>
               <High_drive_select v="Disabled" />
               <Input_Glitch_filter v="0" />
@@ -485,8 +485,8 @@
       </boolgroup>
       <boolgroup name="SLAVE mode" v="Disabled" />
       <group name="Data and Clock">
-        <SDA_pin v="ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0" />
-        <SCL_pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
+        <SDA_pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
+        <SCL_pin v="ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA" />
         <High_drive_select v="Disabled" />
       </group>
       <Internal_frequency__multiplier_factor_ v="10.48576 MHz" />
@@ -1140,13 +1140,13 @@
     <Enabled v="Y" />
     <Properties>
       <Component_name v="EInt1" />
-      <Pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
+      <Pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
       <inhrbean type="ExtInt_LDD">
         <Enabled v="Y" />
         <Template v="ExtInt_LDD" />
         <Properties>
           <Component_name v="ExtIntLdd1" />
-          <Pin v="ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB" />
+          <Pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
           <Generate_interrupt_on v="falling edge" />
           <Interrupt v="INT_PORTB" />
           <Interrupt_priority v="medium priority" />

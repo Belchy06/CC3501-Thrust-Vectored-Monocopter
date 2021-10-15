@@ -11,6 +11,28 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+typedef enum TimeStandby {
+	TIME_STANDBY_5MS = 0x00, // Time standby bit field in the Output Data Rate (ODR) register
+	TIME_STANDBY_10MS = 0x01,
+	TIME_STANDBY_20MS = 0x02,
+	TIME_STANDBY_40MS = 0x03,
+	TIME_STANDBY_80MS = 0x04,
+	TIME_STANDBY_160MS = 0x05,
+	TIME_STANDBY_320MS = 0x06,
+	TIME_STANDBY_640MS = 0x07,
+	TIME_STANDBY_1280MS = 0x08,
+	TIME_STANDBY_2560MS = 0x09,
+	TIME_STANDBY_5120MS = 0x0A,
+	TIME_STANDBY_10240MS = 0x0B,
+	TIME_STANDBY_20480MS = 0x0C,
+	TIME_STANDBY_40960MS = 0x0D,
+	TIME_STANDBY_81920MS = 0x0E,
+	TIME_STANDBY_163840MS = 0x0F,
+	TIME_STANDBY_327680MS = 0x10,
+	TIME_STANDBY_655360MS = 0x11
+} TimeStandby;
+
+
 typedef struct BNO085 {
 	// Variables
 	// Every sensor has an i2c address
@@ -108,5 +130,101 @@ typedef struct GPS {
 	float (*speed_knots)(struct GPS *self);
 	float (*speed_mps)(struct GPS *self);
 } GPS;
+
+typedef struct BMP384 {
+	uint8_t devAddr;
+	uint8_t err;
+
+	union {								// Copy of the BMP388's event register
+		struct {
+			uint8_t por_detected :1;
+		} bit;
+		uint8_t reg;
+	} event;
+
+	union {						// Copy of the BMP388's configuration register
+		struct {
+			uint8_t :1;
+			uint8_t iir_filter :3;
+		} bit;
+		uint8_t reg;
+	} config;
+
+	union {					// Copy of the BMP388's output data rate register
+		struct {
+			uint8_t odr_sel :5;
+		} bit;
+		uint8_t reg;
+	} odr;
+
+	union {						// Copy of the BMP388's oversampling register
+		struct {
+			uint8_t osr_p :3;
+			uint8_t osr_t :3;
+		} bit;
+		uint8_t reg;
+	} osr;
+
+	volatile union {			// Copy of the BMP388's power control register
+		struct {
+			uint8_t press_en :1;
+			uint8_t temp_en :1;
+			uint8_t :2;
+			uint8_t mode :2;
+		} bit;
+		uint8_t reg;
+	} pwr_ctrl;
+
+	volatile union {		// Copy of the BMP388's interrupt status register
+		struct {
+			uint8_t fwm_int : 1;
+			uint8_t ffull_int : 1;
+			uint8_t : 1;
+			uint8_t drdy : 1;
+		} bit;
+		uint8_t reg;
+	} int_status;
+
+	struct {		// The BMP388 compensation trim parameters (coefficients)
+		uint16_t param_T1;
+		uint16_t param_T2;
+		int8_t param_T3;
+		int16_t param_P1;
+		int16_t param_P2;
+		int8_t param_P3;
+		int8_t param_P4;
+		uint16_t param_P5;
+		uint16_t param_P6;
+		int8_t param_P7;
+		int8_t param_P8;
+		int16_t param_P9;
+		int8_t param_P10;
+		int8_t param_P11;
+	}__attribute__ ((packed)) params;
+
+	struct FloatParams {// The BMP388 float point compensation trim parameters
+		float param_T1;
+		float param_T2;
+		float param_T3;
+		float param_P1;
+		float param_P2;
+		float param_P3;
+		float param_P4;
+		float param_P5;
+		float param_P6;
+		float param_P7;
+		float param_P8;
+		float param_P9;
+		float param_P10;
+		float param_P11;
+	} floatParams;
+
+	uint8_t (*start)(struct BMP384 *self);
+	void (*setTimeStandby)(struct BMP384 *self, TimeStandby timeStandby);
+	void (*startNormalConversion)(struct BMP384 *self);
+	uint8_t (*getMeasurements)(struct BMP384 *self, float *temperature,
+			float *pressure, float *altitude);
+
+} BMP384;
 
 #endif /* SOURCES_SENSORS_H_ */

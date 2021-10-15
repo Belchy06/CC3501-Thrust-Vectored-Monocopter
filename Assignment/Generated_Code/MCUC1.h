@@ -6,7 +6,7 @@
 **     Component   : McuLibConfig
 **     Version     : Component 01.012, Driver 01.00, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-11, 19:23, # CodeGen: 31
+**     Date/Time   : 2021-10-15, 10:56, # CodeGen: 61
 **     Abstract    :
 **          Configures the drivers for various SDKs and APIs used.
 **     Settings    :

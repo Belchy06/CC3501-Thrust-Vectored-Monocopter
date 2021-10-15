@@ -38,11 +38,6 @@
 #include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
-#include "Pwm1.h"
-#include "PwmLdd1.h"
-#include "XNeg.h"
-#include "Pwm2.h"
-#include "PwmLdd2.h"
 #include "TU4.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
@@ -51,9 +46,15 @@
 #include "EInt1.h"
 #include "ExtIntLdd1.h"
 #include "XPos.h"
+#include "Pwm1.h"
+#include "PwmLdd1.h"
+#include "XNeg.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
 #include "GPSTimer.h"
 #include "RealTimeLdd2.h"
 #include "TU2.h"
+#include "GPS.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -61,29 +62,33 @@
 #include "IO_Map.h"
 #include "PDD_Includes.h"
 #include "Init_Config.h"
-#include "BNO085.h"
-#include "Sensors.h"
-#include <stdbool.h>
-#include "printf.h"
+/* User includes (#include below this line is not maintained by Processor Expert) */
 #include <math.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "Sensors.h"
+#include "BNO085.h"
+#include "BMP384.h"
 #include "GPS.h"
+
+#include "printf.h"
+
 #include "Controllers.h"
 #include "VelocityEstimator.h"
 #include "PositionEstimator.h"
 #include "utm.h"
-/* User includes (#include below this line is not maintained by Processor Expert) */
-#define BNO080_DEFAULT_ADDRESS 0x4A
-#define BMPXXX_DEFAULT_ADDRESS 0x00
 
-float h;
+#define BNO080_DEFAULT_ADDRESS 0x4A
+#define BMP384_DEFAULT_ADDRESS 0x77
+
+float temperature, pressure, altitude;
 float pitch, roll, yaw;
 float p, q, r;
 float ax, ay, az;
 float lx, ly, lz;
 uint8_t accelAccuracy, gyroAccuracy, magAccuracy, linAccuracy;
-float quatRadianAccuracy;
+
 char level[32];
 char str[256];
 unsigned int time;
@@ -104,9 +109,9 @@ volatile bool newAcc, newGyro, newRot;
 bool haveGps = false;
 
 struct setpoints {
-	float x;
-	float y;
-	float z;
+	float easting;
+	float northing;
+	float altitude;
 	float yaw;
 };
 
@@ -150,7 +155,7 @@ int main(void)
 //	/* For example: for(;;) { } */
 	// Initialize setpoints
 	struct setpoints setpoint;
-	setpoint.x = setpoint.y = setpoint.z = setpoint.yaw = 0;
+	setpoint.easting = setpoint.northing = setpoint.altitude = setpoint.yaw = 0;
 
 	// Controller Init
 	VelocityEstimator EstimatorVelocity;
@@ -168,6 +173,21 @@ int main(void)
 	GPSstats.dx = 0;
 	GPSstats.dy = 0;
 
+	BMP384 BARO;
+	New_BMP384(&BARO, BMP384_DEFAULT_ADDRESS);
+	BARO.start(&BARO);
+	BARO.setTimeStandby(&BARO, TIME_STANDBY_1280MS);
+	BARO.startNormalConversion(&BARO);
+	// Get starting altitude
+	float tempAlt = 0;
+	for (uint8_t i = 0; i < 20; i++) {
+		while(!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
+			;
+		}
+		tempAlt += altitude;
+	}
+	setpoint.altitude = tempAlt / 20.0f;
+
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
 	if (IMU.begin(&IMU) == false) {
 		while (1)
@@ -175,12 +195,12 @@ int main(void)
 	}
 
 	EInt1_Enable();
+	WAIT1_Waitms(1000);
 	IMU.enableLinearAccelerometer(&IMU, 50);
 	//IMU.enableAccelerometer(&IMU, 50);
 	//IMU.enableRotationVector(&IMU, 100);
 	IMU.enableRotationVector(&IMU, 100);
 	IMU.enableGyro(&IMU, 50);
-
 	FC321_Reset();
 	for (;;) {
 		if (newAcc) {
@@ -197,7 +217,6 @@ int main(void)
 			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 			newGyro = 0;
 		}
-
 		if (complete_command) {
 			gps.get_position(&gps, &lat, &lon, &age);
 			long zone;
@@ -227,6 +246,8 @@ int main(void)
 			complete_command = false;
 			index = 0;
 		}
+		BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude);
+
 		// Rest of control loop
 		FC321_GetTimeUS(&time);
 		dt = time * 1e-6;
@@ -256,9 +277,6 @@ int main(void)
 			}
 		}
 
-		float gVector[3] = { dcm[0][2] * -9.81, dcm[1][2] * -9.81, dcm[2][2]
-				* -9.81 };
-		// z = gVector[0]
 		float worldAcceleration[3];
 		worldAcceleration[0] = dcmT[0][0] * lx + dcmT[0][1] * ly
 				+ dcmT[0][2] * lz;
@@ -275,7 +293,6 @@ int main(void)
 		if (haveGps) {
 			float measurements[4] = { GPSstats.dx, GPSstats.dy,
 					worldAcceleration[0], worldAcceleration[1] };
-			// float measurements[4] = { GPSstats.dx, GPSstats.dy, lx, ly };
 			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
 					dt);
 			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
@@ -283,23 +300,14 @@ int main(void)
 		} else {
 			float measurements[4] = { 999999999, 999999999,
 					worldAcceleration[0], worldAcceleration[1] };
-//			float measurements[4] = { 999999999, 999999999, lx, ly };
 			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
 					dt);
 			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
 					&yMps);
 		}
-//		snprintf(str, 256,
-//				"GPS.dx: %f, GPS.dy: %f, lx: %f, ly: %f, Estimator.dx: %f, Estimator.dy: %f, dT: %f, Estimating: %d\r\n",
-//				GPSstats.dx, GPSstats.dy, lx, ly, xMps, yMps, dt, !haveGps);
-//		PC_SendStr(str);
 
 		// Estimate XY position
 		float worldVelXY[2];
-//		worldVelXY[0] = dcmT[0][0] * xMps + dcmT[0][1] * yMps
-//				+ dcmT[0][2] * zMps;
-//		worldVelXY[1] = dcmT[1][0] * xMps + dcmT[1][1] * yMps
-//				+ dcmT[1][2] * zMps;
 		worldVelXY[0] = xMps;
 		worldVelXY[1] = yMps;
 		if (haveGps) {
@@ -321,7 +329,8 @@ int main(void)
 		 */
 		float PRcmd[2];
 		{
-			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
+			float XYErr[2] = { (setpoint.easting - xOff), (setpoint.northing
+					- yOff) };
 			float P = 0.24;
 			float P_xy[2] = { -P
 					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
@@ -368,21 +377,21 @@ int main(void)
 		}
 
 		float altitude_cmd;
-//		{
-//			float altErr = setpoint.z - h;
-//			float P = 0.08;
-//			float P_alt = P * altErr;
-//			float D = -0.03;
-//			float D_alt = D * lz;
-//			altitude_cmd = P_alt + D_alt + 0.5;
-//			altitude_cmd += -9.81f * 1.50f;
-//		}
+		{
+			float altErr = setpoint.altitude - altitude;
+			float P = 0.08;
+			float P_alt = P * altErr;
+			float D = -0.03;
+			float D_alt = D * lz;
+			altitude_cmd = P_alt + D_alt + 0.5;
+			altitude_cmd += -9.81f * 1.50f;
+		}
 
 		// Clamp all the outputs between -1 and 1
 //		tau_roll = clamp(tau_roll, -1, 1);
 //		tau_pitch = clamp(tau_pitch, -1, 1);
 //		tau_yaw = clamp(tau_yaw, -1, 1);
-		//altitude_cmd = clamp(altitude_cmd, 0, 1);
+//		altitude_cmd = clamp(altitude_cmd, 0, 1);
 //
 //		/*
 //		 * Servo mixing
@@ -403,35 +412,30 @@ int main(void)
 		float s4 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
 				- servoWeights[4] * tau_pitch;
 		float s5 = altitude_cmd;
-//
-//		snprintf(str, 128, "s1: %f, s2: %f, s3: %f, s4: %f\r\n", servoScale(s1),
-//				servoScale(s2), servoScale(s3), servoScale(s4));
+
 		float servo1 = clamp(1500 + s1, 1000, 2000); // servoScale(clamp(s1, 0, 500));
 		float servo2 = clamp(1500 + s2, 1000, 2000); // servoScale(clamp(s2, 0, 500));
 		XPos_SetPWMDutyUs(1500);
 		XNeg_SetPWMDutyUs(1500);
 
-//		snprintf(str, 256,
-//				"GPS.x: %f, GPS.y: %f, xMps: %f, yMps: %f, Estimator.x: %f, Estimator.y: %f, lx: %f, ly: %f, dT: %f, Estimating: %d\r\n",
-//				GPSstats.x, GPSstats.y, xMps, yMps, xOff, yOff, lx, ly, dt,
-//				!haveGps);
 		snprintf(str, 256,
 				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
 				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
 				pitch, roll);
-		PC_SendStr(str);
+		// PC_SendStr(str);
 		FC321_Reset();
 		haveGps = false;
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-  #ifdef PEX_RTOS_START
-    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-  #endif
-  /*** End of RTOS startup code.  ***/
-  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-  for(;;){}
-  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+#ifdef PEX_RTOS_START
+	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+#endif
+	/*** End of RTOS startup code.  ***/
+	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+	for (;;) {
+	}
+	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

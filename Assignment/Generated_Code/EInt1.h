@@ -7,7 +7,7 @@
 **     Version     : Component 02.105, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-30, 14:28, # CodeGen: 56
+**     Date/Time   : 2021-10-15, 11:02, # CodeGen: 62
 **     Abstract    :
 **         This component "ExtInt" implements an external 
 **         interrupt, its control methods and interrupt/event 
@@ -16,7 +16,7 @@
 **         selected edge.
 **     Settings    :
 **          Component name                                 : EInt1
-**          Pin                                            : ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB
+**          Pin                                            : ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3
 **          ExtInt_LDD                                     : ExtInt_LDD
 **          Generate interrupt on                          : falling edge
 **          Interrupt                                      : INT_PORTB

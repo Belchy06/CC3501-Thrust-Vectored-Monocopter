@@ -7,7 +7,7 @@
 **     Version     : Component 01.016, Driver 01.07, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-11, 19:23, # CodeGen: 31
+**     Date/Time   : 2021-10-15, 11:02, # CodeGen: 62
 **     Abstract    :
 **          This component encapsulates the internal I2C communication
 **          interface. The implementation of the interface is based
@@ -38,9 +38,9 @@
 **            SLAVE mode                                   : Disabled
 **            Pins                                         : 
 **              SDA pin                                    : 
-**                SDA pin                                  : ADC0_SE13/PTB3/I2C0_SDA/UART0_CTS_b/FTM0_FLT0
+**                SDA pin                                  : ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB
 **              SCL pin                                    : 
-**                SCL pin                                  : ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3
+**                SCL pin                                  : ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA
 **              High drive select                          : Disabled
 **              Input Glitch filter                        : 0
 **            Internal frequency (multiplier factor)       : 10.48576 MHz
@@ -356,22 +356,22 @@ LDD_TDeviceData* IntI2cLdd1_Init(LDD_TUserData *UserDataPtr)
   I2C0_S = I2C_S_IICIF_MASK;           /* Clear interrupt flag */
   /* SIM_SCGC5: PORTB=1 */
   SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
-  /* PORTB_PCR3: ISF=0,MUX=2 */
-  PORTB_PCR3 = (uint32_t)((PORTB_PCR3 & (uint32_t)~(uint32_t)(
+  /* PORTB_PCR1: ISF=0,MUX=2 */
+  PORTB_PCR1 = (uint32_t)((PORTB_PCR1 & (uint32_t)~(uint32_t)(
                 PORT_PCR_ISF_MASK |
                 PORT_PCR_MUX(0x05)
                )) | (uint32_t)(
                 PORT_PCR_MUX(0x02)
                ));
-  /* PORTB_PCR2: ISF=0,MUX=2 */
-  PORTB_PCR2 = (uint32_t)((PORTB_PCR2 & (uint32_t)~(uint32_t)(
+  /* PORTB_PCR0: ISF=0,MUX=2 */
+  PORTB_PCR0 = (uint32_t)((PORTB_PCR0 & (uint32_t)~(uint32_t)(
                 PORT_PCR_ISF_MASK |
                 PORT_PCR_MUX(0x05)
                )) | (uint32_t)(
                 PORT_PCR_MUX(0x02)
                ));
-  PORT_PDD_SetPinOpenDrain(PORTB_BASE_PTR, 0x03u, PORT_PDD_OPEN_DRAIN_ENABLE); /* Set SDA pin as open drain */
-  PORT_PDD_SetPinOpenDrain(PORTB_BASE_PTR, 0x02u, PORT_PDD_OPEN_DRAIN_ENABLE); /* Set SCL pin as open drain */
+  PORT_PDD_SetPinOpenDrain(PORTB_BASE_PTR, 0x01u, PORT_PDD_OPEN_DRAIN_ENABLE); /* Set SDA pin as open drain */
+  PORT_PDD_SetPinOpenDrain(PORTB_BASE_PTR, 0x00u, PORT_PDD_OPEN_DRAIN_ENABLE); /* Set SCL pin as open drain */
   /* I2C0_C2: GCAEN=0,ADEXT=0,HDRS=0,SBRC=0,RMEN=0,AD=0 */
   I2C0_C2 = I2C_C2_AD(0x00);
   /* I2C0_FLT: SHEN=0,STOPF=0,SSIE=0,STARTF=0,FLT=0 */

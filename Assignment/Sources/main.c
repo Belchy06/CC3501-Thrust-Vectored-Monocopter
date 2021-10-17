@@ -33,12 +33,18 @@
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
 #include "MCUC1.h"
-#include "PC.h"
+#include "BT.h"
 #include "Inhr2.h"
 #include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
 #include "TU4.h"
+#include "statusBlue.h"
+#include "BitIoLdd1.h"
+#include "statusRed.h"
+#include "BitIoLdd2.h"
+#include "statusGreen.h"
+#include "BitIoLdd3.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
@@ -109,8 +115,8 @@ volatile bool newAcc, newGyro, newRot;
 bool haveGps = false;
 
 struct setpoints {
-	float easting;
-	float northing;
+	float x;
+	float y;
 	float altitude;
 	float yaw;
 };
@@ -120,6 +126,8 @@ struct GPSStats {
 	float dy;
 	float x;
 	float y;
+	float prevEasting;
+	float prevNorthing;
 };
 
 double easting;
@@ -127,7 +135,7 @@ double northing;
 
 float clamp(float f, float min, float max) {
 	const float t = f < min ? min : f;
-	return f > max ? max : f;
+	return t > max ? max : t;
 }
 
 float servoScale(float f) {
@@ -138,7 +146,7 @@ float servoScale(float f) {
 void sendBT() {
 	snprintf(str, 128, "roll: %f, pitch: %f, yaw: %f, gYaw: %f\r\n", roll,
 			pitch, yaw, gYaw);
-	PC_SendStr(str);
+	// BT_SendStr(str);
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -153,9 +161,12 @@ int main(void)
 	EInt1_Disable();
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
+	// Initialize status LEDs
+	bool bstatusBlue, bstatusRed, bstatusGreen = false;
+
 	// Initialize setpoints
 	struct setpoints setpoint;
-	setpoint.easting = setpoint.northing = setpoint.altitude = setpoint.yaw = 0;
+	setpoint.x = setpoint.y = setpoint.altitude = setpoint.yaw = 0;
 
 	// Controller Init
 	VelocityEstimator EstimatorVelocity;
@@ -172,30 +183,49 @@ int main(void)
 	GPSstats.y = 0;
 	GPSstats.dx = 0;
 	GPSstats.dy = 0;
+	GPSstats.prevEasting = 0;
+	GPSstats.prevNorthing = 0;
 
 	BMP384 BARO;
 	New_BMP384(&BARO, BMP384_DEFAULT_ADDRESS);
-	BARO.start(&BARO);
+	if(!BARO.start(&BARO)) {
+		BT_SendStr("Error initializing barometer!\r\n");
+		while(1) {
+			bstatusRed = true;
+			statusRed_PutVal(bstatusRed);
+		}
+	}
 	BARO.setTimeStandby(&BARO, TIME_STANDBY_1280MS);
 	BARO.startNormalConversion(&BARO);
 	// Get starting altitude
 	float tempAlt = 0;
+	BT_SendStr("Calibrating starting altitude...\r\n");
 	for (uint8_t i = 0; i < 20; i++) {
-		while(!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
+		while (!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
 			;
 		}
 		tempAlt += altitude;
+		bstatusBlue = !bstatusBlue;
+		statusBlue_PutVal(bstatusBlue);
 	}
 	setpoint.altitude = tempAlt / 20.0f;
+	bstatusBlue = false;
+	statusBlue_PutVal(bstatusBlue);
+	snprintf(str, 128, "Starting altitude: %f\r\n", setpoint.altitude);
+	BT_SendStr(str);
 
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+	IMU.begin(&IMU);
 	if (IMU.begin(&IMU) == false) {
-		while (1)
-			;
+		BT_SendStr("Error initializing IMU!");
+		while(1) {
+			bstatusRed = true;
+			statusRed_PutVal(bstatusRed);
+		}
 	}
 
 	EInt1_Enable();
-	WAIT1_Waitms(1000);
+	WAIT1_Waitms(5000);
 	IMU.enableLinearAccelerometer(&IMU, 50);
 	//IMU.enableAccelerometer(&IMU, 50);
 	//IMU.enableRotationVector(&IMU, 100);
@@ -206,16 +236,22 @@ int main(void)
 		if (newAcc) {
 			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
 			newAcc = 0;
+			bstatusGreen = !bstatusGreen;
+			statusGreen_PutVal(bstatusGreen);
 		}
 		if (newRot) {
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
 			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
 			newRot = 0;
+			bstatusGreen = !bstatusGreen;
+			statusGreen_PutVal(bstatusGreen);
 		}
 		if (newGyro) {
 			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 			newGyro = 0;
+			bstatusGreen = !bstatusGreen;
+			statusGreen_PutVal(bstatusGreen);
 		}
 		if (complete_command) {
 			gps.get_position(&gps, &lat, &lon, &age);
@@ -224,8 +260,10 @@ int main(void)
 			long res = Convert_Geodetic_To_UTM(lat * 0.0174533f,
 					lon * 0.0174533f, &zone, &hemisphere, &easting, &northing);
 			if (res == UTM_NO_ERROR) {
-				GPSstats.x = (float) easting;
-				GPSstats.y = (float) northing;
+				GPSstats.x = (float) (GPSstats.prevEasting - easting);
+				GPSstats.y = (float) (GPSstats.prevNorthing - northing);
+				GPSstats.prevEasting = easting;
+				GPSstats.prevNorthing = northing;
 				if (!firstTime) {
 					float gYaw = gps.course_to(&gps, prevLat, prevLon, lat,
 							lon);
@@ -246,7 +284,10 @@ int main(void)
 			complete_command = false;
 			index = 0;
 		}
-		BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude);
+		if(BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
+ 			bstatusBlue = !bstatusBlue;
+			statusBlue_PutVal(bstatusBlue);
+		}
 
 		// Rest of control loop
 		FC321_GetTimeUS(&time);
@@ -329,8 +370,7 @@ int main(void)
 		 */
 		float PRcmd[2];
 		{
-			float XYErr[2] = { (setpoint.easting - xOff), (setpoint.northing
-					- yOff) };
+			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
 			float P = 0.24;
 			float P_xy[2] = { -P
 					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
@@ -382,7 +422,7 @@ int main(void)
 			float P = 0.08;
 			float P_alt = P * altErr;
 			float D = -0.03;
-			float D_alt = D * lz;
+			float D_alt = D * worldAcceleration[2];
 			altitude_cmd = P_alt + D_alt + 0.5;
 			altitude_cmd += -9.81f * 1.50f;
 		}
@@ -402,40 +442,43 @@ int main(void)
 ////		float s3 = tau_yaw - tau_roll + tau_pitch;
 ////		float s4 = tau_yaw + tau_roll - tau_pitch;
 		// total thrust, yaw, pitch, roll
-		float servoWeights[4] = { 0, 56, 150, 150 };
-		float s1 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+		float servoWeights[4] = { 1, 56, 150, 150 };
+		float s1 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
 				+ servoWeights[3] * tau_roll;
-		float s2 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+		float s2 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
 				- servoWeights[3] * tau_roll;
-		float s3 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+		float s3 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
 				+ servoWeights[4] * tau_pitch;
-		float s4 = servoWeights[0] * altitude_cmd + servoWeights[1] * tau_yaw
+		float s4 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
 				- servoWeights[4] * tau_pitch;
-		float s5 = altitude_cmd;
+		float s5 = servoWeights[0] * altitude_cmd;
 
+		float edfServo = clamp(1000 + s5, 1000.0f, 2000.0f);
 		float servo1 = clamp(1500 + s1, 1000, 2000); // servoScale(clamp(s1, 0, 500));
 		float servo2 = clamp(1500 + s2, 1000, 2000); // servoScale(clamp(s2, 0, 500));
 		XPos_SetPWMDutyUs(1500);
 		XNeg_SetPWMDutyUs(1500);
 
-		snprintf(str, 256,
-				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
-				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
-				pitch, roll);
-		// PC_SendStr(str);
+		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude, s5, edfServo);
+		BT_SendStr(str);
+//		snprintf(str, 256,
+//				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
+//				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
+//				pitch, roll);
+		// BT_SendStr(str);
 		FC321_Reset();
 		haveGps = false;
+		WAIT1_Waitms(50);
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-#ifdef PEX_RTOS_START
-	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-#endif
-	/*** End of RTOS startup code.  ***/
-	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-	for (;;) {
-	}
-	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+  #ifdef PEX_RTOS_START
+    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+  #endif
+  /*** End of RTOS startup code.  ***/
+  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+  for(;;){}
+  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

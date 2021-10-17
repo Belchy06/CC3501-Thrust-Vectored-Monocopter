@@ -37,12 +37,18 @@
 #include "CI2C1.h"
 #include "IntI2cLdd1.h"
 #include "MCUC1.h"
-#include "PC.h"
+#include "BT.h"
 #include "Inhr2.h"
 #include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
 #include "TU4.h"
+#include "statusBlue.h"
+#include "BitIoLdd1.h"
+#include "statusRed.h"
+#include "BitIoLdd2.h"
+#include "statusGreen.h"
+#include "BitIoLdd3.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
@@ -109,6 +115,23 @@ void EInt1_OnInterrupt(void);
 ** ===================================================================
 */
 void Inhr1_OnRxChar(void);
+
+/*
+** ===================================================================
+**     Event       :  Inhr2_OnRxChar (module Events)
+**
+**     Component   :  Inhr2 [AsynchroSerial]
+**     Description :
+**         This event is called after a correct character is received.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled and either the <Receiver>
+**         property is enabled or the <SCI output mode> property (if
+**         supported) is set to Single-wire mode.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Inhr2_OnRxChar(void);
 
 /* END Events */
 

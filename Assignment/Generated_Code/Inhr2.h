@@ -7,7 +7,7 @@
 **     Version     : Component 02.611, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-21, 19:59, # CodeGen: 48
+**     Date/Time   : 2021-10-17, 14:15, # CodeGen: 68
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -17,17 +17,28 @@
 **         The component requires one on-chip asynchronous serial channel.
 **     Settings    :
 **          Component name                                 : Inhr2
-**          Channel                                        : UART1
-**          Interrupt service/event                        : Disabled
+**          Channel                                        : UART0
+**          Interrupt service/event                        : Enabled
+**            Interrupt RxD                                : INT_UART0_RX_TX
+**            Interrupt RxD priority                       : medium priority
+**            Interrupt TxD                                : INT_UART0_RX_TX
+**            Interrupt TxD priority                       : medium priority
+**            Interrupt Error                              : INT_UART0_ERR
+**            Interrupt Error priority                     : medium priority
+**            Input buffer size                            : 128
+**            Output buffer size                           : 128
+**            Handshake                                    : 
+**              CTS                                        : Disabled
+**              RTS                                        : Disabled
 **          Settings                                       : 
 **            Parity                                       : none
 **            Width                                        : 8 bits
 **            Stop bit                                     : 1
 **            Receiver                                     : Enabled
-**              RxD                                        : ADC1_SE5a/PTE1/LLWU_P0/SPI1_SOUT/UART1_RX/I2C1_SCL/SPI1_SIN
+**              RxD                                        : PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN
 **            Transmitter                                  : Enabled
-**              TxD                                        : ADC1_SE4a/PTE0/CLKOUT32K/SPI1_PCS1/UART1_TX/I2C1_SDA/RTC_CLKOUT
-**            Baud rate                                    : 9600 baud
+**              TxD                                        : PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b
+**            Baud rate                                    : 115200 baud
 **            Break signal                                 : Disabled
 **            Wakeup condition                             : Idle line wakeup
 **            Transmitter output                           : Not inverted
@@ -133,6 +144,10 @@ extern "C" {
   typedef byte Inhr2_TComData;         /* User type for communication. Size of this type depends on the communication data witdh */
 #endif
 
+#define Inhr2_INP_BUF_SIZE  0x80U      /* Length of the RX buffer */
+
+#define Inhr2_OUT_BUF_SIZE  0x80U      /* Length of the TX buffer */
+
 /*
 ** ===================================================================
 **     Method      :  Inhr2_RecvChar (component AsynchroSerial)
@@ -217,6 +232,42 @@ word Inhr2_GetCharsInRxBuf(void);
 ** ===================================================================
 */
 void Inhr2_Init(void);
+
+/*
+** ===================================================================
+**     Method      :  Inhr2_ASerialLdd2_OnBlockReceived (component AsynchroSerial)
+**
+**     Description :
+**         This event is called when the requested number of data is 
+**         moved to the input buffer.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd2_OnBlockReceived(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  Inhr2_ASerialLdd2_OnBlockSent (component AsynchroSerial)
+**
+**     Description :
+**         This event is called after the last character from the output 
+**         buffer is moved to the transmitter.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd2_OnBlockSent(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  Inhr2_ASerialLdd2_OnError (component AsynchroSerial)
+**
+**     Description :
+**         This event is called when a channel error (not the error 
+**         returned by a given method) occurs.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void ASerialLdd2_OnError(LDD_TUserData *UserDataPtr);
 
 /*
 ** ===================================================================

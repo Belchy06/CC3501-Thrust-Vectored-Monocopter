@@ -29,7 +29,7 @@ by the component.
 <tr><td colspan="4" class="ttitle1">IntI2cLdd1 Initialization</td></tr>
 <tr><td class="ttitle2">Address</td><td class="ttitle2">Register</td><td class="ttitle2">Register Value</td><td class="ttitle2">Register Description</td></tr>
 <tr><td>0x40048034</td><td>SIM_SCGC4</td>
-<td class="regNotResetVal">0xF0100870</td>
+<td class="regNotResetVal">0xF0100470</td>
  <td>SIM_SCGC4 register, peripheral IntI2cLdd1.</td></tr>
 <tr><td>0x40066002</td><td>I2C0_C1</td>
 <td class="regResetVal">0x00000000</td>
@@ -41,7 +41,7 @@ by the component.
 <td class="regNotResetVal">0x00000002</td>
  <td>I2C0_S register, peripheral IntI2cLdd1.</td></tr>
 <tr><td>0x40048038</td><td>SIM_SCGC5</td>
-<td class="regNotResetVal">0x00042582</td>
+<td class="regNotResetVal">0x00040582</td>
  <td>SIM_SCGC5 register, peripheral IntI2cLdd1.</td></tr>
 <tr><td>0x4004A004</td><td>PORTB_PCR1</td>
 <td class="regNotResetVal">0x00000200</td>
@@ -56,7 +56,7 @@ by the component.
 <td class="regNotResetVal">0x00000008</td>
  <td>I2C0_SMB register, peripheral IntI2cLdd1.</td></tr>
 <tr><td>0x40066001</td><td>I2C0_F</td>
-<td class="regNotResetVal">0x00000057</td>
+<td class="regNotResetVal">0x00000097</td>
  <td>I2C0_F register, peripheral IntI2cLdd1.</td></tr>
 </table>
 Color Denotes Reset Value
@@ -112,15 +112,15 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0x40048034</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0xF0100870</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0xF0100470</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0xF0100030</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>20</td><td>VREF</td><td>0x01</td><td>VREF Clock Gate Control</td>
 <tr><td>19</td><td>CMP</td><td>0x00</td><td>Comparator Clock Gate Control</td>
 <tr><td>18</td><td>USBOTG</td><td>0x00</td><td>USB Clock Gate Control</td>
 <tr><td>12</td><td>UART2</td><td>0x00</td><td>UART2 Clock Gate Control</td>
-<tr><td>11</td><td>UART1</td><td>0x01</td><td>UART1 Clock Gate Control</td>
-<tr><td>10</td><td>UART0</td><td>0x00</td><td>UART0 Clock Gate Control</td>
+<tr><td>11</td><td>UART1</td><td>0x00</td><td>UART1 Clock Gate Control</td>
+<tr><td>10</td><td>UART0</td><td>0x01</td><td>UART0 Clock Gate Control</td>
 <tr><td>7</td><td>I2C1</td><td>0x00</td><td>I2C1 Clock Gate Control</td>
 <tr><td>6</td><td>I2C0</td><td>0x01</td><td>I2C0 Clock Gate Control</td>
 <tr><td>1</td><td>EWM</td><td>0x00</td><td>EWM Clock Gate Control</td>
@@ -269,10 +269,10 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0x40048038</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00042582</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00040582</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00040182</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
-<tr><td>13</td><td>PORTE</td><td>0x01</td><td>Port E Clock Gate Control</td>
+<tr><td>13</td><td>PORTE</td><td>0x00</td><td>Port E Clock Gate Control</td>
 <tr><td>12</td><td>PORTD</td><td>0x00</td><td>Port D Clock Gate Control</td>
 <tr><td>11</td><td>PORTC</td><td>0x00</td><td>Port C Clock Gate Control</td>
 <tr><td>10</td><td>PORTB</td><td>0x01</td><td>Port B Clock Gate Control</td>
@@ -481,10 +481,10 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0x40066001</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000057</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000097</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
-<tr><td>6 - 7</td><td>MULT</td><td>0x00</td><td>Multiplier Factor</td>
+<tr><td>6 - 7</td><td>MULT</td><td>0x02</td><td>Multiplier Factor</td>
 <tr><td>0 - 5</td><td>ICR</td><td>0x00</td><td>ClockRate</td>
 </tr></table>
 */
@@ -508,13 +508,13 @@ registers of the peripheral(s) configured by the component.
 **                SCL pin                                  : ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA
 **              High drive select                          : Disabled
 **              Input Glitch filter                        : 0
-**            Internal frequency (multiplier factor)       : 10.48576 MHz
+**            Internal frequency (multiplier factor)       : 5.24288 MHz
 **            Bits 0-2 of Frequency divider register       : 111
 **            Bits 3-5 of Frequency divider register       : 010
-**            SCL frequency                                : 81.92 kHz
-**            SDA Hold                                     : 2.003 us
-**            SCL start Hold                               : 5.531 us
-**            SCL stop Hold                                : 6.199 us
+**            SCL frequency                                : 40.96 kHz
+**            SDA Hold                                     : 4.005 us
+**            SCL start Hold                               : 11.063 us
+**            SCL stop Hold                                : 12.398 us
 **            Control acknowledge bit                      : Disabled
 **            Low timeout                                  : Disabled
 **          Initialization                                 : 

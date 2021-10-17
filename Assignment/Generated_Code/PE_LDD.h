@@ -6,7 +6,7 @@
 **     Version     : Component 01.048, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-15, 10:56, # CodeGen: 61
+**     Date/Time   : 2021-10-17, 13:58, # CodeGen: 67
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -56,7 +56,7 @@
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "Pins1.h"
-#include "PC.h"
+#include "BT.h"
 #include "Inhr2.h"
 #include "ASerialLdd2.h"
 #include "CI2C1.h"
@@ -81,6 +81,12 @@
 #include "Pwm2.h"
 #include "PwmLdd2.h"
 #include "TU4.h"
+#include "statusBlue.h"
+#include "BitIoLdd1.h"
+#include "statusRed.h"
+#include "BitIoLdd2.h"
+#include "statusGreen.h"
+#include "BitIoLdd3.h"
 
 
 /*

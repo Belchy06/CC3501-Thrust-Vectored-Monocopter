@@ -1,79 +1,83 @@
-12:14:55 **** Incremental Build of configuration Debug for project Assignment ****
+19:28:08 **** Incremental Build of configuration Debug for project Assignment ****
 make all 
 Building file: ../Sources/main.c
 Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
 ../Sources/main.c: In function 'main':
-../Sources/main.c:167:2: warning: passing argument 1 of 'NEW_GPS' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:178:2: warning: passing argument 1 of 'NEW_GPS' discards 'volatile' qualifier from pointer target type [enabled by default]
   NEW_GPS(&gps);
   ^
-In file included from ../Sources/Events.h:61:0,
+In file included from ../Sources/Events.h:67:0,
                  from ../Sources/main.c:31:
 ../Sources/GPS.h:43:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
  void NEW_GPS(GPS *self);
       ^
-../Sources/main.c:191:2: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:217:2: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
   New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
   ^
-In file included from ../Sources/main.c:71:0:
+In file included from ../Sources/main.c:77:0:
 ../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
  void New_BNO085(BNO085 *self, uint8_t addr);
       ^
-../Sources/main.c:192:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:218:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:218:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:219:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
   if (IMU.begin(&IMU) == false) {
   ^
-../Sources/main.c:192:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:199:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:219:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:229:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
   IMU.enableLinearAccelerometer(&IMU, 50);
   ^
-../Sources/main.c:199:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:202:2: warning: passing argument 1 of 'IMU.enableRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:229:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:232:2: warning: passing argument 1 of 'IMU.enableRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
   IMU.enableRotationVector(&IMU, 100);
   ^
-../Sources/main.c:202:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:203:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:232:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:233:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
   IMU.enableGyro(&IMU, 50);
   ^
-../Sources/main.c:203:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:207:4: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:233:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:237:4: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
     IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
     ^
-../Sources/main.c:207:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:211:4: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:237:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:243:4: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
     roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
     ^
-../Sources/main.c:211:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:212:4: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:243:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:244:4: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
     pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
     ^
-../Sources/main.c:212:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:213:4: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:244:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:245:4: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
     yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
     ^
-../Sources/main.c:213:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:217:4: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:245:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:251:4: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
     IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
     ^
-../Sources/main.c:217:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
-../Sources/main.c:221:4: warning: passing argument 1 of 'gps.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:251:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:257:4: warning: passing argument 1 of 'gps.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
     gps.get_position(&gps, &lat, &lon, &age);
     ^
-../Sources/main.c:221:4: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
-../Sources/main.c:231:8: warning: passing argument 1 of 'gps.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:257:4: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+../Sources/main.c:269:8: warning: passing argument 1 of 'gps.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
         lon);
         ^
-../Sources/main.c:231:8: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
-../Sources/main.c:233:6: warning: passing argument 1 of 'gps.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:269:8: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+../Sources/main.c:271:6: warning: passing argument 1 of 'gps.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
       mps = gps.speed_mps(&gps);
       ^
-../Sources/main.c:233:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+../Sources/main.c:271:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
 Finished building: ../Sources/main.c
  
 Building target: Assignment.elf
 Invoking: Cross ARM C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Documents/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EInt1.o ./Generated_Code/ExtIntLdd1.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PC.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU4.o ./Generated_Code/WAIT1.o ./Generated_Code/XNeg.o ./Generated_Code/XPos.o   
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/willi/Desktop/Uni/Year 3/SP2/CC3501/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EInt1.o ./Generated_Code/ExtIntLdd1.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU4.o ./Generated_Code/WAIT1.o ./Generated_Code/XNeg.o ./Generated_Code/XPos.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o   
 Finished building target: Assignment.elf
  
 
-12:14:56 Build Finished (took 988ms)
+19:28:09 Build Finished (took 1s.420ms)
 

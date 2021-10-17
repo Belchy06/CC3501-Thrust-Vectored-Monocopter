@@ -72,22 +72,10 @@ void Inhr1_OnRxChar(void) {
 			// new line received
 			if (index > 0) {
 				buffer[index] = '\0';
-				//PC_SendChar(c);
 				// complete_command = true;
 				if (gps.encode(&gps, c))
 					complete_command = true;
 			}
-			break;
-
-		case 0x7F:
-			// Backspace
-		{
-			if (index > 0) {
-				buffer[index] = '\0';
-				index--;
-				PC_SendChar(0x7f);
-			}
-		}
 			break;
 
 		default:
@@ -98,7 +86,6 @@ void Inhr1_OnRxChar(void) {
 				if (gps.encode(&gps, c))
 					complete_command = true;
 				index++;
-				//PC_SendChar(c);
 			}
 		}
 			break;
@@ -153,11 +140,31 @@ void EInt1_OnInterrupt(void) {
 	case SENSOR_REPORTID_GYROSCOPE: {
 		newGyro = 1;
 	}
-	break;
+		break;
 	default:
 		// Unhandled Input Report
 		break;
 	}
+}
+
+/*
+** ===================================================================
+**     Event       :  Inhr2_OnRxChar (module Events)
+**
+**     Component   :  Inhr2 [AsynchroSerial]
+**     Description :
+**         This event is called after a correct character is received.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled and either the <Receiver>
+**         property is enabled or the <SCI output mode> property (if
+**         supported) is set to Single-wire mode.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Inhr2_OnRxChar(void)
+{
+  /* Write your code here ... */
 }
 
 /* END Events */

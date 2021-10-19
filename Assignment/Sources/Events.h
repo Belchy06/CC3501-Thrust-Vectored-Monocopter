@@ -53,8 +53,6 @@
 #include "RealTimeLdd1.h"
 #include "TU1.h"
 #include "WAIT1.h"
-#include "EInt1.h"
-#include "ExtIntLdd1.h"
 #include "XPos.h"
 #include "Pwm1.h"
 #include "PwmLdd1.h"
@@ -84,20 +82,6 @@ extern "C" {
 */
 /* ===================================================================*/
 void Cpu_OnNMI(void);
-
-void EInt1_OnInterrupt(void);
-/*
-** ===================================================================
-**     Event       :  EInt1_OnInterrupt (module Events)
-**
-**     Component   :  EInt1 [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
 
 /*
 ** ===================================================================

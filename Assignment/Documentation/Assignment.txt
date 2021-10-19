@@ -127,13 +127,6 @@ Module "WAIT1"     (component Wait)
    - WAIT1_Init -Driver initialization routine.
    - WAIT1_DeInit -Driver de-initialization routine
 
-Module "EInt1"     (component ExtInt)
-   - EInt1_Enable -Enable the component - the external events are accepted. This method is available only if HW module allows 
-                enable/disable of the interrupt.
-   - EInt1_Disable -Disable the component - the external events are not accepted. This method is available only if HW module 
-                allows enable/disable of the interrupt.
-   - EInt1_GetVal -Returns the actual value of the input pin of the component.
-
 Module "XPos"      (component Servo)
    - XPos_SetPWMDutyUs -Sets the servo PWM duty cycle in micro seconds (us)
    - XPos_SetPos -Sets the servo position

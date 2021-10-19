@@ -419,13 +419,13 @@
               <High_drive_select v="Disabled" />
               <Input_Glitch_filter v="0" />
             </group>
-            <Internal_frequency__multiplier_factor_ v="5.24288 MHz" />
+            <Internal_frequency__multiplier_factor_ v="20.97152 MHz" />
             <Bits_0_2_of_Frequency_divider_register v="111" />
-            <Bits_3_5_of_Frequency_divider_register v="010" />
-            <SCL_frequency v="40.96 kHz" />
-            <SDA_Hold v="4.005 us" />
-            <SCL_start_Hold v="11.063 us" />
-            <SCL_stop_Hold v="12.398 us" />
+            <Bits_3_5_of_Frequency_divider_register v="011" />
+            <SCL_frequency v="87.381 kHz" />
+            <SDA_Hold v="1.574 us" />
+            <SCL_start_Hold v="5.627 us" />
+            <SCL_stop_Hold v="5.77 us" />
             <boolgroup name="Control acknowledge bit" v="Disabled" />
             <boolgroup name="Low timeout" v="Disabled" />
           </group>
@@ -518,11 +518,11 @@
         <SCL_pin v="ADC0_SE8/ADC1_SE8/PTB0/LLWU_P5/I2C0_SCL/FTM1_CH0/FTM1_QD_PHA" />
         <High_drive_select v="Disabled" />
       </group>
-      <Internal_frequency__multiplier_factor_ v="5.24288 MHz" />
+      <Internal_frequency__multiplier_factor_ v="20.97152 MHz" />
       <Bits_0_2_of_Frequency_divider_register v="111" />
-      <Bits_3_5_of_Frequency_divider_register v="010" />
-      <SCL_frequency v="40.96 kHz" />
-      <SDA_Hold v="4.005 us" />
+      <Bits_3_5_of_Frequency_divider_register v="011" />
+      <SCL_frequency v="87.381 kHz" />
+      <SDA_Hold v="1.574 us" />
       <Noise__glitch__filter v="0" />
       <boolgroup name="Low timeout" v="Disabled" />
       <Wake_up v="Disabled" />
@@ -1163,64 +1163,6 @@
     </Methods>
     <Events>
       <EmptySection_DummyValue />
-    </Events>
-  </Bean>
-  <Bean name="EInt1" type="ExtInt">
-    <Enabled v="Y" />
-    <Properties>
-      <Component_name v="EInt1" />
-      <Pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
-      <inhrbean type="ExtInt_LDD">
-        <Enabled v="Y" />
-        <Template v="ExtInt_LDD" />
-        <Properties>
-          <Component_name v="ExtIntLdd1" />
-          <Pin v="ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3" />
-          <Generate_interrupt_on v="falling edge" />
-          <Interrupt v="INT_PORTB" />
-          <Interrupt_priority v="medium priority" />
-          <group name="Initialization">
-            <Enabled_in_init__code v="yes" />
-          </group>
-        </Properties>
-        <Methods>
-          <Init v="generate code" />
-          <Deinit v="don&amp;apos;t generate code" />
-          <Enable v="generate code" />
-          <Disable v="generate code" />
-          <GetVal v="generate code" />
-          <SetEdge v="don&amp;apos;t generate code" />
-          <SetOperationMode v="don&amp;apos;t generate code" />
-          <GetDriverState v="don&amp;apos;t generate code" />
-          <ConnectPin v="don&amp;apos;t generate code" />
-        </Methods>
-        <Events>
-          <Event_module_name v="Events" />
-          <event name="OnInterrupt" v="generate code">
-            <Event_procedure_name v="ExtIntLdd1_OnInterrupt" />
-          </event>
-        </Events>
-      </inhrbean>
-      <Generate_interrupt_on v="falling edge" />
-      <Interrupt v="INT_PORTB" />
-      <Interrupt_priority v="medium priority" />
-      <group name="Initialization">
-        <Enabled_in_init__code v="yes" />
-      </group>
-    </Properties>
-    <Methods>
-      <Enable v="generate code" />
-      <Disable v="generate code" />
-      <GetVal v="generate code" />
-      <SetEdge v="don&amp;apos;t generate code" />
-      <ConnectPin v="don&amp;apos;t generate code" />
-    </Methods>
-    <Events>
-      <Event_module_name v="Events" />
-      <event name="OnInterrupt" v="generate code">
-        <Event_procedure_name v="EInt1_OnInterrupt" />
-        <Priority v="same as interrupt" />
-      </event>
     </Events>
   </Bean>
   <Bean name="XPos" type="Servo">

@@ -110,42 +110,6 @@ void Cpu_OnNMI(void) {
 	/* Write your code here ... */
 }
 
-/*
- ** ===================================================================
- **     Event       :  EInt1_OnInterrupt (module Events)
- **
- **     Component   :  EInt1 [ExtInt]
- **     Description :
- **         This event is called when an active signal edge/level has
- **         occurred.
- **     Parameters  : None
- **     Returns     : Nothing
- ** ===================================================================
- */
-void EInt1_OnInterrupt(void) {
-	/* Write your code here ... */
-	uint16_t res = IMU.getReadings(&IMU);
-	switch (res) {
-	case SENSOR_REPORTID_LINEAR_ACCELERATION:
-	case SENSOR_REPORTID_ACCELEROMETER: {
-		newAcc = 1;
-	}
-		break;
-
-	case SENSOR_REPORTID_ROTATION_VECTOR:
-	case SENSOR_REPORTID_GAME_ROTATION_VECTOR: {
-		newRot = 1;
-	}
-		break;
-	case SENSOR_REPORTID_GYROSCOPE: {
-		newGyro = 1;
-	}
-		break;
-	default:
-		// Unhandled Input Report
-		break;
-	}
-}
 
 /*
 ** ===================================================================

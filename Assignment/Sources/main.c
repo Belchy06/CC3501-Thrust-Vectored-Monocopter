@@ -49,8 +49,6 @@
 #include "RealTimeLdd1.h"
 #include "TU1.h"
 #include "WAIT1.h"
-#include "EInt1.h"
-#include "ExtIntLdd1.h"
 #include "XPos.h"
 #include "Pwm1.h"
 #include "PwmLdd1.h"
@@ -158,7 +156,6 @@ int main(void)
 	/*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
 	PE_low_level_init();
 	/*** End of Processor Expert internal initialization.                    ***/
-	EInt1_Disable();
 //	/* Write your code here */
 //	/* For example: for(;;) { } */
 	// Initialize status LEDs
@@ -188,9 +185,9 @@ int main(void)
 
 	BMP384 BARO;
 	New_BMP384(&BARO, BMP384_DEFAULT_ADDRESS);
-	if(!BARO.start(&BARO)) {
+	if (!BARO.start(&BARO)) {
 		BT_SendStr("Error initializing barometer!\r\n");
-		while(1) {
+		while (1) {
 			bstatusRed = true;
 			statusRed_PutVal(bstatusRed);
 		}
@@ -217,14 +214,14 @@ int main(void)
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
 	IMU.begin(&IMU);
 	if (IMU.begin(&IMU) == false) {
-		BT_SendStr("Error initializing IMU!");
-		while(1) {
-			bstatusRed = true;
-			statusRed_PutVal(bstatusRed);
+		BT_SendStr("Error initializing IMU!\r\n");
+		bstatusRed = true;
+		statusRed_PutVal(bstatusRed);
+		while (1) {
+			;
 		}
 	}
 
-	EInt1_Enable();
 	WAIT1_Waitms(5000);
 	IMU.enableLinearAccelerometer(&IMU, 50);
 	//IMU.enableAccelerometer(&IMU, 50);
@@ -233,23 +230,12 @@ int main(void)
 	IMU.enableGyro(&IMU, 50);
 	FC321_Reset();
 	for (;;) {
-		if (newAcc) {
+		if (IMU.dataAvailable(&IMU)) {
 			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
-			newAcc = 0;
-			bstatusGreen = !bstatusGreen;
-			statusGreen_PutVal(bstatusGreen);
-		}
-		if (newRot) {
+			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
 			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
-			newRot = 0;
-			bstatusGreen = !bstatusGreen;
-			statusGreen_PutVal(bstatusGreen);
-		}
-		if (newGyro) {
-			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
-			newGyro = 0;
 			bstatusGreen = !bstatusGreen;
 			statusGreen_PutVal(bstatusGreen);
 		}
@@ -284,9 +270,19 @@ int main(void)
 			complete_command = false;
 			index = 0;
 		}
-		if(BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
- 			bstatusBlue = !bstatusBlue;
+		if (BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
+			bstatusBlue = !bstatusBlue;
 			statusBlue_PutVal(bstatusBlue);
+		}
+
+		if (BARO.err || IMU.err) {
+			bstatusRed = true;
+			statusRed_PutVal(bstatusRed);
+			if (BARO.err) {
+				// Barometer Error
+			} else {
+				// IMU error
+			}
 		}
 
 		// Rest of control loop
@@ -443,14 +439,14 @@ int main(void)
 ////		float s4 = tau_yaw + tau_roll - tau_pitch;
 		// total thrust, yaw, pitch, roll
 		float servoWeights[4] = { 1, 56, 150, 150 };
-		float s1 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
-				+ servoWeights[3] * tau_roll;
-		float s2 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
-				- servoWeights[3] * tau_roll;
-		float s3 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
-				+ servoWeights[4] * tau_pitch;
-		float s4 = servoWeights[0] / 2 * altitude_cmd + servoWeights[1] * tau_yaw
-				- servoWeights[4] * tau_pitch;
+		float s1 = servoWeights[0] / 2 * altitude_cmd
+				+ servoWeights[1] * tau_yaw + servoWeights[3] * tau_roll;
+		float s2 = servoWeights[0] / 2 * altitude_cmd
+				+ servoWeights[1] * tau_yaw - servoWeights[3] * tau_roll;
+		float s3 = servoWeights[0] / 2 * altitude_cmd
+				+ servoWeights[1] * tau_yaw + servoWeights[4] * tau_pitch;
+		float s4 = servoWeights[0] / 2 * altitude_cmd
+				+ servoWeights[1] * tau_yaw - servoWeights[4] * tau_pitch;
 		float s5 = servoWeights[0] * altitude_cmd;
 
 		float edfServo = clamp(1000 + s5, 1000.0f, 2000.0f);
@@ -459,7 +455,8 @@ int main(void)
 		XPos_SetPWMDutyUs(1500);
 		XNeg_SetPWMDutyUs(1500);
 
-		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude, s5, edfServo);
+		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude, s5,
+				edfServo);
 		BT_SendStr(str);
 //		snprintf(str, 256,
 //				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",

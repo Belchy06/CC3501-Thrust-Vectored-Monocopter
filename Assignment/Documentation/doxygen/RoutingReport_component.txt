@@ -375,7 +375,7 @@
 			</tr>
 			<tr>
 				<td>G9</td><td>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</td><td><small><i>same</i></small></td>
-				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port2</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
+				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se12</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
 			</tr>
 			<tr>
 				<td>G10</td><td>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</td><td><small><i>same</i></small></td>
@@ -2445,7 +2445,7 @@
 			</tr>
 			<tr>
 				<td>G9</td><td>ADC0_SE12/PTB2/I2C0_SCL/UART0_RTS_b/FTM0_FLT3</td><td><small><i>same</i></small></td>
-				<td bgcolor='#F7DCFF'>PTB</td><td bgcolor='#F7DCFF'>port2</td><td bgcolor='#F7DCFF'>alt1</td><td bgcolor='#F7DCFF'>Not Specified</td>
+				<td bgcolor='#F8FF9A'>ADC0</td><td bgcolor='#F8FF9A'>adc_se12</td><td bgcolor='#F8FF9A'>alt0</td><td bgcolor='#F8FF9A'>Input</td>
 			</tr>
 			<tr>
 				<td>G10</td><td>ADC0_SE9/ADC1_SE9/PTB1/I2C0_SDA/FTM1_CH1/FTM1_QD_PHB</td><td><small><i>same</i></small></td>

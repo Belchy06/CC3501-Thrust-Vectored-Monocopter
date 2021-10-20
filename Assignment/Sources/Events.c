@@ -42,10 +42,14 @@ extern "C" {
 /* User includes (#include below this line is not maintained by Processor Expert) */
 extern volatile GPS gps;
 extern volatile BNO085 IMU;
-extern volatile uint8_t index;
-extern volatile char buffer[128];
-extern volatile bool complete_command;
-extern volatile bool newAcc, newGyro, newRot;
+
+extern volatile uint8_t gpsIndex;
+extern volatile char gpsBuffer[128];
+extern volatile bool bGpsCompleteCommand;
+
+extern volatile uint8_t btIndex;
+extern volatile char btBuffer[128];
+extern volatile bool bbtCompleteCommand;
 
 /*
  ** ===================================================================
@@ -63,29 +67,27 @@ extern volatile bool newAcc, newGyro, newRot;
  ** ===================================================================
  */
 void Inhr1_OnRxChar(void) {
-	/* Write your code here ... */
-	/* Write your code here ... */
 	char c;
 	if (ERR_OK == Inhr1_RecvChar(&c)) {
 		switch (c) {
 		case '\r':
 			// new line received
-			if (index > 0) {
-				buffer[index] = '\0';
+			if (gpsIndex > 0) {
+				gpsBuffer[gpsIndex] = '\0';
 				// complete_command = true;
 				if (gps.encode(&gps, c))
-					complete_command = true;
+					bGpsCompleteCommand = true;
 			}
 			break;
 
 		default:
 			// Normal characters
 		{
-			if (index < 128) {
-				buffer[index] = c;
+			if (gpsIndex < 128) {
+				gpsBuffer[gpsIndex] = c;
 				if (gps.encode(&gps, c))
-					complete_command = true;
-				index++;
+					bGpsCompleteCommand = true;
+				gpsIndex++;
 			}
 		}
 			break;
@@ -110,25 +112,45 @@ void Cpu_OnNMI(void) {
 	/* Write your code here ... */
 }
 
-
 /*
-** ===================================================================
-**     Event       :  Inhr2_OnRxChar (module Events)
-**
-**     Component   :  Inhr2 [AsynchroSerial]
-**     Description :
-**         This event is called after a correct character is received.
-**         The event is available only when the <Interrupt
-**         service/event> property is enabled and either the <Receiver>
-**         property is enabled or the <SCI output mode> property (if
-**         supported) is set to Single-wire mode.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void Inhr2_OnRxChar(void)
-{
-  /* Write your code here ... */
+ ** ===================================================================
+ **     Event       :  Inhr2_OnRxChar (module Events)
+ **
+ **     Component   :  Inhr2 [AsynchroSerial]
+ **     Description :
+ **         This event is called after a correct character is received.
+ **         The event is available only when the <Interrupt
+ **         service/event> property is enabled and either the <Receiver>
+ **         property is enabled or the <SCI output mode> property (if
+ **         supported) is set to Single-wire mode.
+ **     Parameters  : None
+ **     Returns     : Nothing
+ ** ===================================================================
+ */
+void Inhr2_OnRxChar(void) {
+	char c;
+	if (ERR_OK == Inhr2_RecvChar(&c)) {
+		switch (c) {
+		case '\r':
+			// new line received
+			if (btIndex > 0) {
+				btBuffer[btIndex] = '\0';
+				bbtCompleteCommand = true;
+
+			}
+			break;
+
+		default:
+			// Normal characters
+		{
+			if (btIndex < 128) {
+				btBuffer[btIndex] = c;
+				btIndex++;
+			}
+		}
+			break;
+		}
+	}
 }
 
 /* END Events */

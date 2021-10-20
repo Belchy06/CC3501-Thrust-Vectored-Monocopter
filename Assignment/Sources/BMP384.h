@@ -78,17 +78,6 @@ typedef enum Oversampling {
 	OVERSAMPLING_X32 = 0x05
 } Oversampling;
 
- typedef enum IIRFilter {
-	IIR_FILTER_OFF = 0x00, // Infinite Impulse Response (IIR) filter bit field in the configuration register
-	IIR_FILTER_2 = 0x01,
-	IIR_FILTER_4 = 0x02,
-	IIR_FILTER_8 = 0x03,
-	IIR_FILTER_16 = 0x04,
-	IIR_FILTER_32 = 0x05,
-	IIR_FILTER_64 = 0x06,
-	IIR_FILTER_128 = 0x07
-} IIRFilter;
-
 
 
 enum OutputDrive {						// Interrupt output drive configuration

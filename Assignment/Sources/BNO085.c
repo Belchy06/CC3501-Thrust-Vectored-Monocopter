@@ -61,7 +61,7 @@ bool begin(BNO085 *self) {
 	//Transmit packet on channel 2, 2 bytes
 	sendPacket(self, CHANNEL_CONTROL, 2);
 
-	if(receivePacket(self) == true) {
+	if (receivePacket(self) == true) {
 		return true;
 	}
 
@@ -91,7 +91,7 @@ bool receivePacket(BNO085 *self) {
 	word recv;
 	uint8_t data[4];
 	self->err = CI2C1_RecvBlock(data, 4, &recv);
-	if(self->err != ERR_OK) {
+	if (self->err != ERR_OK) {
 		//do something
 		;
 	}
@@ -107,19 +107,18 @@ bool receivePacket(BNO085 *self) {
 	self->shtpHeader[3] = sequenceNumber;
 
 	//Calculate the number of data bytes in this packet
-	uint16_t dataLength = (((uint16_t)packetMSB) << 8) | (packetLSB);
+	uint16_t dataLength = (((uint16_t) packetMSB) << 8) | (packetLSB);
 	dataLength &= ~(1 << 15); //Clear the MSbit.
 
-	if (dataLength == 0)
-	{
+	if (dataLength == 0) {
 		//Packet is empty
 		return false; //All done
 	}
 	dataLength -= 4; //Remove the header bytes from the data count
 	getData(self, dataLength);
 
-	if (self->shtpHeader[2] == CHANNEL_EXECUTABLE && self->shtpData[0] == EXECUTABLE_RESET_COMPLETE)
-	{
+	if (self->shtpHeader[2] == CHANNEL_EXECUTABLE
+			&& self->shtpData[0] == EXECUTABLE_RESET_COMPLETE) {
 		self->_hasReset = true;
 	}
 
@@ -129,16 +128,17 @@ bool receivePacket(BNO085 *self) {
 bool getData(BNO085 *self, uint16_t bytesRemaining) {
 	uint16_t dataSpot = 0;
 	word recv;
-	while(bytesRemaining > 0) {
+	while (bytesRemaining > 0) {
 		uint16_t numberOfBytesToRead = bytesRemaining;
-		if (numberOfBytesToRead > (I2C_BUFFER_LENGTH - 4)) numberOfBytesToRead = (I2C_BUFFER_LENGTH - 4);
+		if (numberOfBytesToRead > (I2C_BUFFER_LENGTH - 4))
+			numberOfBytesToRead = (I2C_BUFFER_LENGTH - 4);
 		uint8_t dataLength = numberOfBytesToRead + 4;
 		uint8_t data[dataLength];
 
 		self->err = CI2C1_RecvBlock(data, dataLength, &recv);
 
-		for(uint8_t i = 4; i < dataLength; i++) {
-			if(dataSpot < MAX_PACKET_SIZE) {
+		for (uint8_t i = 4; i < dataLength; i++) {
+			if (dataSpot < MAX_PACKET_SIZE) {
 				// First 4 bytes are header bytes and can be disregarded
 				self->shtpData[dataSpot++] = data[i];
 			}
@@ -150,15 +150,18 @@ bool getData(BNO085 *self, uint16_t bytesRemaining) {
 }
 
 void enableRotationVector(BNO085 *self, uint16_t timeBetweenReports) {
-	setFeatureCommand(self, SENSOR_REPORTID_ROTATION_VECTOR, timeBetweenReports, 0);
+	setFeatureCommand(self, SENSOR_REPORTID_ROTATION_VECTOR, timeBetweenReports,
+			0);
 }
 
 void enableAccelerometer(BNO085 *self, uint16_t timeBetweenReports) {
-	setFeatureCommand(self, SENSOR_REPORTID_ACCELEROMETER, timeBetweenReports, 0);
+	setFeatureCommand(self, SENSOR_REPORTID_ACCELEROMETER, timeBetweenReports,
+			0);
 }
 
 void enableLinearAccelerometer(BNO085 *self, uint16_t timeBetweenReports) {
-	setFeatureCommand(self, SENSOR_REPORTID_LINEAR_ACCELERATION, timeBetweenReports, 0);
+	setFeatureCommand(self, SENSOR_REPORTID_LINEAR_ACCELERATION,
+			timeBetweenReports, 0);
 }
 
 void enableGyro(BNO085 *self, uint16_t timeBetweenReports) {
@@ -167,34 +170,37 @@ void enableGyro(BNO085 *self, uint16_t timeBetweenReports) {
 }
 
 void enableMagnetometer(BNO085 *self, uint16_t timeBetweenReports) {
-	setFeatureCommand(self, SENSOR_REPORTID_MAGNETIC_FIELD, timeBetweenReports, 0);
+	setFeatureCommand(self, SENSOR_REPORTID_MAGNETIC_FIELD, timeBetweenReports,
+			0);
 }
 
 void enableGameRotationVector(BNO085 *self, uint16_t timeBetweenReports) {
-	setFeatureCommand(self, SENSOR_REPORTID_AR_VR_STABILIZED_GAME_ROTATION_VECTOR, timeBetweenReports, 0);
+	setFeatureCommand(self,
+	SENSOR_REPORTID_AR_VR_STABILIZED_GAME_ROTATION_VECTOR, timeBetweenReports,
+			0);
 }
 
-
-void setFeatureCommand(BNO085 *self, uint8_t reportID, uint16_t timeBetweenReports, uint32_t specificConfig) {
+void setFeatureCommand(BNO085 *self, uint8_t reportID,
+		uint16_t timeBetweenReports, uint32_t specificConfig) {
 	long microsBetweenReports = (long) timeBetweenReports * 1000L;
 
-	self->shtpData[0] = SHTP_REPORT_SET_FEATURE_COMMAND;//Set feature command. Reference page 55
-	self->shtpData[1] = reportID;	//Feature Report ID. 0x01 = Accelerometer, 0x05 = Rotation vector
+	self->shtpData[0] = SHTP_REPORT_SET_FEATURE_COMMAND; //Set feature command. Reference page 55
+	self->shtpData[1] = reportID; //Feature Report ID. 0x01 = Accelerometer, 0x05 = Rotation vector
 	self->shtpData[2] = 0;								   //Feature flags
-	self->shtpData[3] = 0;								  //Change sensitivity (LSB)
-	self->shtpData[4] = 0;								  //Change sensitivity (MSB)
+	self->shtpData[3] = 0;							//Change sensitivity (LSB)
+	self->shtpData[4] = 0;							//Change sensitivity (MSB)
 	self->shtpData[5] = (microsBetweenReports >> 0) & 0xFF; //Report interval (LSB) in microseconds. 0x7A120 = 500ms
 	self->shtpData[6] = (microsBetweenReports >> 8) & 0xFF;  //Report interval
 	self->shtpData[7] = (microsBetweenReports >> 16) & 0xFF; //Report interval
 	self->shtpData[8] = (microsBetweenReports >> 24) & 0xFF; //Report interval (MSB)
-	self->shtpData[9] = 0;								   //Batch Interval (LSB)
+	self->shtpData[9] = 0;								  //Batch Interval (LSB)
 	self->shtpData[10] = 0;								   //Batch Interval
 	self->shtpData[11] = 0;								   //Batch Interval
-	self->shtpData[12] = 0;								   //Batch Interval (MSB)
+	self->shtpData[12] = 0;								  //Batch Interval (MSB)
 	self->shtpData[13] = (specificConfig >> 0) & 0xFF;//Sensor-specific config (LSB)
-	self->shtpData[14] = (specificConfig >> 8) & 0xFF;	   //Sensor-specific config
-	self->shtpData[15] = (specificConfig >> 16) & 0xFF;	  //Sensor-specific config
-	self->shtpData[16] = (specificConfig >> 24) & 0xFF;//Sensor-specific config (MSB)
+	self->shtpData[14] = (specificConfig >> 8) & 0xFF;	//Sensor-specific config
+	self->shtpData[15] = (specificConfig >> 16) & 0xFF;	//Sensor-specific config
+	self->shtpData[16] = (specificConfig >> 24) & 0xFF;	//Sensor-specific config (MSB)
 
 	//Transmit packet on channel 2, 17 bytes
 	sendPacket(self, CHANNEL_CONTROL, 17);
@@ -209,8 +215,8 @@ bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength) {
 	message[2] = channelNumber;
 	message[3] = self->sequenceNumber[channelNumber]++;
 
-	for(int i = 4; i < packetLength; i++) {
-		message[i] = self->shtpData[i-4];
+	for (int i = 4; i < packetLength; i++) {
+		message[i] = self->shtpData[i - 4];
 	}
 
 	self->err = CI2C1_SelectSlave(self->devAddr);
@@ -220,7 +226,6 @@ bool sendPacket(BNO085 *self, uint8_t channelNumber, uint8_t dataLength) {
 	return self->err ? false : true;
 }
 
-
 bool dataAvailable(BNO085 *self) {
 	bool dataAvail = (getReadings(self) != 0);
 	return dataAvail;
@@ -228,14 +233,15 @@ bool dataAvailable(BNO085 *self) {
 
 uint16_t getReadings(BNO085 *self) {
 	uint16_t returnVal;
-	if(receivePacket(self) == true) {
-		if(self->shtpHeader[2] == CHANNEL_REPORTS && self->shtpData[0] == SHTP_REPORT_BASE_TIMESTAMP) {
+	if (receivePacket(self) == true) {
+		if (self->shtpHeader[2] == CHANNEL_REPORTS
+				&& self->shtpData[0] == SHTP_REPORT_BASE_TIMESTAMP) {
 			returnVal = parseInputReport(self);
 			return returnVal;
 		} else if (self->shtpHeader[2] == CHANNEL_CONTROL) {
 			returnVal = parseCommandReport(self);
 			return returnVal;
-		} else if(self->shtpHeader[2] == CHANNEL_GYRO) {
+		} else if (self->shtpHeader[2] == CHANNEL_GYRO) {
 			returnVal = parseInputReport(self); //This will update the rawAccelX, etc variables depending on which feature report is found
 			return returnVal;
 		}
@@ -259,36 +265,45 @@ uint16_t getReadings(BNO085 *self) {
 //shtpData[10:11]: real/gyro temp/etc
 //shtpData[12:13]: Accuracy estimate
 uint16_t parseInputReport(BNO085 *self) {
-	int16_t dataLength = ((uint16_t)self->shtpHeader[1] << 8 | self->shtpHeader[0]);
+	int16_t dataLength = ((uint16_t) self->shtpHeader[1] << 8
+			| self->shtpHeader[0]);
 	dataLength &= ~(1 << 15);
 	dataLength -= 4;
-	self->timeStamp = ((uint32_t)self->shtpData[4] << (8 * 3)) | ((uint32_t)self->shtpData[3] << (8 * 2)) | ((uint32_t)self->shtpData[2] << (8 * 1)) | ((uint32_t)self->shtpData[1]);
-	if(self->shtpHeader[2] == CHANNEL_GYRO) {
-		self->rawQuatI = (uint16_t)self->shtpData[1] << 8 | self->shtpData[0];
-		self->rawQuatJ = (uint16_t)self->shtpData[3] << 8 | self->shtpData[2];
-		self->rawQuatK = (uint16_t)self->shtpData[5] << 8 | self->shtpData[4];
-		self->rawQuatReal = (uint16_t)self->shtpData[7] << 8 | self->shtpData[6];
-		self->rawFastGyroX = (uint16_t)self->shtpData[9] << 8 | self->shtpData[8];
-		self->rawFastGyroY = (uint16_t)self->shtpData[11] << 8 | self->shtpData[10];
-		self->rawFastGyroZ = (uint16_t)self->shtpData[13] << 8 | self->shtpData[12];
+	self->timeStamp = ((uint32_t) self->shtpData[4] << (8 * 3))
+			| ((uint32_t) self->shtpData[3] << (8 * 2))
+			| ((uint32_t) self->shtpData[2] << (8 * 1))
+			| ((uint32_t) self->shtpData[1]);
+	if (self->shtpHeader[2] == CHANNEL_GYRO) {
+		self->rawQuatI = (uint16_t) self->shtpData[1] << 8 | self->shtpData[0];
+		self->rawQuatJ = (uint16_t) self->shtpData[3] << 8 | self->shtpData[2];
+		self->rawQuatK = (uint16_t) self->shtpData[5] << 8 | self->shtpData[4];
+		self->rawQuatReal = (uint16_t) self->shtpData[7] << 8
+				| self->shtpData[6];
+		self->rawFastGyroX = (uint16_t) self->shtpData[9] << 8
+				| self->shtpData[8];
+		self->rawFastGyroY = (uint16_t) self->shtpData[11] << 8
+				| self->shtpData[10];
+		self->rawFastGyroZ = (uint16_t) self->shtpData[13] << 8
+				| self->shtpData[12];
 
 		return SENSOR_REPORTID_GYRO_INTEGRATED_ROTATION_VECTOR;
 	}
 
 	uint8_t status = self->shtpData[5 + 2] & 0x03; //Get status bits
-	uint16_t data1 = (uint16_t)self->shtpData[5 + 5] << 8 | self->shtpData[5 + 4];
-	uint16_t data2 = (uint16_t)self->shtpData[5 + 7] << 8 | self->shtpData[5 + 6];
-	uint16_t data3 = (uint16_t)self->shtpData[5 + 9] << 8 | self->shtpData[5 + 8];
+	uint16_t data1 = (uint16_t) self->shtpData[5 + 5] << 8
+			| self->shtpData[5 + 4];
+	uint16_t data2 = (uint16_t) self->shtpData[5 + 7] << 8
+			| self->shtpData[5 + 6];
+	uint16_t data3 = (uint16_t) self->shtpData[5 + 9] << 8
+			| self->shtpData[5 + 8];
 	uint16_t data4 = 0;
 	uint16_t data5 = 0; //We would need to change this to uin32_t to capture time stamp value on Raw Accel/Gyro/Mag reports
 
-	if (dataLength - 5 > 9)
-	{
-		data4 = (uint16_t)self->shtpData[5 + 11] << 8 | self->shtpData[5 + 10];
+	if (dataLength - 5 > 9) {
+		data4 = (uint16_t) self->shtpData[5 + 11] << 8 | self->shtpData[5 + 10];
 	}
-	if (dataLength - 5 > 11)
-	{
-		data5 = (uint16_t)self->shtpData[5 + 13] << 8 | self->shtpData[5 + 12];
+	if (dataLength - 5 > 11) {
+		data5 = (uint16_t) self->shtpData[5 + 13] << 8 | self->shtpData[5 + 12];
 	}
 
 	//Store these generic values to their proper global variable
@@ -314,7 +329,8 @@ uint16_t parseInputReport(BNO085 *self) {
 		self->rawMagZ = data3;
 	} else if (self->shtpData[5] == SENSOR_REPORTID_ROTATION_VECTOR
 			|| self->shtpData[5] == SENSOR_REPORTID_GAME_ROTATION_VECTOR
-			|| self->shtpData[5] == SENSOR_REPORTID_AR_VR_STABILIZED_ROTATION_VECTOR
+			|| self->shtpData[5]
+					== SENSOR_REPORTID_AR_VR_STABILIZED_ROTATION_VECTOR
 			|| self->shtpData[5]
 					== SENSOR_REPORTID_AR_VR_STABILIZED_GAME_ROTATION_VECTOR) {
 		self->quatAccuracy = status;
@@ -352,7 +368,7 @@ uint16_t parseInputReport(BNO085 *self) {
 		self->memsRawMagZ = data3;
 	} else if (self->shtpData[5] == SHTP_REPORT_COMMAND_RESPONSE) {
 		uint8_t command = self->shtpData[5 + 2];
-		if(command == COMMAND_ME_CALIBRATE) {
+		if (command == COMMAND_ME_CALIBRATE) {
 			self->calibrationStatus = self->shtpData[5 + 5];
 		}
 	} else {
@@ -364,10 +380,10 @@ uint16_t parseInputReport(BNO085 *self) {
 }
 
 uint16_t parseCommandReport(BNO085 *self) {
-	if(self->shtpData[5] == SHTP_REPORT_COMMAND_RESPONSE) {
+	if (self->shtpData[5] == SHTP_REPORT_COMMAND_RESPONSE) {
 		uint8_t command = self->shtpData[2];
 
-		if(command == COMMAND_ME_CALIBRATE) {
+		if (command == COMMAND_ME_CALIBRATE) {
 			self->calibrationStatus = self->shtpData[5];
 		}
 		return self->shtpData[0];
@@ -382,11 +398,19 @@ float getRoll(BNO085 *self) {
 	float dqy = getQuatJ(self);
 	float dqz = getQuatK(self);
 
-	float norm = sqrt(dqw*dqw + dqx*dqx + dqy*dqy + dqz*dqz);
-	dqw = dqw/norm;
-	dqx = dqx/norm;
-	dqy = dqy/norm;
-	dqz = dqz/norm;
+	float norm = sqrt(dqw * dqw + dqx * dqx + dqy * dqy + dqz * dqz);
+	if (norm == 0.0f) {
+		dqw = 0;
+		dqx = 0;
+		dqy = 0;
+		dqz = 0;
+	} else {
+		dqw = dqw / norm;
+		dqx = dqx / norm;
+		dqy = dqy / norm;
+		dqz = dqz / norm;
+	}
+
 	float ysqr = dqy * dqy;
 	// roll (x-axis rotation)
 	float t0 = +2.0 * (dqw * dqx + dqy * dqz);
@@ -397,18 +421,24 @@ float getRoll(BNO085 *self) {
 }
 
 // Return the pitch (rotation around the y-axis) in Radians
-float getPitch(BNO085 *self)
-{
+float getPitch(BNO085 *self) {
 	float dqw = getQuatReal(self);
 	float dqx = getQuatI(self);
 	float dqy = getQuatJ(self);
 	float dqz = getQuatK(self);
 
-	float norm = sqrt(dqw*dqw + dqx*dqx + dqy*dqy + dqz*dqz);
-	dqw = dqw/norm;
-	dqx = dqx/norm;
-	dqy = dqy/norm;
-	dqz = dqz/norm;
+	float norm = sqrt(dqw * dqw + dqx * dqx + dqy * dqy + dqz * dqz);
+	if (norm == 0.0f) {
+		dqw = 0;
+		dqx = 0;
+		dqy = 0;
+		dqz = 0;
+	} else {
+		dqw = dqw / norm;
+		dqx = dqx / norm;
+		dqy = dqy / norm;
+		dqz = dqz / norm;
+	}
 
 	float ysqr = dqy * dqy;
 
@@ -421,18 +451,24 @@ float getPitch(BNO085 *self)
 	return pitch;
 }
 
-float getYaw(BNO085 *self)
-{
+float getYaw(BNO085 *self) {
 	float dqw = getQuatReal(self);
 	float dqx = getQuatI(self);
 	float dqy = getQuatJ(self);
 	float dqz = getQuatK(self);
 
-	float norm = sqrt(dqw*dqw + dqx*dqx + dqy*dqy + dqz*dqz);
-	dqw = dqw/norm;
-	dqx = dqx/norm;
-	dqy = dqy/norm;
-	dqz = dqz/norm;
+	float norm = sqrt(dqw * dqw + dqx * dqx + dqy * dqy + dqz * dqz);
+	if (norm == 0.0f) {
+		dqw = 0;
+		dqx = 0;
+		dqy = 0;
+		dqz = 0;
+	} else {
+		dqw = dqw / norm;
+		dqx = dqx / norm;
+		dqy = dqy / norm;
+		dqz = dqz / norm;
+	}
 
 	float ysqr = dqy * dqy;
 
@@ -465,13 +501,14 @@ float getQuatK(BNO085 *self) {
 }
 
 float getQuatRadianAccuracy(BNO085 *self) {
-	float quat = qToFloat(self->rawQuatRadianAccuracy, self->rotationVectorAccuracy_Q1);
+	float quat = qToFloat(self->rawQuatRadianAccuracy,
+			self->rotationVectorAccuracy_Q1);
 	return quat;
 }
 
 float qToFloat(int16_t fixedPointValue, uint8_t qPoint) {
 	float qFloat = fixedPointValue;
-	qFloat *= pow(2, qPoint * -1);
+	qFloat *= powf(2, qPoint * -1);
 	return qFloat;
 }
 

@@ -32,6 +32,17 @@ typedef enum TimeStandby {
 	TIME_STANDBY_655360MS = 0x11
 } TimeStandby;
 
+typedef enum IIRFilter {
+	IIR_FILTER_OFF = 0x00, // Infinite Impulse Response (IIR) filter bit field in the configuration register
+	IIR_FILTER_2 = 0x01,
+	IIR_FILTER_4 = 0x02,
+	IIR_FILTER_8 = 0x03,
+	IIR_FILTER_16 = 0x04,
+	IIR_FILTER_32 = 0x05,
+	IIR_FILTER_64 = 0x06,
+	IIR_FILTER_128 = 0x07
+} IIRFilter;
+
 
 typedef struct BNO085 {
 	// Variables
@@ -222,6 +233,7 @@ typedef struct BMP384 {
 	uint8_t (*start)(struct BMP384 *self);
 	void (*setTimeStandby)(struct BMP384 *self, TimeStandby timeStandby);
 	void (*startNormalConversion)(struct BMP384 *self);
+	void (*setIIRFilter)(struct BMP384 *self, IIRFilter iirFilter);
 	uint8_t (*getMeasurements)(struct BMP384 *self, float *temperature,
 			float *pressure, float *altitude);
 

@@ -22,6 +22,7 @@ void New_BMP384(BMP384 *self, uint8_t devAddr) {
 	self->start = &start;
 	self->setTimeStandby = &setTimeStandby;
 	self->startNormalConversion = &startNormalConversion;
+	self->setIIRFilter = &setIIRFilter;
 	self->getMeasurements = &getMeasurements;
 }
 

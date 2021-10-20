@@ -106,10 +106,15 @@ float xMps, yMps, zMps = 0;
 float mps;
 volatile GPS gps;
 volatile BNO085 IMU;
-volatile uint8_t index;
-volatile char buffer[128];
-volatile bool complete_command;
-volatile bool newAcc, newGyro, newRot;
+
+volatile uint8_t gpsIndex;
+volatile char gpsBuffer[128];
+volatile bool bGpsCompleteCommand;
+
+volatile uint8_t btIndex;
+volatile char btBuffer[128];
+volatile bool bbtCompleteCommand;
+
 bool haveGps = false;
 
 struct setpoints {
@@ -132,7 +137,7 @@ double easting;
 double northing;
 
 float clamp(float f, float min, float max) {
-	const float t = f < min ? min : f;
+	float t = f < min ? min : f;
 	return t > max ? max : t;
 }
 
@@ -152,12 +157,12 @@ int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
 	/* Write your local variable definition here */
+	bool bTakeoffFlag = true;
+	bool bRunMainLoop = false;
 
 	/*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
 	PE_low_level_init();
 	/*** End of Processor Expert internal initialization.                    ***/
-//	/* Write your code here */
-//	/* For example: for(;;) { } */
 	// Initialize status LEDs
 	bool bstatusBlue, bstatusRed, bstatusGreen = false;
 
@@ -173,7 +178,9 @@ int main(void)
 	initializePositionEstimator(&EstimatorPosition);
 
 	NEW_GPS(&gps);
-	complete_command = false;
+
+	bGpsCompleteCommand = false;
+	bbtCompleteCommand = false;
 	bool firstTime = true;
 	struct GPSStats GPSstats;
 	GPSstats.x = 0;
@@ -187,17 +194,19 @@ int main(void)
 	New_BMP384(&BARO, BMP384_DEFAULT_ADDRESS);
 	if (!BARO.start(&BARO)) {
 		BT_SendStr("Error initializing barometer!\r\n");
+		bstatusRed = true;
+		statusRed_PutVal(bstatusRed);
 		while (1) {
-			bstatusRed = true;
-			statusRed_PutVal(bstatusRed);
+			;
 		}
 	}
-	BARO.setTimeStandby(&BARO, TIME_STANDBY_1280MS);
+	BARO.setTimeStandby(&BARO, TIME_STANDBY_40MS);
 	BARO.startNormalConversion(&BARO);
+	BARO.setIIRFilter(&BARO, IIR_FILTER_4);
 	// Get starting altitude
 	float tempAlt = 0;
 	BT_SendStr("Calibrating starting altitude...\r\n");
-	for (uint8_t i = 0; i < 20; i++) {
+	for (uint8_t i = 0; i < 1; i++) {
 		while (!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
 			;
 		}
@@ -205,7 +214,7 @@ int main(void)
 		bstatusBlue = !bstatusBlue;
 		statusBlue_PutVal(bstatusBlue);
 	}
-	setpoint.altitude = tempAlt / 20.0f;
+	setpoint.altitude = tempAlt / 1.0f;
 	bstatusBlue = false;
 	statusBlue_PutVal(bstatusBlue);
 	snprintf(str, 128, "Starting altitude: %f\r\n", setpoint.altitude);
@@ -226,20 +235,28 @@ int main(void)
 	IMU.enableLinearAccelerometer(&IMU, 50);
 	//IMU.enableAccelerometer(&IMU, 50);
 	//IMU.enableRotationVector(&IMU, 100);
-	IMU.enableRotationVector(&IMU, 100);
+	IMU.enableGameRotationVector(&IMU, 50);
 	IMU.enableGyro(&IMU, 50);
+
+//	while (!bRunMainLoop) {
+//		if (bbtCompleteCommand) {
+//			bRunMainLoop = true;
+//		}
+//	}
+
 	FC321_Reset();
 	for (;;) {
 		if (IMU.dataAvailable(&IMU)) {
-			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
-			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
 			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
+			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
+			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
+
 			bstatusGreen = !bstatusGreen;
 			statusGreen_PutVal(bstatusGreen);
 		}
-		if (complete_command) {
+		if (bGpsCompleteCommand) {
 			gps.get_position(&gps, &lat, &lon, &age);
 			long zone;
 			char hemisphere;
@@ -267,8 +284,8 @@ int main(void)
 			} else {
 				haveGps = false;
 			}
-			complete_command = false;
-			index = 0;
+			bGpsCompleteCommand = false;
+			gpsIndex = 0;
 		}
 		if (BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
 			bstatusBlue = !bstatusBlue;
@@ -280,8 +297,12 @@ int main(void)
 			statusRed_PutVal(bstatusRed);
 			if (BARO.err) {
 				// Barometer Error
+				snprintf(str, 256, "Barometer error!\r\n");
+				BT_SendStr(str);
 			} else {
 				// IMU error
+				snprintf(str, 256, "IMU error!\r\n");
+				BT_SendStr(str);
 			}
 		}
 
@@ -344,9 +365,10 @@ int main(void)
 		}
 
 		// Estimate XY position
-		float worldVelXY[2];
-		worldVelXY[0] = xMps;
-		worldVelXY[1] = yMps;
+		float worldVel[3] = { 0, 0, 0 };
+		worldVel[0] = xMps;
+		worldVel[1] = yMps;
+		worldVel[2] += worldAcceleration[2] * dt;
 		if (haveGps) {
 			float measurements[4] = { GPSstats.x, GPSstats.y, xMps, yMps };
 			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
@@ -364,7 +386,7 @@ int main(void)
 		/*
 		 * XY-to-world setpoint
 		 */
-		float PRcmd[2];
+		float PRcmd[2] = { 0, 0 };
 		{
 			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
 			float P = 0.24;
@@ -379,10 +401,11 @@ int main(void)
 			PRcmd[0] = P_xy[0] + D_xy[0];
 			PRcmd[1] = P_xy[1] + D_xy[1];
 		}
+
 		/*
 		 * Attitude Controller
 		 */
-		float tau_pitch, tau_roll;
+		float tau_pitch, tau_roll = 0;
 		{
 			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
 			// Proportional
@@ -390,19 +413,20 @@ int main(void)
 			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
 			// Integral
 			float I = 0.01;
-			float I_pr[2] = { I * PRErr[0] * dt, I * PRErr[1] * dt };
+			float I_pr[2] = { I * clamp(PRErr[0] * dt, -2, 2), I
+					* clamp(PRErr[1] * dt, -2, 2) };
 			// Derivative
-			float D[2] = { -0.002, -0.0028 };
+			float D[2] = { 0.002, 0.0028 };
 			float D_pr[2] = { D[0] * q, D[1] * p };
 
-			tau_pitch = P_pr[0] + I_pr[0] + D_pr[0];
-			tau_roll = P_pr[1] + I_pr[1] + D_pr[1];
+			tau_pitch = P_pr[0] + I_pr[0] - D_pr[0];
+			tau_roll = P_pr[1] + I_pr[1] - D_pr[1];
 		}
 
 		/*
 		 * Yaw Controller
 		 */
-		float tau_yaw;
+		float tau_yaw = 0;
 		{
 			float yawErr = setpoint.yaw - yaw;
 			float P = 0.004;
@@ -412,51 +436,63 @@ int main(void)
 			tau_yaw = P_yaw + D_yaw;
 		}
 
-		float altitude_cmd;
+		float altitude_cmd = 0;
 		{
-			float altErr = setpoint.altitude - altitude;
-			float P = 0.08;
-			float P_alt = P * altErr;
-			float D = -0.03;
-			float D_alt = D * worldAcceleration[2];
-			altitude_cmd = P_alt + D_alt + 0.5;
-			altitude_cmd += -9.81f * 1.50f;
+			if (altitude >= setpoint.altitude) {
+				bTakeoffFlag = false;
+			}
+
+			float w0 = -0.92f * 2.5f;
+			// float w0 = -9.81f * 2.5f;
+			if (bTakeoffFlag) {
+				altitude_cmd = w0 * 0.45f;
+			} else {
+				float altErr = altitude - setpoint.altitude;
+				float P = 0.8f;
+				float P_alt = P * altErr;
+				float D = 0.3f;
+				float D_alt = D * worldVel[2];
+				altitude_cmd = P_alt - D_alt;
+			}
+
+			altitude_cmd += w0;
+			altitude_cmd = clamp(altitude_cmd, -(1.5f * 3.0f), (1.5f * 3.0f));
 		}
 
-		// Clamp all the outputs between -1 and 1
-//		tau_roll = clamp(tau_roll, -1, 1);
-//		tau_pitch = clamp(tau_pitch, -1, 1);
-//		tau_yaw = clamp(tau_yaw, -1, 1);
-//		altitude_cmd = clamp(altitude_cmd, 0, 1);
-//
-//		/*
-//		 * Servo mixing
-//		 */
+		/*
+		 * Servo mixing
+		 */
 //		// TODO: Scale the last term based on thrust to counteract gyroscopic effect
-////		float s1 = tau_yaw + tau_roll - tau_pitch;
-////		float s2 = tau_yaw - tau_roll + tau_pitch;
-////		float s3 = tau_yaw - tau_roll + tau_pitch;
-////		float s4 = tau_yaw + tau_roll - tau_pitch;
+//		float s1 = tau_yaw + tau_roll - tau_pitch;
+//		float s2 = tau_yaw - tau_roll + tau_pitch;
+//		float s3 = tau_yaw - tau_roll + tau_pitch;
+//		float s4 = tau_yaw + tau_roll - tau_pitch;
 		// total thrust, yaw, pitch, roll
-		float servoWeights[4] = { 1, 56, 150, 150 };
-		float s1 = servoWeights[0] / 2 * altitude_cmd
+		float servoWeights[4] = { 1, -103.5736, 5.6659, 5.6659 };
+		// -x, +x, -y, +y, edf
+		float servoVals[5] = { 0, 0, 0, 0, 0 };
+		servoVals[0] = servoWeights[0] / 2 * altitude_cmd
 				+ servoWeights[1] * tau_yaw + servoWeights[3] * tau_roll;
-		float s2 = servoWeights[0] / 2 * altitude_cmd
+		servoVals[1] = servoWeights[0] / 2 * altitude_cmd
 				+ servoWeights[1] * tau_yaw - servoWeights[3] * tau_roll;
-		float s3 = servoWeights[0] / 2 * altitude_cmd
+		servoVals[2] = servoWeights[0] / 2 * altitude_cmd
 				+ servoWeights[1] * tau_yaw + servoWeights[4] * tau_pitch;
-		float s4 = servoWeights[0] / 2 * altitude_cmd
+		servoVals[3] = servoWeights[0] / 2 * altitude_cmd
 				+ servoWeights[1] * tau_yaw - servoWeights[4] * tau_pitch;
-		float s5 = servoWeights[0] * altitude_cmd;
+		servoVals[4] = servoWeights[0] * altitude_cmd;
 
-		float edfServo = clamp(1000 + s5, 1000.0f, 2000.0f);
-		float servo1 = clamp(1500 + s1, 1000, 2000); // servoScale(clamp(s1, 0, 500));
-		float servo2 = clamp(1500 + s2, 1000, 2000); // servoScale(clamp(s2, 0, 500));
+		for (uint8_t i = 0; i < 4; i++) {
+			servoVals[i] = clamp(servoVals[i] * -1530.7f, 0, 500) + 1500;
+		}
+
+		float edfServo = (clamp(servoVals[4] * -111.2f, 0, 500) * 2) + 1000;
+		float servo1 = clamp(1500 + servoVals[0], 1000, 2000); // servoScale(clamp(s1, 0, 500));
+		float servo2 = clamp(1500 + servoVals[1], 1000, 2000); // servoScale(clamp(s2, 0, 500));
 		XPos_SetPWMDutyUs(1500);
 		XNeg_SetPWMDutyUs(1500);
 
-		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude, s5,
-				edfServo);
+		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude,
+				servoVals[4], edfServo);
 		BT_SendStr(str);
 //		snprintf(str, 256,
 //				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",

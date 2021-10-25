@@ -1,6 +1,6 @@
-16:39:58 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+17:52:58 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
 make all 
 make: Nothing to be done for 'all'.
 
-16:39:59 Build Finished (took 701ms)
+17:52:58 Build Finished (took 832ms)
 

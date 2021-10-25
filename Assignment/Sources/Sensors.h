@@ -108,7 +108,7 @@ typedef struct BNO085 {
 	uint16_t (*getReadings)(struct BNO085 *self);
 } BNO085;
 
-typedef struct GPS {
+typedef struct NEO6M {
 	// properties
 	unsigned long _time, _new_time;
 	unsigned long _date, _new_date;
@@ -132,15 +132,15 @@ typedef struct GPS {
 	uint8_t _term_offset;
 	bool _gps_data_good;
 
-	bool (*encode)(struct GPS *self, char c);
-	bool (*term_complete)(struct GPS *self);
-	void (*get_position)(struct GPS *self, float *lat, float *lon, unsigned long *age);
-	void (*get_altitude)(struct GPS *self, float *alt);
-	float (*distance_between)(struct GPS *self, float lat1, float long1, float lat2, float long2);
-	float (*course_to)(struct GPS *self, float lat1, float long1, float lat2, float long2);
-	float (*speed_knots)(struct GPS *self);
-	float (*speed_mps)(struct GPS *self);
-} GPS;
+	bool (*encode)(struct NEO6M *self, char c);
+	bool (*term_complete)(struct NEO6M *self);
+	void (*get_position)(struct NEO6M *self, float *lat, float *lon, unsigned long *age);
+	void (*get_altitude)(struct NEO6M *self, float *alt);
+	float (*distance_between)(struct NEO6M *self, float lat1, float long1, float lat2, float long2);
+	float (*course_to)(struct NEO6M *self, float lat1, float long1, float lat2, float long2);
+	float (*speed_knots)(struct NEO6M *self);
+	float (*speed_mps)(struct NEO6M *self);
+} NEO6M;
 
 typedef struct BMP384 {
 	uint8_t devAddr;

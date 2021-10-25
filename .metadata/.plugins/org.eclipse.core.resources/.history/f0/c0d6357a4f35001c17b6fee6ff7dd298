@@ -75,7 +75,7 @@ void Inhr1_OnRxChar(void) {
 			if (gpsIndex > 0) {
 				gpsBuffer[gpsIndex] = '\0';
 				// complete_command = true;
-				if (GPS.encode(&GPS, c))
+				if (GPS.encode(&gps, c))
 					bGpsCompleteCommand = true;
 			}
 			break;
@@ -85,7 +85,7 @@ void Inhr1_OnRxChar(void) {
 		{
 			if (gpsIndex < 128) {
 				gpsBuffer[gpsIndex] = c;
-				if (GPS.encode(&GPS, c))
+				if (GPS.encode(&gps, c))
 					bGpsCompleteCommand = true;
 				gpsIndex++;
 			}

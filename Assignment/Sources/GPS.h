@@ -40,23 +40,23 @@
 
 #define COMBINE(sentence_type, term_number) (((unsigned)(sentence_type) << 5) | term_number)
 
-void NEW_GPS(GPS *self);
-bool encode(GPS *self, char c);
-bool term_complete(GPS *self);
+void New_NEO6M(NEO6M *self);
+bool encode(NEO6M *self, char c);
+bool term_complete(NEO6M *self);
 int from_hex(char a);
 int gpsstrcmp(const char *str1, const char *str2);
-unsigned long parse_decimal(GPS *self);
-unsigned long parse_degrees(GPS *self);
+unsigned long parse_decimal(NEO6M *self);
+unsigned long parse_degrees(NEO6M *self);
 long gpsatol(const char *str);
 bool gpsisdigit(char c);
-void get_position(GPS *self, float *lat, float *lon, unsigned long *age);
-void get_altitude(GPS *self, float *alt);
-float distance_between(GPS *self, float lat1, float long1, float lat2, float long2);
+void get_position(NEO6M *self, float *lat, float *lon, unsigned long *age);
+void get_altitude(NEO6M *self, float *alt);
+float distance_between(NEO6M *self, float lat1, float long1, float lat2, float long2);
 float degrees(float radians);
 float radians(float degrees);
 float sq(float input);
-float course_to(GPS *self, float lat1, float long1, float lat2, float long2);
-float speed_knots(GPS *self);
-float speed_mps(GPS *self);
+float course_to(NEO6M *self, float lat1, float long1, float lat2, float long2);
+float speed_knots(NEO6M *self);
+float speed_mps(NEO6M *self);
 
 #endif /* SOURCES_GPS_H_ */

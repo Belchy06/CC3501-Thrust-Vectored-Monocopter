@@ -96,8 +96,6 @@
 // Barometer Variables
 BMP384 BARO;
 float temperature, pressure, altitude;
-float altitudeInitial;
-float altitudeAGL;
 // IMU Variables
 BNO085 IMU;
 float pitch, roll, yaw;
@@ -111,8 +109,6 @@ float xOff, yOff;
 float xMps, yMps, zMps = 0;
 bool bstatusBlue, bstatusRed, bstatusGreen = false;
 bool bFirstRun = true;
-bool bCalculateLandingHeight = true;
-float timeSinceLandingStarted;
 void* nullptr;
 // GPS Variables
 volatile NEO6M GPS;
@@ -293,7 +289,6 @@ void calibrateYaw() {
 		ledToggle(GREEN);
 	}
 	setpoint.yaw = tempYaw / 20.0f;
-	altitudeAGL = setpoint.yaw;
 	snprintf(outputBuffer, 128, "Starting yaw: %f\r\n", setpoint.yaw);
 	BT_SendStr(outputBuffer);
 }
@@ -538,31 +533,17 @@ void calculateServoValues() {
 		servoVals[i] = 1500 - clamp(servoVals[i] * -362.32f, -500, 500);
 	}
 	servoVals[4] = (clamp(servoVals[4] * -362.32f, 0, 1000)) + 1000;
-	snprintf(outputBuffer, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+	snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
 				yawComp, pitchComp, rollComp, yaw, pitch, roll);
-	BT_SendStr(outputBuffer);
+	BT_SendStr(str);
 }
 
 void writeServos() {
-	xPos_SetPWMDutyUs(servoVals[0]);
-	xNeg_SetPWMDutyUs(servoVals[1]);
-	yPos_SetPWMDutyUs(servoVals[2]);
-	yNeg_SetPWMDutyUs(servoVals[3]);
+	xPos_SetPWMDutyUs(clamp(servoVals[0], 1000, 2000));
+	xNeg_SetPWMDutyUs(clamp(servoVals[1], 1000, 2000));
+	yPos_SetPWMDutyUs(clamp(servoVals[2], 1000, 2000));
+	yNeg_SetPWMDutyUs(clamp(servoVals[3], 1000, 2000));
 	EDF_SetPWMDutyUs(servoVals[4]);
-}
-
-void zeroServos() {
-	xPos_SetPWMDutyUs(1500);
-	xNeg_SetPWMDutyUs(1500);
-	yPos_SetPWMDutyUs(1500);
-	yNeg_SetPWMDutyUs(1500);
-	EDF_SetPWMDutyUs(1000);
-}
-
-float sampleLandingFunction(unsigned int time) {
-	// Function is the sigmoid flipped around the y axis, scaled so that the maximum value is the altitude above the starting altitude
-	// The -0.025 ensures the function crosses the x-axis
-	return altitudeAGL * (1 / (1 + expf(0.7 * (time - altitudeAGL)))) - 0.025;
 }
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -663,17 +644,6 @@ int main(void)
 			break;
 		case LANDING: {
 			// TODO: A run once function that creates a exponential curve for the altitude setpoint for smooth landing
-			if(bCalculateLandingHeight) {
-				altitudeAGL = setpoint.altitude - altitudeInitial;
-				bCalculateLandingHeight = false;
-			}
-			timeSinceLandingStarted += dt;
-			setpoint.altitude = sampleLandingFunction(timeSinceLandingStarted) + altitudeInitial;
-			if(setpoint.altitude < altitudeInitial) {
-				zeroServos();
-				state = IDLE;
-				continue;
-			}
 			readIMU();
 			readBarometer();
 			checkSensorErrors();

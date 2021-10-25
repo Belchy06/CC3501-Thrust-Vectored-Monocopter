@@ -293,7 +293,7 @@ void calibrateYaw() {
 		ledToggle(GREEN);
 	}
 	setpoint.yaw = tempYaw / 20.0f;
-	altitudeAGL = setpoint.yaw;
+	initialAltitude = setpoint.yaw; 
 	snprintf(outputBuffer, 128, "Starting yaw: %f\r\n", setpoint.yaw);
 	BT_SendStr(outputBuffer);
 }

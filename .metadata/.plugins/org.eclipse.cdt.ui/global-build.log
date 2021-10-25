@@ -13936,3 +13936,2006 @@ Invoking: Cross ARM C++ Linker
 arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
 Finished building target: Assignment.elf
  
+12:06:49 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'main':
+../Sources/main.c:180:2: warning: passing argument 1 of 'NEW_GPS' discards 'volatile' qualifier from pointer target type [enabled by default]
+  NEW_GPS(&gps);
+  ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+ void NEW_GPS(GPS *self);
+      ^
+../Sources/main.c:221:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Starting altitude: %f\r\n", setpoint.altitude);
+           ^
+../Sources/main.c:221:11: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c:224:2: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+  New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+  ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:225:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:225:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:226:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:226:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:235:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:235:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:238:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:238:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:239:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:239:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:244:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:244:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:247:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:247:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:271:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   if (IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:271:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:273:4: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+    roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+    ^
+../Sources/main.c:273:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:275:4: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+    pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+    ^
+../Sources/main.c:275:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:276:4: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+    yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+    ^
+../Sources/main.c:276:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:277:42: error: 'linAccuracy' undeclared (first use in this function)
+    IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
+                                          ^
+../Sources/main.c:277:4: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+    IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
+    ^
+../Sources/main.c:277:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:278:35: error: 'gyroAccuracy' undeclared (first use in this function)
+    IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
+                                   ^
+../Sources/main.c:278:4: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+    IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
+    ^
+../Sources/main.c:278:4: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:284:4: warning: passing argument 1 of 'gps.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+    gps.get_position(&gps, &lat, &lon, &age);
+    ^
+../Sources/main.c:284:4: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+../Sources/main.c:296:8: warning: passing argument 1 of 'gps.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+        lon);
+        ^
+../Sources/main.c:296:8: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+../Sources/main.c:298:6: warning: passing argument 1 of 'gps.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+      mps = gps.speed_mps(&gps);
+      ^
+../Sources/main.c:298:6: note: expected 'struct GPS *' but argument is of type 'volatile struct GPS *'
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+12:06:55 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+12:06:56 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:52:07 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Static_Code/System/CPU_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/CPU_Init.d" -MT"Static_Code/System/CPU_Init.o" -c -o "Static_Code/System/CPU_Init.o" "../Static_Code/System/CPU_Init.c"
+Finished building: ../Static_Code/System/CPU_Init.c
+ 
+Building file: ../Static_Code/System/Vectors.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Vectors.d" -MT"Static_Code/System/Vectors.o" -c -o "Static_Code/System/Vectors.o" "../Static_Code/System/Vectors.c"
+Finished building: ../Static_Code/System/Vectors.c
+ 
+Building file: ../Sources/BMP384.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BMP384.d" -MT"Sources/BMP384.o" -c -o "Sources/BMP384.o" "../Sources/BMP384.c"
+Finished building: ../Sources/BMP384.c
+ 
+Building file: ../Sources/BNO085.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BNO085.d" -MT"Sources/BNO085.o" -c -o "Sources/BNO085.o" "../Sources/BNO085.c"
+Finished building: ../Sources/BNO085.c
+ 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+../Sources/Events.c:43:1: error: unknown type name 'GPS'
+ extern volatile GPS gps;
+ ^
+../Sources/Events.c: In function 'Inhr1_OnRxChar':
+../Sources/Events.c:78:12: error: request for member 'encode' in something not a structure or union
+     if (gps.encode(&gps, c))
+            ^
+../Sources/Events.c:88:12: error: request for member 'encode' in something not a structure or union
+     if (gps.encode(&gps, c))
+            ^
+Sources/subdir.mk:48: recipe for target 'Sources/Events.o' failed
+make: *** [Sources/Events.o] Error 1
+14:52:11 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:52:12 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:52:50 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Static_Code/System/CPU_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/CPU_Init.d" -MT"Static_Code/System/CPU_Init.o" -c -o "Static_Code/System/CPU_Init.o" "../Static_Code/System/CPU_Init.c"
+Finished building: ../Static_Code/System/CPU_Init.c
+ 
+Building file: ../Static_Code/System/Peripherals_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Peripherals_Init.d" -MT"Static_Code/System/Peripherals_Init.o" -c -o "Static_Code/System/Peripherals_Init.o" "../Static_Code/System/Peripherals_Init.c"
+Finished building: ../Static_Code/System/Peripherals_Init.c
+ 
+Building file: ../Static_Code/System/Vectors.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Vectors.d" -MT"Static_Code/System/Vectors.o" -c -o "Static_Code/System/Vectors.o" "../Static_Code/System/Vectors.c"
+Finished building: ../Static_Code/System/Vectors.c
+ 
+Building file: ../Sources/BMP384.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BMP384.d" -MT"Sources/BMP384.o" -c -o "Sources/BMP384.o" "../Sources/BMP384.c"
+Finished building: ../Sources/BMP384.c
+ 
+Building file: ../Sources/BNO085.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BNO085.d" -MT"Sources/BNO085.o" -c -o "Sources/BNO085.o" "../Sources/BNO085.c"
+Finished building: ../Sources/BNO085.c
+ 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+../Sources/Events.c: In function 'Inhr1_OnRxChar':
+../Sources/Events.c:78:21: error: 'gps' undeclared (first use in this function)
+     if (GPS.encode(&gps, c))
+                     ^
+../Sources/Events.c:78:21: note: each undeclared identifier is reported only once for each function it appears in
+Sources/subdir.mk:48: recipe for target 'Sources/Events.o' failed
+make: *** [Sources/Events.o] Error 1
+14:52:53 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:52:54 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:53:21 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+../Sources/Events.c: In function 'Inhr1_OnRxChar':
+../Sources/Events.c:78:5: warning: passing argument 1 of 'GPS.encode' discards 'volatile' qualifier from pointer target type [enabled by default]
+     if (GPS.encode(&GPS, c))
+     ^
+../Sources/Events.c:78:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/Events.c:88:21: error: 'gps' undeclared (first use in this function)
+     if (GPS.encode(&gps, c))
+                     ^
+../Sources/Events.c:88:21: note: each undeclared identifier is reported only once for each function it appears in
+Sources/subdir.mk:48: recipe for target 'Sources/Events.o' failed
+make: *** [Sources/Events.o] Error 1
+14:53:22 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:53:23 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:53:32 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+../Sources/Events.c: In function 'Inhr1_OnRxChar':
+../Sources/Events.c:78:5: warning: passing argument 1 of 'GPS.encode' discards 'volatile' qualifier from pointer target type [enabled by default]
+     if (GPS.encode(&GPS, c))
+     ^
+../Sources/Events.c:78:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/Events.c:88:5: warning: passing argument 1 of 'GPS.encode' discards 'volatile' qualifier from pointer target type [enabled by default]
+     if (GPS.encode(&GPS, c))
+     ^
+../Sources/Events.c:88:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+Finished building: ../Sources/Events.c
+ 
+Building file: ../Sources/GPS.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/GPS.d" -MT"Sources/GPS.o" -c -o "Sources/GPS.o" "../Sources/GPS.c"
+Finished building: ../Sources/GPS.c
+ 
+Building file: ../Sources/I2C.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/I2C.d" -MT"Sources/I2C.o" -c -o "Sources/I2C.o" "../Sources/I2C.c"
+Finished building: ../Sources/I2C.c
+ 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:165:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:175:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:175:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:176:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:176:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:181:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:181:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:182:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:182:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:205:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:165:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:260:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:260:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:263:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:263:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:267:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Starting yaw: %f\r\n", setpoint.yaw);
+           ^
+../Sources/main.c:267:11: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:291:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:291:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:293:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:293:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:294:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:294:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:297:40: error: expected expression before 'void'
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, void);
+                                        ^
+../Sources/main.c:297:40: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:297:40: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:299:33: error: expected expression before 'void'
+   IMU.getGyro(&IMU, &p, &q, &r, void);
+                                 ^
+../Sources/main.c:299:33: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:299:33: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:312:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:312:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:321:10: error: 'firstTime' undeclared (first use in this function)
+     if (!firstTime) {
+          ^
+../Sources/main.c:322:19: error: 'gps' undeclared (first use in this function)
+      float gYaw = gps.course_to(&GPS, prevLat, prevLon, lat,
+                   ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:367:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:369:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:413:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+14:53:35 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:53:35 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:56:00 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:166:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:176:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:176:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:182:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:182:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:206:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:166:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:261:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:261:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:264:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:264:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:292:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:292:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:294:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:294:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:298:40: error: expected expression before 'void'
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, void);
+                                        ^
+../Sources/main.c:298:40: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:298:40: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:300:33: error: expected expression before 'void'
+   IMU.getGyro(&IMU, &p, &q, &r, void);
+                                 ^
+../Sources/main.c:300:33: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:300:33: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:313:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:313:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:323:19: error: 'gps' undeclared (first use in this function)
+      float gYaw = gps.course_to(&GPS, prevLat, prevLon, lat,
+                   ^
+../Sources/main.c:323:19: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:368:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:370:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:414:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+make: *** [Sources/main.o] Error 1
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+14:56:02 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:56:02 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:56:23 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:166:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:176:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:176:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:182:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:182:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:206:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:166:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:261:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:261:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:264:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:264:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:292:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:292:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:294:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:294:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:298:40: error: expected expression before 'void'
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, void*);
+                                        ^
+../Sources/main.c:298:40: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:298:40: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:300:33: error: expected expression before 'void'
+   IMU.getGyro(&IMU, &p, &q, &r, void*);
+                                 ^
+../Sources/main.c:300:33: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:300:33: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:313:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:313:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:323:19: error: 'gps' undeclared (first use in this function)
+      float gYaw = gps.course_to(&GPS, prevLat, prevLon, lat,
+                   ^
+../Sources/main.c:323:19: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:368:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:370:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:414:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+14:56:24 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:56:25 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:57:42 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:167:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:178:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:178:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:185:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:185:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:207:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:167:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:262:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:262:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:265:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:265:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:293:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:293:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:297:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:297:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:299:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:299:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:301:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:301:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:314:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:314:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:324:19: error: 'gps' undeclared (first use in this function)
+      float gYaw = gps.course_to(&GPS, prevLat, prevLon, lat,
+                   ^
+../Sources/main.c:324:19: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:369:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:371:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:415:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+make: *** [Sources/main.o] Error 1
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+14:57:43 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:57:43 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:18 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:167:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:178:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:178:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:185:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:185:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:207:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:167:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:262:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:262:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:265:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:265:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:293:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:293:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:297:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:297:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:299:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:299:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:301:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:301:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:314:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:314:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:324:19: error: 'gps' undeclared (first use in this function)
+      float gYaw = gps.course_to(&GPS, prevLat, prevLon, lat, lon);
+                   ^
+../Sources/main.c:324:19: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:368:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:370:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:414:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+14:58:20 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:20 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:22 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:167:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:178:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:178:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:185:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:185:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:207:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:167:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:262:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:262:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:265:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:265:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:293:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:293:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:297:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:297:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:299:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:299:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:301:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:301:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:314:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:314:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:324:6: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+      float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+      ^
+../Sources/main.c:324:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:326:12: error: 'gps' undeclared (first use in this function)
+      mps = gps.speed_mps(&GPS);
+            ^
+../Sources/main.c:326:12: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:368:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:370:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:414:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+14:58:23 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:24 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:28 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:167:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:177:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:177:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:178:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:178:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:183:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:183:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:184:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:184:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:185:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:185:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:207:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:167:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:262:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while(!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:262:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:265:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:265:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:293:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:293:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:295:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:295:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:296:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:296:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:297:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:297:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:299:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:299:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:301:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:301:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:314:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:314:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:324:6: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+      float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+      ^
+../Sources/main.c:324:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:326:6: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+      mps = GPS.speed_mps(&GPS);
+      ^
+../Sources/main.c:326:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:368:5: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_NEO6M(&GPS);
+     ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:370:5: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+     New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+     ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:414:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 128, "Waiting for input...\r\n");
+           ^
+../Sources/main.c:414:11: note: each undeclared identifier is reported only once for each function it appears in
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+14:58:29 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+14:58:30 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:31:59 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c:143:1: error: expected ',' or ';' before 'float'
+ float servoVals[5] = { 0, 0, 0, 0, 0 };
+ ^
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:200:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:200:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:201:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:201:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:206:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:206:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:207:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:207:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:208:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:208:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:285:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while (!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:285:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:288:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:288:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:316:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:316:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:318:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:318:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:319:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:319:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:320:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:320:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:322:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:322:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:324:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:324:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'calculateThrust':
+../Sources/main.c:507:21: error: 'worldVel' undeclared (first use in this function)
+   float D_alt = D * worldVel[2];
+                     ^
+../Sources/main.c:507:21: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'calculateServoValues':
+../Sources/main.c:528:2: error: 'servoVals' undeclared (first use in this function)
+  servoVals[0] = thrustComp - pitchComp + yawComp;
+  ^
+../Sources/main.c: In function 'writeServos':
+../Sources/main.c:542:26: error: 'servoVals' undeclared (first use in this function)
+  xPos_SetPWMDutyUs(clamp(servoVals[0], 1000, 2000));
+                          ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:569:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:571:4: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+    ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:666:12: error: 'str' undeclared (first use in this function)
+   snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+            ^
+../Sources/main.c:667:5: error: 'yawComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+     ^
+../Sources/main.c:667:14: error: 'pitchComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+              ^
+../Sources/main.c:667:25: error: 'rollComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+                         ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:32:01 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:32:01 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:32:15 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c:143:1: error: expected ',' or ';' before 'float'
+ float servoVals[5] = { 0, 0, 0, 0, 0 };
+ ^
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:200:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:200:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:201:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:201:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:206:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:206:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:207:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:207:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:208:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:208:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:285:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while (!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:285:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:288:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:288:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:316:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:316:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:318:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:318:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:319:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:319:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:320:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:320:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:322:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:322:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:324:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:324:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'calculateServoValues':
+../Sources/main.c:528:2: error: 'servoVals' undeclared (first use in this function)
+  servoVals[0] = thrustComp - pitchComp + yawComp;
+  ^
+../Sources/main.c:528:2: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'writeServos':
+../Sources/main.c:542:26: error: 'servoVals' undeclared (first use in this function)
+  xPos_SetPWMDutyUs(clamp(servoVals[0], 1000, 2000));
+                          ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:569:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:571:4: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+    ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:666:12: error: 'str' undeclared (first use in this function)
+   snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+            ^
+../Sources/main.c:667:5: error: 'yawComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+     ^
+../Sources/main.c:667:14: error: 'pitchComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+              ^
+../Sources/main.c:667:25: error: 'rollComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+                         ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:32:16 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:32:17 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:32:55 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c:200:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.begin(&IMU);
+  ^
+../Sources/main.c:200:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:201:2: warning: passing argument 1 of 'IMU.begin' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.begin(&IMU) == false) {
+  ^
+../Sources/main.c:201:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:206:2: warning: passing argument 1 of 'IMU.enableLinearAccelerometer' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableLinearAccelerometer(&IMU, 50);
+  ^
+../Sources/main.c:206:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:207:2: warning: passing argument 1 of 'IMU.enableGameRotationVector' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGameRotationVector(&IMU, 50);
+  ^
+../Sources/main.c:207:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:208:2: warning: passing argument 1 of 'IMU.enableGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+  IMU.enableGyro(&IMU, 50);
+  ^
+../Sources/main.c:208:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:285:3: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+   while (!IMU.dataAvailable(&IMU)) {
+   ^
+../Sources/main.c:285:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:288:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:288:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readIMU':
+../Sources/main.c:316:2: warning: passing argument 1 of 'IMU.dataAvailable' discards 'volatile' qualifier from pointer target type [enabled by default]
+  if (IMU.dataAvailable(&IMU)) {
+  ^
+../Sources/main.c:316:2: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:318:3: warning: passing argument 1 of 'IMU.getYaw' discards 'volatile' qualifier from pointer target type [enabled by default]
+   yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+   ^
+../Sources/main.c:318:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:319:3: warning: passing argument 1 of 'IMU.getPitch' discards 'volatile' qualifier from pointer target type [enabled by default]
+   pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+   ^
+../Sources/main.c:319:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:320:3: warning: passing argument 1 of 'IMU.getRoll' discards 'volatile' qualifier from pointer target type [enabled by default]
+   roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
+   ^
+../Sources/main.c:320:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:322:3: warning: passing argument 1 of 'IMU.getLinAccel' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
+   ^
+../Sources/main.c:322:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c:324:3: warning: passing argument 1 of 'IMU.getGyro' discards 'volatile' qualifier from pointer target type [enabled by default]
+   IMU.getGyro(&IMU, &p, &q, &r, nullptr);
+   ^
+../Sources/main.c:324:3: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:569:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:571:4: warning: passing argument 1 of 'New_BNO085' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
+    ^
+In file included from ../Sources/main.c:84:0:
+../Sources/BNO085.h:98:6: note: expected 'struct BNO085 *' but argument is of type 'volatile struct BNO085 *'
+ void New_BNO085(BNO085 *self, uint8_t addr);
+      ^
+../Sources/main.c:666:12: error: 'str' undeclared (first use in this function)
+   snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+            ^
+../Sources/main.c:666:12: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c:667:5: error: 'yawComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+     ^
+../Sources/main.c:667:14: error: 'pitchComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+              ^
+../Sources/main.c:667:25: error: 'rollComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+                         ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:32:56 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:32:56 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:34:27 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:569:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+../Sources/main.c:666:12: error: 'str' undeclared (first use in this function)
+   snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+            ^
+../Sources/main.c:666:12: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c:667:5: error: 'yawComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+     ^
+../Sources/main.c:667:14: error: 'pitchComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+              ^
+../Sources/main.c:667:25: error: 'rollComp' undeclared (first use in this function)
+     yawComp, pitchComp, rollComp, yaw, pitch, roll);
+                         ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:34:28 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:34:29 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:36:56 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'calculateServoValues':
+../Sources/main.c:536:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+           ^
+../Sources/main.c:536:11: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:570:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:36:57 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:36:57 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:37:51 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Static_Code/System/CPU_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/CPU_Init.d" -MT"Static_Code/System/CPU_Init.o" -c -o "Static_Code/System/CPU_Init.o" "../Static_Code/System/CPU_Init.c"
+Finished building: ../Static_Code/System/CPU_Init.c
+ 
+Building file: ../Static_Code/System/Peripherals_Init.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Peripherals_Init.d" -MT"Static_Code/System/Peripherals_Init.o" -c -o "Static_Code/System/Peripherals_Init.o" "../Static_Code/System/Peripherals_Init.c"
+Finished building: ../Static_Code/System/Peripherals_Init.c
+ 
+Building file: ../Static_Code/System/Vectors.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Static_Code/System/Vectors.d" -MT"Static_Code/System/Vectors.o" -c -o "Static_Code/System/Vectors.o" "../Static_Code/System/Vectors.c"
+Finished building: ../Static_Code/System/Vectors.c
+ 
+Building file: ../Sources/BMP384.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BMP384.d" -MT"Sources/BMP384.o" -c -o "Sources/BMP384.o" "../Sources/BMP384.c"
+Finished building: ../Sources/BMP384.c
+ 
+Building file: ../Sources/BNO085.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/BNO085.d" -MT"Sources/BNO085.o" -c -o "Sources/BNO085.o" "../Sources/BNO085.c"
+Finished building: ../Sources/BNO085.c
+ 
+Building file: ../Sources/Events.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/Events.d" -MT"Sources/Events.o" -c -o "Sources/Events.o" "../Sources/Events.c"
+../Sources/Events.c: In function 'Inhr1_OnRxChar':
+../Sources/Events.c:78:5: warning: passing argument 1 of 'GPS.encode' discards 'volatile' qualifier from pointer target type [enabled by default]
+     if (GPS.encode(&GPS, c))
+     ^
+../Sources/Events.c:78:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/Events.c:88:5: warning: passing argument 1 of 'GPS.encode' discards 'volatile' qualifier from pointer target type [enabled by default]
+     if (GPS.encode(&GPS, c))
+     ^
+../Sources/Events.c:88:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+Finished building: ../Sources/Events.c
+ 
+Building file: ../Sources/GPS.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/GPS.d" -MT"Sources/GPS.o" -c -o "Sources/GPS.o" "../Sources/GPS.c"
+Finished building: ../Sources/GPS.c
+ 
+Building file: ../Sources/I2C.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/I2C.d" -MT"Sources/I2C.o" -c -o "Sources/I2C.o" "../Sources/I2C.c"
+Finished building: ../Sources/I2C.c
+ 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'calculateServoValues':
+../Sources/main.c:536:11: error: 'str' undeclared (first use in this function)
+  snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+           ^
+../Sources/main.c:536:11: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:570:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:37:56 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:37:56 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:38:13 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'calculateServoValues':
+../Sources/main.c:538:13: error: 'str' undeclared (first use in this function)
+  BT_SendStr(str);
+             ^
+../Sources/main.c:538:13: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'main':
+../Sources/main.c:570:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+16:38:14 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:38:15 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+16:38:20 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:190:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:230:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:190:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:353:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:353:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:364:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:364:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:366:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:366:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:570:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building file: ../Generated_Code/ASerialLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/ASerialLdd1.d" -MT"Generated_Code/ASerialLdd1.o" -c -o "Generated_Code/ASerialLdd1.o" "../Generated_Code/ASerialLdd1.c"
+Finished building: ../Generated_Code/ASerialLdd1.c
+ 
+Building file: ../Generated_Code/ASerialLdd2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/ASerialLdd2.d" -MT"Generated_Code/ASerialLdd2.o" -c -o "Generated_Code/ASerialLdd2.o" "../Generated_Code/ASerialLdd2.c"
+Finished building: ../Generated_Code/ASerialLdd2.c
+ 
+Building file: ../Generated_Code/BT.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/BT.d" -MT"Generated_Code/BT.o" -c -o "Generated_Code/BT.o" "../Generated_Code/BT.c"
+Finished building: ../Generated_Code/BT.c
+ 
+Building file: ../Generated_Code/BitIoLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/BitIoLdd1.d" -MT"Generated_Code/BitIoLdd1.o" -c -o "Generated_Code/BitIoLdd1.o" "../Generated_Code/BitIoLdd1.c"
+Finished building: ../Generated_Code/BitIoLdd1.c
+ 
+Building file: ../Generated_Code/BitIoLdd2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/BitIoLdd2.d" -MT"Generated_Code/BitIoLdd2.o" -c -o "Generated_Code/BitIoLdd2.o" "../Generated_Code/BitIoLdd2.c"
+Finished building: ../Generated_Code/BitIoLdd2.c
+ 
+Building file: ../Generated_Code/BitIoLdd3.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/BitIoLdd3.d" -MT"Generated_Code/BitIoLdd3.o" -c -o "Generated_Code/BitIoLdd3.o" "../Generated_Code/BitIoLdd3.c"
+Finished building: ../Generated_Code/BitIoLdd3.c
+ 
+Building file: ../Generated_Code/CI2C1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/CI2C1.d" -MT"Generated_Code/CI2C1.o" -c -o "Generated_Code/CI2C1.o" "../Generated_Code/CI2C1.c"
+Finished building: ../Generated_Code/CI2C1.c
+ 
+Building file: ../Generated_Code/Cpu.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Cpu.d" -MT"Generated_Code/Cpu.o" -c -o "Generated_Code/Cpu.o" "../Generated_Code/Cpu.c"
+Finished building: ../Generated_Code/Cpu.c
+ 
+Building file: ../Generated_Code/EDF.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/EDF.d" -MT"Generated_Code/EDF.o" -c -o "Generated_Code/EDF.o" "../Generated_Code/EDF.c"
+Finished building: ../Generated_Code/EDF.c
+ 
+Building file: ../Generated_Code/FC321.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/FC321.d" -MT"Generated_Code/FC321.o" -c -o "Generated_Code/FC321.o" "../Generated_Code/FC321.c"
+Finished building: ../Generated_Code/FC321.c
+ 
+Building file: ../Generated_Code/GPS.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/GPS.d" -MT"Generated_Code/GPS.o" -c -o "Generated_Code/GPS.o" "../Generated_Code/GPS.c"
+Finished building: ../Generated_Code/GPS.c
+ 
+Building file: ../Generated_Code/GPSTimer.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/GPSTimer.d" -MT"Generated_Code/GPSTimer.o" -c -o "Generated_Code/GPSTimer.o" "../Generated_Code/GPSTimer.c"
+Finished building: ../Generated_Code/GPSTimer.c
+ 
+Building file: ../Generated_Code/Inhr1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Inhr1.d" -MT"Generated_Code/Inhr1.o" -c -o "Generated_Code/Inhr1.o" "../Generated_Code/Inhr1.c"
+Finished building: ../Generated_Code/Inhr1.c
+ 
+Building file: ../Generated_Code/Inhr2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Inhr2.d" -MT"Generated_Code/Inhr2.o" -c -o "Generated_Code/Inhr2.o" "../Generated_Code/Inhr2.c"
+Finished building: ../Generated_Code/Inhr2.c
+ 
+Building file: ../Generated_Code/IntI2cLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/IntI2cLdd1.d" -MT"Generated_Code/IntI2cLdd1.o" -c -o "Generated_Code/IntI2cLdd1.o" "../Generated_Code/IntI2cLdd1.c"
+Finished building: ../Generated_Code/IntI2cLdd1.c
+ 
+Building file: ../Generated_Code/MCUC1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/MCUC1.d" -MT"Generated_Code/MCUC1.o" -c -o "Generated_Code/MCUC1.o" "../Generated_Code/MCUC1.c"
+Finished building: ../Generated_Code/MCUC1.c
+ 
+Building file: ../Generated_Code/PE_LDD.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PE_LDD.d" -MT"Generated_Code/PE_LDD.o" -c -o "Generated_Code/PE_LDD.o" "../Generated_Code/PE_LDD.c"
+Finished building: ../Generated_Code/PE_LDD.c
+ 
+Building file: ../Generated_Code/Pins1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pins1.d" -MT"Generated_Code/Pins1.o" -c -o "Generated_Code/Pins1.o" "../Generated_Code/Pins1.c"
+Finished building: ../Generated_Code/Pins1.c
+ 
+Building file: ../Generated_Code/Pwm1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pwm1.d" -MT"Generated_Code/Pwm1.o" -c -o "Generated_Code/Pwm1.o" "../Generated_Code/Pwm1.c"
+Finished building: ../Generated_Code/Pwm1.c
+ 
+Building file: ../Generated_Code/Pwm2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pwm2.d" -MT"Generated_Code/Pwm2.o" -c -o "Generated_Code/Pwm2.o" "../Generated_Code/Pwm2.c"
+Finished building: ../Generated_Code/Pwm2.c
+ 
+Building file: ../Generated_Code/Pwm3.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pwm3.d" -MT"Generated_Code/Pwm3.o" -c -o "Generated_Code/Pwm3.o" "../Generated_Code/Pwm3.c"
+Finished building: ../Generated_Code/Pwm3.c
+ 
+Building file: ../Generated_Code/Pwm4.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pwm4.d" -MT"Generated_Code/Pwm4.o" -c -o "Generated_Code/Pwm4.o" "../Generated_Code/Pwm4.c"
+Finished building: ../Generated_Code/Pwm4.c
+ 
+Building file: ../Generated_Code/Pwm5.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/Pwm5.d" -MT"Generated_Code/Pwm5.o" -c -o "Generated_Code/Pwm5.o" "../Generated_Code/Pwm5.c"
+Finished building: ../Generated_Code/Pwm5.c
+ 
+Building file: ../Generated_Code/PwmLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PwmLdd1.d" -MT"Generated_Code/PwmLdd1.o" -c -o "Generated_Code/PwmLdd1.o" "../Generated_Code/PwmLdd1.c"
+Finished building: ../Generated_Code/PwmLdd1.c
+ 
+Building file: ../Generated_Code/PwmLdd2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PwmLdd2.d" -MT"Generated_Code/PwmLdd2.o" -c -o "Generated_Code/PwmLdd2.o" "../Generated_Code/PwmLdd2.c"
+Finished building: ../Generated_Code/PwmLdd2.c
+ 
+Building file: ../Generated_Code/PwmLdd3.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PwmLdd3.d" -MT"Generated_Code/PwmLdd3.o" -c -o "Generated_Code/PwmLdd3.o" "../Generated_Code/PwmLdd3.c"
+Finished building: ../Generated_Code/PwmLdd3.c
+ 
+Building file: ../Generated_Code/PwmLdd4.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PwmLdd4.d" -MT"Generated_Code/PwmLdd4.o" -c -o "Generated_Code/PwmLdd4.o" "../Generated_Code/PwmLdd4.c"
+Finished building: ../Generated_Code/PwmLdd4.c
+ 
+Building file: ../Generated_Code/PwmLdd5.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/PwmLdd5.d" -MT"Generated_Code/PwmLdd5.o" -c -o "Generated_Code/PwmLdd5.o" "../Generated_Code/PwmLdd5.c"
+Finished building: ../Generated_Code/PwmLdd5.c
+ 
+Building file: ../Generated_Code/RealTimeLdd1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/RealTimeLdd1.d" -MT"Generated_Code/RealTimeLdd1.o" -c -o "Generated_Code/RealTimeLdd1.o" "../Generated_Code/RealTimeLdd1.c"
+Finished building: ../Generated_Code/RealTimeLdd1.c
+ 
+Building file: ../Generated_Code/RealTimeLdd2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/RealTimeLdd2.d" -MT"Generated_Code/RealTimeLdd2.o" -c -o "Generated_Code/RealTimeLdd2.o" "../Generated_Code/RealTimeLdd2.c"
+Finished building: ../Generated_Code/RealTimeLdd2.c
+ 
+Building file: ../Generated_Code/TU1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/TU1.d" -MT"Generated_Code/TU1.o" -c -o "Generated_Code/TU1.o" "../Generated_Code/TU1.c"
+Finished building: ../Generated_Code/TU1.c
+ 
+Building file: ../Generated_Code/TU2.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/TU2.d" -MT"Generated_Code/TU2.o" -c -o "Generated_Code/TU2.o" "../Generated_Code/TU2.c"
+Finished building: ../Generated_Code/TU2.c
+ 
+Building file: ../Generated_Code/TU3.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/TU3.d" -MT"Generated_Code/TU3.o" -c -o "Generated_Code/TU3.o" "../Generated_Code/TU3.c"
+Finished building: ../Generated_Code/TU3.c
+ 
+Building file: ../Generated_Code/WAIT1.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/WAIT1.d" -MT"Generated_Code/WAIT1.o" -c -o "Generated_Code/WAIT1.o" "../Generated_Code/WAIT1.c"
+Finished building: ../Generated_Code/WAIT1.c
+ 
+Building file: ../Generated_Code/statusBlue.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/statusBlue.d" -MT"Generated_Code/statusBlue.o" -c -o "Generated_Code/statusBlue.o" "../Generated_Code/statusBlue.c"
+Finished building: ../Generated_Code/statusBlue.c
+ 
+Building file: ../Generated_Code/statusGreen.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/statusGreen.d" -MT"Generated_Code/statusGreen.o" -c -o "Generated_Code/statusGreen.o" "../Generated_Code/statusGreen.c"
+Finished building: ../Generated_Code/statusGreen.c
+ 
+Building file: ../Generated_Code/statusRed.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/statusRed.d" -MT"Generated_Code/statusRed.o" -c -o "Generated_Code/statusRed.o" "../Generated_Code/statusRed.c"
+Finished building: ../Generated_Code/statusRed.c
+ 
+Building file: ../Generated_Code/xNeg.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/xNeg.d" -MT"Generated_Code/xNeg.o" -c -o "Generated_Code/xNeg.o" "../Generated_Code/xNeg.c"
+Finished building: ../Generated_Code/xNeg.c
+ 
+Building file: ../Generated_Code/xPos.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/xPos.d" -MT"Generated_Code/xPos.o" -c -o "Generated_Code/xPos.o" "../Generated_Code/xPos.c"
+Finished building: ../Generated_Code/xPos.c
+ 
+Building file: ../Generated_Code/yNeg.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/yNeg.d" -MT"Generated_Code/yNeg.o" -c -o "Generated_Code/yNeg.o" "../Generated_Code/yNeg.c"
+Finished building: ../Generated_Code/yNeg.c
+ 
+Building file: ../Generated_Code/yPos.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Generated_Code/yPos.d" -MT"Generated_Code/yPos.o" -c -o "Generated_Code/yPos.o" "../Generated_Code/yPos.c"
+Finished building: ../Generated_Code/yPos.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+16:38:38 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+16:38:39 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+17:52:14 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:194:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:234:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:194:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'calibrateYaw':
+../Sources/main.c:296:2: error: 'initialAltitude' undeclared (first use in this function)
+  initialAltitude = setpoint.yaw; 
+  ^
+../Sources/main.c:296:2: note: each undeclared identifier is reported only once for each function it appears in
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:358:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:358:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:369:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:369:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:371:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:371:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:589:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Sources/subdir.mk:48: recipe for target 'Sources/main.o' failed
+make: *** [Sources/main.o] Error 1
+17:52:18 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+17:52:19 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+17:52:52 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:194:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:234:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:194:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:358:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:358:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:369:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:369:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:371:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:371:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'main':
+../Sources/main.c:589:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+17:52:58 **** Incremental Build of configuration Debug for project BT_UART_Repeater ****
+make all 
+make: Nothing to be done for 'all'.
+17:52:59 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.

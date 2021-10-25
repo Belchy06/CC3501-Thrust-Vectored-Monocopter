@@ -96,10 +96,8 @@
 // Barometer Variables
 BMP384 BARO;
 float temperature, pressure, altitude;
-float altitudeInitial;
-float altitudeAGL;
 // IMU Variables
-BNO085 IMU;
+volatile BNO085 IMU;
 float pitch, roll, yaw;
 float p, q, r;
 float lx, ly, lz;
@@ -111,8 +109,6 @@ float xOff, yOff;
 float xMps, yMps, zMps = 0;
 bool bstatusBlue, bstatusRed, bstatusGreen = false;
 bool bFirstRun = true;
-bool bCalculateLandingHeight = true;
-float timeSinceLandingStarted;
 void* nullptr;
 // GPS Variables
 volatile NEO6M GPS;
@@ -127,6 +123,7 @@ double northing;
 volatile uint8_t gpsIndex;
 volatile char gpsBuffer[128];
 volatile bool bGpsCompleteCommand = false;
+;
 // Bluetooth ISR Variables
 volatile uint8_t btIndex;
 volatile char btBuffer[128];
@@ -136,17 +133,6 @@ VelocityEstimator EstimatorVelocity;
 PositionEstimator EstimatorPosition;
 // World Reference Frame Values
 float worldAcceleration[3] = { 0, 0, 0 };
-float worldVelocity[3] = { 0, 0, 0 };
-// Control Values
-float PRcmd[2] = { -3.47f, -0.35f };
-float tau_yaw, tau_pitch, tau_roll = 0;
-float altitude_cmd = 0;
-float w0 = -1.108f * 1.790f;
-// Servo Variables
-// -x, +x, -y, +y, edf
-float servoVals[5] = { 0, 0, 0, 0, 0 };
-//                   total thrust, yaw, pitch, roll
-float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
 // Structs
 struct setpoints {
 	float x;
@@ -293,7 +279,6 @@ void calibrateYaw() {
 		ledToggle(GREEN);
 	}
 	setpoint.yaw = tempYaw / 20.0f;
-	altitudeAGL = setpoint.yaw;
 	snprintf(outputBuffer, 128, "Starting yaw: %f\r\n", setpoint.yaw);
 	BT_SendStr(outputBuffer);
 }
@@ -417,165 +402,20 @@ void calculateWorldAcceleration() {
 	worldAcceleration[2] = dcmT[2][0] * lx + dcmT[2][1] * ly + dcmT[2][2] * lz;
 }
 
-void estimateWorldVelocity() {
-	/*
-	 * VELOCITY ESTIMATE
-	 */
-	if (haveGps) {
-		float measurements[4] = { GPSstats.dx, GPSstats.dy,
-				worldAcceleration[0], worldAcceleration[1] };
-		EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
-				dt);
-		EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps, &yMps);
-	} else {
-		float measurements[4] = { 999999999, 999999999, worldAcceleration[0],
-				worldAcceleration[1] };
-		EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
-				dt);
-		EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps, &yMps);
-	}
-}
 
-void estimateWorldPosition() {
-	/*
-	 * World Position Estimate
-	 */
-	worldVelocity[0] = xMps;
-	worldVelocity[1] = yMps;
-	worldVelocity[2] += worldAcceleration[2] * dt;
-	if (haveGps) {
-		float measurements[4] = { GPSstats.x, GPSstats.y, xMps, yMps };
-		EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
-				dt);
-		EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff, &yOff);
-	} else {
-		float measurements[4] = { 999999999, 999999999, xMps, yMps };
-		EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
-				dt);
-		EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff, &yOff);
-	}
-}
-
-void calculatePitchRollSetpoint() {
-	/*
-	 * PD Controller to calculate the orientation the vehicle should be in in order to correct for its positional error
-	 */
-	float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
-	float P = 0.24;
-	float P_xy[2] = { -P
-			* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3, 3), P
-			* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3, 3) };
-	float D = 0.1;
-	float D_xy[2] = { D * xMps, -D * yMps };
-	PRcmd[0] = P_xy[0] + D_xy[0];
-	PRcmd[1] = P_xy[1] + D_xy[1];
-}
-
-void calculatePitchRollTorque() {
-	/*
-	 * Attitude Controller
-	 */
-	float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
-	// Proportional
-	float P[2] = { 0.013, 0.01 };
-	float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
-	// Integral
-	float I = 0.01;
-	float I_pr[2] = { I * clamp(PRErr[0] * dt, -2, 2), I
-			* clamp(PRErr[1] * dt, -2, 2) };
-	// Derivative
-	float D[2] = { 0.002, 0.0028 };
-	// x, y, z
-	// p, q, r
-	float D_pr[2] = { D[0] * q, D[1] * r };
-
-	tau_pitch = P_pr[0] + I_pr[0] - D_pr[0];
-	tau_roll = P_pr[1] + I_pr[1] - D_pr[1];
-}
-
-void calculateYawTorque() {
-	float yawErr = setpoint.yaw - yaw;
-	float P = 0.004;
-	float P_yaw = P * yawErr;
-	float D = -0.03 * 0.004;
-	float D_yaw = D * r;
-	tau_yaw = P_yaw + D_yaw;
-}
-
-void calculateThrust() {
-	if (state == POSITION_AND_ATTITUDE_HOVER || state == ATTITUDE_HOVER) {
-		// We're in a hovering state, try and maintain altitude
-		float altErr = altitude - setpoint.altitude;
-		float P = 0.8f;
-		float P_alt = P * altErr;
-		float D = 0.3f;
-		float D_alt = D * worldVelocity[2];
-		altitude_cmd = P_alt - D_alt;
-	} else {
-		// We're trying to take off, add some thrust to our minimum required hovering thrust
-		altitude_cmd = w0 * 0.55f;
-	}
-	altitude_cmd += w0;
-	altitude_cmd = clamp(altitude_cmd, -3.0f, 3.0f);
-}
-
-void calculateServoValues() {
-	/*
-	 * Servo mixing
-	 */
-	// TODO: Scale the last term based on thrust to counteract gyroscopic effect
-	float thrustComp, yawComp, pitchComp, rollComp = 0;
-	thrustComp = servoWeights[0] * altitude_cmd;
-	yawComp = servoWeights[1] * tau_yaw;
-	pitchComp = servoWeights[2] * tau_pitch;
-	rollComp = servoWeights[3] * tau_roll;
-	servoVals[0] = thrustComp - pitchComp + yawComp;
-	servoVals[1] = thrustComp + pitchComp + yawComp;
-	servoVals[2] = thrustComp + rollComp + yawComp;
-	servoVals[3] = thrustComp - rollComp + yawComp;
-	servoVals[4] = altitude_cmd;
-	for (uint8_t i = 0; i < 4; i++) {
-		servoVals[i] = 1500 - clamp(servoVals[i] * -362.32f, -500, 500);
-	}
-	servoVals[4] = (clamp(servoVals[4] * -362.32f, 0, 1000)) + 1000;
-	snprintf(outputBuffer, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
-				yawComp, pitchComp, rollComp, yaw, pitch, roll);
-	BT_SendStr(outputBuffer);
-}
-
-void writeServos() {
-	xPos_SetPWMDutyUs(servoVals[0]);
-	xNeg_SetPWMDutyUs(servoVals[1]);
-	yPos_SetPWMDutyUs(servoVals[2]);
-	yNeg_SetPWMDutyUs(servoVals[3]);
-	EDF_SetPWMDutyUs(servoVals[4]);
-}
-
-void zeroServos() {
-	xPos_SetPWMDutyUs(1500);
-	xNeg_SetPWMDutyUs(1500);
-	yPos_SetPWMDutyUs(1500);
-	yNeg_SetPWMDutyUs(1500);
-	EDF_SetPWMDutyUs(1000);
-}
-
-float sampleLandingFunction(unsigned int time) {
-	// Function is the sigmoid flipped around the y axis, scaled so that the maximum value is the altitude above the starting altitude
-	// The -0.025 ensures the function crosses the x-axis
-	return altitudeAGL * (1 / (1 + expf(0.7 * (time - altitudeAGL)))) - 0.025;
-}
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
+	/* Write your local variable definition here */
+	bool bTakeoffFlag = true;
+	bool bRunMainLoop = false;
+
 	/*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
 	PE_low_level_init();
 	/*** End of Processor Expert internal initialization.                    ***/
 	for (;;) {
-		FC321_GetTimeUS(&time);
-		dt = time * 1e-6;
-		FC321_Reset();
 		switch (state) {
 		case START: {
 			// Initialize setpoints and gps values
@@ -617,71 +457,14 @@ int main(void)
 			}
 			// TODO: Parse BT Command
 			state = ASCENT;
+			FC321_Reset();
 		}
 			break;
 		case ASCENT: {
 			readIMU();
 			readBarometer();
 			checkSensorErrors();
-			// We successfully read the barometer and are at least as high as our setpoint. Transition to hover
-			if (altitude >= setpoint.altitude) {
-				state == ATTITUDE_HOVER;
-				continue;
-			}
 			calculateWorldAcceleration();
-			calculateThrust();
-			calculateServoValues();
-			writeServos();
-		}
-			break;
-		case POSITION_AND_ATTITUDE_HOVER: {
-			readGPS();
-			readIMU();
-			readBarometer();
-			checkSensorErrors();
-			calculateWorldAcceleration();
-			estimateWorldVelocity();
-			estimateWorldPosition();
-			calculatePitchRollSetpoint();
-			calculatePitchRollTorque();
-			calculateYawTorque();
-			calculateThrust();
-			calculateServoValues();
-			writeServos();
-		}
-			break;
-		case ATTITUDE_HOVER: {
-			readIMU();
-			readBarometer();
-			checkSensorErrors();
-			calculatePitchRollTorque();
-			calculateYawTorque();
-			calculateThrust();
-			calculateServoValues();
-			writeServos();
-		}
-			break;
-		case LANDING: {
-			// TODO: A run once function that creates a exponential curve for the altitude setpoint for smooth landing
-			if(bCalculateLandingHeight) {
-				altitudeAGL = setpoint.altitude - altitudeInitial;
-				bCalculateLandingHeight = false;
-			}
-			timeSinceLandingStarted += dt;
-			setpoint.altitude = sampleLandingFunction(timeSinceLandingStarted) + altitudeInitial;
-			if(setpoint.altitude < altitudeInitial) {
-				zeroServos();
-				state = IDLE;
-				continue;
-			}
-			readIMU();
-			readBarometer();
-			checkSensorErrors();
-			calculatePitchRollTorque();
-			calculateYawTorque();
-			calculateThrust();
-			calculateServoValues();
-			writeServos();
 		}
 			break;
 		case ERROR: {
@@ -689,17 +472,180 @@ int main(void)
 		}
 			break;
 		}
+	}
+
+	for (;;) {
+
+		// Rest of control loop
+		FC321_GetTimeUS(&time);
+		dt = time * 1e-6;
+
+		/*
+		 * VELOCITY ESTIMATE
+		 */
+		if (haveGps) {
+			float measurements[4] = { GPSstats.dx, GPSstats.dy,
+					worldAcceleration[0], worldAcceleration[1] };
+			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
+					dt);
+			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
+					&yMps);
+		} else {
+			float measurements[4] = { 999999999, 999999999,
+					worldAcceleration[0], worldAcceleration[1] };
+			EstimatorVelocity.estimateVelocity(&EstimatorVelocity, measurements,
+					dt);
+			EstimatorVelocity.getVelocityEstimate(&EstimatorVelocity, &xMps,
+					&yMps);
+		}
+
+		// Estimate XY position
+		float worldVel[3] = { 0, 0, 0 };
+		worldVel[0] = xMps;
+		worldVel[1] = yMps;
+		worldVel[2] += worldAcceleration[2] * dt;
+		if (haveGps) {
+			float measurements[4] = { GPSstats.x, GPSstats.y, xMps, yMps };
+			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
+					dt);
+			EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff,
+					&yOff);
+		} else {
+			float measurements[4] = { 999999999, 999999999, xMps, yMps };
+			EstimatorPosition.estimatePosition(&EstimatorPosition, measurements,
+					dt);
+			EstimatorPosition.getPositionEstimate(&EstimatorPosition, &xOff,
+					&yOff);
+		}
+
+		/*
+		 * XY-to-world setpoint
+		 */
+		float PRcmd[2] = { 0, 0 };
+		{
+			float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
+			float P = 0.24;
+			float P_xy[2] = { -P
+					* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3,
+							3), P
+					* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3,
+							3) };
+			float D = 0.1;
+			float D_xy[2] = { D * xMps, -D * yMps };
+			// PD Controller
+			PRcmd[0] = P_xy[0] + D_xy[0];
+			PRcmd[1] = P_xy[1] + D_xy[1];
+		}
+
+		/*
+		 * Attitude Controller
+		 */
+		float tau_pitch, tau_roll = 0;
+		{
+			// float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			float PRErr[2] = { (-3.47f - pitch), (-0.35f - roll) };
+			// Proportional
+			float P[2] = { 0.013, 0.01 };
+			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
+			// Integral
+			float I = 0.01;
+			float I_pr[2] = { I * clamp(PRErr[0] * dt, -2, 2), I
+					* clamp(PRErr[1] * dt, -2, 2) };
+			// Derivative
+			float D[2] = { 0.002, 0.0028 };
+			// x, y, z
+			// p, q, r
+			float D_pr[2] = { D[0] * q, D[1] * r };
+
+			tau_pitch = P_pr[0] + I_pr[0] - D_pr[0];
+			tau_roll = P_pr[1] + I_pr[1] - D_pr[1];
+		}
+
+		/*
+		 * Yaw Controller
+		 */
+		float tau_yaw = 0;
+		{
+			float yawErr = setpoint.yaw - yaw;
+			float P = 0.004;
+			float P_yaw = P * yawErr;
+			float D = -0.03 * 0.004;
+			float D_yaw = D * r;
+			tau_yaw = P_yaw + D_yaw;
+		}
+
+		float altitude_cmd = 0;
+		{
+
+			if (altitude >= setpoint.altitude) {
+				bTakeoffFlag = false;
+			}
+
+			float w0 = -1.108f * 1.790f;
+			// float w0 = -9.81f * 2.5f;
+			if (bTakeoffFlag) {
+				altitude_cmd = w0 * 0.55f;
+			} else {
+				float altErr = altitude - setpoint.altitude;
+				float P = 0.8f;
+				float P_alt = P * altErr;
+				float D = 0.3f;
+				float D_alt = D * worldVel[2];
+				altitude_cmd = P_alt - D_alt;
+			}
+
+			altitude_cmd += w0;
+			altitude_cmd = clamp(altitude_cmd, -3.0f, 3.0f);
+		}
+
+		/*
+		 * Servo mixing
+		 */
+		// TODO: Scale the last term based on thrust to counteract gyroscopic effect
+		// total thrust, yaw, pitch, roll
+		float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
+		// -x, +x, -y, +y, edf
+		float servoVals[5] = { 0, 0, 0, 0, 0 };
+		float thrustComp, yawComp, pitchComp, rollComp = 0;
+		thrustComp = servoWeights[0] * altitude_cmd;
+		yawComp = servoWeights[1] * tau_yaw;
+		pitchComp = servoWeights[2] * tau_pitch;
+		rollComp = servoWeights[3] * tau_roll;
+
+		servoVals[0] = thrustComp - pitchComp + yawComp;
+		servoVals[1] = thrustComp + pitchComp + yawComp;
+		servoVals[2] = thrustComp + rollComp + yawComp;
+		servoVals[3] = thrustComp - rollComp + yawComp;
+		servoVals[4] = altitude_cmd;
+
+		for (uint8_t i = 0; i < 4; i++) {
+			servoVals[i] = 1500 - clamp(servoVals[i] * -362.32f, -500, 500);
+		}
+
+		float edfServo = (clamp(servoVals[4] * -362.32f, 0, 1000)) + 1000;
+		xPos_SetPWMDutyUs(clamp(servoVals[0], 1000, 2000));
+		xNeg_SetPWMDutyUs(clamp(servoVals[1], 1000, 2000));
+		yPos_SetPWMDutyUs(clamp(servoVals[2], 1000, 2000));
+		yNeg_SetPWMDutyUs(clamp(servoVals[3], 1000, 2000));
+		EDF_SetPWMDutyUs(edfServo);
+
+		// snprintf(str, 256, "y: %f, p: %f, r: %f\r\n", yaw, pitch, roll);
+		snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
+				yawComp, pitchComp, rollComp, yaw, pitch, roll);
+		BT_SendStr(str);
+		FC321_Reset();
 		haveGps = false;
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-  #ifdef PEX_RTOS_START
-    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-  #endif
-  /*** End of RTOS startup code.  ***/
-  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-  for(;;){}
-  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+#ifdef PEX_RTOS_START
+	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+#endif
+	/*** End of RTOS startup code.  ***/
+	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+	for (;;) {
+	}
+	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

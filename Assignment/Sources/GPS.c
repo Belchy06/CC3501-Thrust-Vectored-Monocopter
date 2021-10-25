@@ -8,7 +8,7 @@
  */
 #include "GPS.h"
 
-void NEW_GPS(GPS *self) {
+void New_NEO6M(NEO6M *self) {
 	self->_time = GPS_INVALID_TIME;
 	self->_date = GPS_INVALID_DATE;
 	self->_latitude = GPS_INVALID_ANGLE;
@@ -38,7 +38,7 @@ void NEW_GPS(GPS *self) {
 	self->speed_mps = &speed_mps;
 }
 
-bool encode(GPS *self, char c) {
+bool encode(NEO6M *self, char c) {
 	bool valid_sentence = false;
 
 	switch (c) {
@@ -73,7 +73,7 @@ bool encode(GPS *self, char c) {
 	return valid_sentence;
 }
 
-bool term_complete(GPS *self) {
+bool term_complete(NEO6M *self) {
 	if (self->_is_checksum_term) {
 		char checksum = 16 * from_hex(self->_term[0])
 				+ from_hex(self->_term[1]);
@@ -190,7 +190,7 @@ int gpsstrcmp(const char *str1, const char *str2) {
 	return *str1;
 }
 
-unsigned long parse_decimal(GPS *self) {
+unsigned long parse_decimal(NEO6M *self) {
 	char *p = self->_term;
 	bool isneg = *p == '-';
 	if (isneg)
@@ -209,7 +209,7 @@ unsigned long parse_decimal(GPS *self) {
 }
 
 // Parse a string in the form ddmm.mmmmmmm...
-unsigned long parse_degrees(GPS *self) {
+unsigned long parse_degrees(NEO6M *self) {
 	char *p;
 	unsigned long left_of_decimal = gpsatol(self->_term);
 	unsigned long hundred1000ths_of_minute = (left_of_decimal % 100UL)
@@ -238,19 +238,19 @@ bool gpsisdigit(char c) {
 	return c >= '0' && c <= '9';
 }
 
-void get_position(GPS *self, float *lat, float *lon, unsigned long *age) {
+void get_position(NEO6M *self, float *lat, float *lon, unsigned long *age) {
 	*lat = self->_latitude == GPS_INVALID_ANGLE ?
 			GPS_INVALID_F_ANGLE : (self->_latitude / 1000000.0f);
 	*lon = self->_longitude == GPS_INVALID_ANGLE ?
 			GPS_INVALID_F_ANGLE : (self->_longitude / 1000000.0f);
 }
 
-void get_altitude(GPS *self, float *alt) {
+void get_altitude(NEO6M *self, float *alt) {
 	*alt = self->_altitude == GPS_INVALID_ALTITUDE ?
 			GPS_INVALID_F_ALTITUDE : self->_altitude / 100.0f;
 }
 
-float distance_between(GPS *self, float lat1, float long1, float lat2,
+float distance_between(NEO6M *self, float lat1, float long1, float lat2,
 		float long2) {
 	// returns distance in meters between two positions, both specified
 	// as signed decimal-degrees latitude and longitude. Uses great-circle
@@ -287,7 +287,7 @@ float sq(float input) {
 	return input * input;
 }
 
-float course_to(GPS *self, float lat1, float long1, float lat2, float long2) {
+float course_to(NEO6M *self, float lat1, float long1, float lat2, float long2) {
 	// returns course in degrees (North=0, West=270) from position 1 to position 2,
 	// both specified as signed decimal-degrees latitude and longitude.
 	// Because Earth is no exact sphere, calculated course may be off by a tiny fraction.
@@ -305,11 +305,11 @@ float course_to(GPS *self, float lat1, float long1, float lat2, float long2) {
 	return degrees(a2);
 }
 
-float speed_knots(GPS *self) {
+float speed_knots(NEO6M *self) {
 	return self->_speed == GPS_INVALID_SPEED ? GPS_INVALID_F_SPEED : self->_speed / 100.0;
 }
 
-float speed_mps(GPS *self) {
+float speed_mps(NEO6M *self) {
 	float sk = speed_knots(self);
 	return sk == GPS_INVALID_F_SPEED ? GPS_INVALID_F_SPEED : _GPS_MPS_PER_KNOT * sk;
 }

@@ -38,23 +38,32 @@
 #include "ASerialLdd2.h"
 #include "Inhr1.h"
 #include "ASerialLdd1.h"
-#include "TU4.h"
 #include "statusBlue.h"
 #include "BitIoLdd1.h"
 #include "statusRed.h"
 #include "BitIoLdd2.h"
 #include "statusGreen.h"
 #include "BitIoLdd3.h"
+#include "EDF.h"
 #include "FC321.h"
 #include "RealTimeLdd1.h"
 #include "TU1.h"
 #include "WAIT1.h"
-#include "XPos.h"
 #include "Pwm1.h"
 #include "PwmLdd1.h"
-#include "XNeg.h"
+#include "TU3.h"
+#include "xPos.h"
 #include "Pwm2.h"
 #include "PwmLdd2.h"
+#include "xNeg.h"
+#include "Pwm3.h"
+#include "PwmLdd3.h"
+#include "yPos.h"
+#include "Pwm4.h"
+#include "PwmLdd4.h"
+#include "yNeg.h"
+#include "Pwm5.h"
+#include "PwmLdd5.h"
 #include "GPSTimer.h"
 #include "RealTimeLdd2.h"
 #include "TU2.h"
@@ -89,9 +98,7 @@
 float temperature, pressure, altitude;
 float pitch, roll, yaw;
 float p, q, r;
-float ax, ay, az;
 float lx, ly, lz;
-uint8_t accelAccuracy, gyroAccuracy, magAccuracy, linAccuracy;
 
 char level[32];
 char str[256];
@@ -206,7 +213,7 @@ int main(void)
 	// Get starting altitude
 	float tempAlt = 0;
 	BT_SendStr("Calibrating starting altitude...\r\n");
-	for (uint8_t i = 0; i < 1; i++) {
+	for (uint8_t i = 0; i < 20; i++) {
 		while (!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
 			;
 		}
@@ -214,12 +221,13 @@ int main(void)
 		bstatusBlue = !bstatusBlue;
 		statusBlue_PutVal(bstatusBlue);
 	}
-	setpoint.altitude = tempAlt / 1.0f;
+	setpoint.altitude = tempAlt / 20.0f;
+	setpoint.altitude += 2.0f;
 	bstatusBlue = false;
 	statusBlue_PutVal(bstatusBlue);
 	snprintf(str, 128, "Starting altitude: %f\r\n", setpoint.altitude);
 	BT_SendStr(str);
-
+	// setpoint.altitude += 0.5f;
 	New_BNO085(&IMU, BNO080_DEFAULT_ADDRESS);
 	IMU.begin(&IMU);
 	if (IMU.begin(&IMU) == false) {
@@ -231,25 +239,48 @@ int main(void)
 		}
 	}
 
-	WAIT1_Waitms(5000);
 	IMU.enableLinearAccelerometer(&IMU, 50);
 	//IMU.enableAccelerometer(&IMU, 50);
-	//IMU.enableRotationVector(&IMU, 100);
+	//IMU.enableRotationVector(&IMU, 50);
 	IMU.enableGameRotationVector(&IMU, 50);
 	IMU.enableGyro(&IMU, 50);
 
-//	while (!bRunMainLoop) {
-//		if (bbtCompleteCommand) {
-//			bRunMainLoop = true;
-//		}
-//	}
+	float tempYaw = 0;
+	BT_SendStr("Calibrating starting yaw...\r\n");
+	for (uint8_t i = 0; i < 20; i++) {
+		while(!IMU.dataAvailable(&IMU)) {
+			;
+		}
+		tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+		bstatusGreen = !bstatusGreen;
+		statusGreen_PutVal(bstatusGreen);
+	}
+	setpoint.yaw = tempYaw / 20.0f;
+	snprintf(str, 128, "Starting yaw: %f\r\n", setpoint.yaw);
+	BT_SendStr(str);
+
+	snprintf(str, 128, "Waiting for input...\r\n");
+	BT_SendStr(str);
+	while (!bRunMainLoop) {
+		if (bbtCompleteCommand) {
+			bRunMainLoop = true;
+		}
+	}
+	for (uint8_t i = 5; i > 0; i--) {
+		snprintf(str, 128, "%d...", i);
+		BT_SendStr(str);
+		WAIT1_Waitms(1000);
+	}
+	BT_SendStr("\r\n");
 
 	FC321_Reset();
 	for (;;) {
 		if (IMU.dataAvailable(&IMU)) {
+			// Vertical orientation, roll wraps from -180 to 180. Change this to go from 0 to 360
 			roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
-			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert pitch to degrees
-			yaw = (float) abs((IMU.getYaw(&IMU)) * 180.0 / 3.14159f); // Convert yaw to degrees
+
+			pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
+			yaw = (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
 			IMU.getLinAccel(&IMU, &lx, &ly, &lz, &linAccuracy);
 			IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 
@@ -304,6 +335,8 @@ int main(void)
 				snprintf(str, 256, "IMU error!\r\n");
 				BT_SendStr(str);
 			}
+			EDF_SetPWMDutyUs(1000);
+			break;
 		}
 
 		// Rest of control loop
@@ -407,7 +440,8 @@ int main(void)
 		 */
 		float tau_pitch, tau_roll = 0;
 		{
-			float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			// float PRErr[2] = { (PRcmd[0] - pitch), (PRcmd[1] - roll) };
+			float PRErr[2] = { (-3.47f - pitch), (-0.35 - roll) };
 			// Proportional
 			float P[2] = { 0.013, 0.01 };
 			float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
@@ -417,7 +451,9 @@ int main(void)
 					* clamp(PRErr[1] * dt, -2, 2) };
 			// Derivative
 			float D[2] = { 0.002, 0.0028 };
-			float D_pr[2] = { D[0] * q, D[1] * p };
+			// x, y, z
+			// p, q, r
+			float D_pr[2] = { D[0] * q, D[1] * r };
 
 			tau_pitch = P_pr[0] + I_pr[0] - D_pr[0];
 			tau_roll = P_pr[1] + I_pr[1] - D_pr[1];
@@ -438,14 +474,15 @@ int main(void)
 
 		float altitude_cmd = 0;
 		{
+
 			if (altitude >= setpoint.altitude) {
 				bTakeoffFlag = false;
 			}
 
-			float w0 = -0.92f * 2.5f;
+			float w0 = -1.108f * 1.790f;
 			// float w0 = -9.81f * 2.5f;
 			if (bTakeoffFlag) {
-				altitude_cmd = w0 * 0.45f;
+				altitude_cmd = w0 * 0.55f;
 			} else {
 				float altErr = altitude - setpoint.altitude;
 				float P = 0.8f;
@@ -456,7 +493,7 @@ int main(void)
 			}
 
 			altitude_cmd += w0;
-			altitude_cmd = clamp(altitude_cmd, -(1.5f * 3.0f), (1.5f * 3.0f));
+			altitude_cmd = clamp(altitude_cmd, -3.0f, 3.0f);
 		}
 
 		/*
@@ -468,50 +505,50 @@ int main(void)
 //		float s3 = tau_yaw - tau_roll + tau_pitch;
 //		float s4 = tau_yaw + tau_roll - tau_pitch;
 		// total thrust, yaw, pitch, roll
-		float servoWeights[4] = { 1, -103.5736, 5.6659, 5.6659 };
+		// float servoWeights[4] = { 0.4, -1.5736, 5.6659, 5.6659 };
+		float servoWeights[4] = { 0.3, 1.57, 1.57, 1.57 };
 		// -x, +x, -y, +y, edf
 		float servoVals[5] = { 0, 0, 0, 0, 0 };
-		servoVals[0] = servoWeights[0] / 2 * altitude_cmd
-				+ servoWeights[1] * tau_yaw + servoWeights[3] * tau_roll;
-		servoVals[1] = servoWeights[0] / 2 * altitude_cmd
-				+ servoWeights[1] * tau_yaw - servoWeights[3] * tau_roll;
-		servoVals[2] = servoWeights[0] / 2 * altitude_cmd
-				+ servoWeights[1] * tau_yaw + servoWeights[4] * tau_pitch;
-		servoVals[3] = servoWeights[0] / 2 * altitude_cmd
-				+ servoWeights[1] * tau_yaw - servoWeights[4] * tau_pitch;
-		servoVals[4] = servoWeights[0] * altitude_cmd;
+		float thrustComp, yawComp, pitchComp, rollComp = 0;
+		thrustComp = servoWeights[0] * altitude_cmd;
+		yawComp = servoWeights[1] * tau_yaw;
+		pitchComp = servoWeights[2] * tau_pitch;
+		rollComp = servoWeights[3] * tau_roll;
+
+
+		servoVals[0] = thrustComp - pitchComp + yawComp;
+		servoVals[1] = thrustComp + pitchComp + yawComp;
+		servoVals[2] = thrustComp + rollComp + yawComp;
+		servoVals[3] = thrustComp - rollComp + yawComp;
+		servoVals[4] = altitude_cmd;
 
 		for (uint8_t i = 0; i < 4; i++) {
-			servoVals[i] = clamp(servoVals[i] * -1530.7f, 0, 500) + 1500;
+			servoVals[i] = 1500 - clamp(servoVals[i] * -362.32f, -500, 500);
 		}
 
-		float edfServo = (clamp(servoVals[4] * -111.2f, 0, 500) * 2) + 1000;
-		float servo1 = clamp(1500 + servoVals[0], 1000, 2000); // servoScale(clamp(s1, 0, 500));
-		float servo2 = clamp(1500 + servoVals[1], 1000, 2000); // servoScale(clamp(s2, 0, 500));
-		XPos_SetPWMDutyUs(1500);
-		XNeg_SetPWMDutyUs(1500);
+		float edfServo = (clamp(servoVals[4] * -362.32f, 0, 1000)) + 1000;
+		xPos_SetPWMDutyUs(clamp(servoVals[0], 1000, 2000)); // servoScale(clamp(s1, 0, 500));
+		xNeg_SetPWMDutyUs(clamp(servoVals[1], 1000, 2000)); // servoScale(clamp(s2, 0, 500));
+		yPos_SetPWMDutyUs(clamp(servoVals[2], 1000, 2000)); // servoScale(clamp(s1, 0, 500));
+		yNeg_SetPWMDutyUs(clamp(servoVals[3], 1000, 2000)); // servoScale(clamp(s2, 0, 500));
+		EDF_SetPWMDutyUs(edfServo);
 
-		snprintf(str, 256, "altitude: %f, s5 %f, servo5: %f \r\n", altitude,
-				servoVals[4], edfServo);
+		// snprintf(str, 256, "y: %f, p: %f, r: %f\r\n", yaw, pitch, roll);
+		snprintf(str, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n", yawComp, pitchComp, rollComp, yaw, pitch, roll);
 		BT_SendStr(str);
-//		snprintf(str, 256,
-//				"tau_yaw: %f, tau_pitch: %f tau_roll: %f, s1: %f, s2: %f, servo1: %f, servo2: %f, yaw: %f, pitch %f, roll %f\r\n",
-//				tau_yaw, tau_roll, tau_pitch, s1, s2, 1500 + s1, 1500 + s2, yaw,
-//				pitch, roll);
-		// BT_SendStr(str);
 		FC321_Reset();
 		haveGps = false;
-		WAIT1_Waitms(50);
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
-  /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
-  #ifdef PEX_RTOS_START
-    PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
-  #endif
-  /*** End of RTOS startup code.  ***/
-  /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
-  for(;;){}
-  /*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
+	/*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
+#ifdef PEX_RTOS_START
+	PEX_RTOS_START(); /* Startup of the selected RTOS. Macro is defined by the RTOS component. */
+#endif
+	/*** End of RTOS startup code.  ***/
+	/*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+	for (;;) {
+	}
+	/*** Processor Expert end of main routine. DON'T WRITE CODE BELOW!!! ***/
 } /*** End of main routine. DO NOT MODIFY THIS TEXT!!! ***/
 
 /* END main */

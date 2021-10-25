@@ -110,7 +110,7 @@
 			</tr>
 			<tr>
 				<td>B3</td><td>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</td><td><small><i>same</i></small></td>
-				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>B4</td><td>PTC18/LPUART0_RTS_b/FBa_TBST_b/FBa_CS2_b/FBa_BE15_8_BLS23_16_b</td><td><small><i>same</i></small></td>
@@ -142,7 +142,7 @@
 			</tr>
 			<tr>
 				<td>B10</td><td>PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART0</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
 			</tr>
 			<tr>
 				<td>B11</td><td>NC126</td><td><small><i>same</i></small></td>
@@ -158,7 +158,7 @@
 			</tr>
 			<tr>
 				<td>C3</td><td>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</td><td><small><i>same</i></small></td>
-				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>C4</td><td>PTC17/LPUART0_TX/FBa_CS4_b/FBa_TSIZ0/FBa_BE31_24_BLS7_0_b</td><td><small><i>same</i></small></td>
@@ -278,7 +278,7 @@
 			</tr>
 			<tr>
 				<td>E9</td><td>PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART0</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
 			</tr>
 			<tr>
 				<td>E10</td><td>PTB9/SPI1_PCS1/LPUART0_CTS_b/FBa_AD20</td><td><small><i>same</i></small></td>
@@ -2183,7 +2183,7 @@
 			</tr>
 			<tr>
 				<td>B3</td><td>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</td><td><small><i>same</i></small></td>
-				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>B4</td><td>PTC18/LPUART0_RTS_b/FBa_TBST_b/FBa_CS2_b/FBa_BE15_8_BLS23_16_b</td><td><small><i>same</i></small></td>
@@ -2215,7 +2215,7 @@
 			</tr>
 			<tr>
 				<td>B10</td><td>PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART0</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
 			</tr>
 			<tr>
 				<td>B11</td><td>NC126</td><td><small><i>same</i></small></td>
@@ -2231,7 +2231,7 @@
 			</tr>
 			<tr>
 				<td>C3</td><td>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</td><td><small><i>same</i></small></td>
-				<td bgcolor='#00CA3A'>UART2</td><td bgcolor='#00CA3A'>uart_rx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Input</td>
+				<td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
 				<td>C4</td><td>PTC17/LPUART0_TX/FBa_CS4_b/FBa_TSIZ0/FBa_BE31_24_BLS7_0_b</td><td><small><i>same</i></small></td>
@@ -2351,7 +2351,7 @@
 			</tr>
 			<tr>
 				<td>E9</td><td>PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b</td><td><small><i>same</i></small></td>
-				<td></td><td></td><td></td><td></td>
+				<td bgcolor='#00CA3A'>UART0</td><td bgcolor='#00CA3A'>uart_tx</td><td bgcolor='#00CA3A'>alt3</td><td bgcolor='#00CA3A'>Output</td>
 			</tr>
 			<tr>
 				<td>E10</td><td>PTB9/SPI1_PCS1/LPUART0_CTS_b/FBa_AD20</td><td><small><i>same</i></small></td>

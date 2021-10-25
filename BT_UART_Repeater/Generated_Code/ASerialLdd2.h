@@ -7,7 +7,7 @@
 **     Version     : Component 01.188, Driver 01.12, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-17, 11:41, # CodeGen: 1
+**     Date/Time   : 2021-10-22, 21:49, # CodeGen: 3
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -17,13 +17,13 @@
 **         The component requires one on-chip asynchronous serial communication channel.
 **     Settings    :
 **          Component name                                 : ASerialLdd2
-**          Device                                         : UART2
+**          Device                                         : UART0
 **          Interrupt service/event                        : Enabled
-**            Interrupt RxD                                : INT_UART2_RX_TX
+**            Interrupt RxD                                : INT_UART0_RX_TX
 **            Interrupt RxD priority                       : medium priority
-**            Interrupt TxD                                : INT_UART2_RX_TX
+**            Interrupt TxD                                : INT_UART0_RX_TX
 **            Interrupt TxD priority                       : medium priority
-**            Interrupt Error                              : INT_UART2_ERR
+**            Interrupt Error                              : INT_UART0_ERR
 **            Interrupt Error priority                     : medium priority
 **          Settings                                       : 
 **            Data width                                   : 8 bits
@@ -38,9 +38,9 @@
 **            Receiver input                               : Not inverted
 **            Break generation length                      : 10/11 bits
 **            Receiver                                     : Enabled
-**              RxD                                        : PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL
+**              RxD                                        : PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN
 **            Transmitter                                  : Enabled
-**              TxD                                        : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
+**              TxD                                        : PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b
 **            Flow control                                 : None
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
@@ -127,7 +127,7 @@ extern "C" {
 
 
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
-#define ASerialLdd2_PRPH_BASE_ADDRESS  0x4006C000U
+#define ASerialLdd2_PRPH_BASE_ADDRESS  0x4006A000U
   
 /* Methods configuration constants - generated for all enabled component's methods */
 #define ASerialLdd2_Init_METHOD_ENABLED /*!< Init method of the component ASerialLdd2 is enabled (generated) */

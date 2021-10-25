@@ -33,12 +33,15 @@
 - \subpage ASerialLdd1
 - \subpage TU1
 - \subpage RealTimeLdd1
-- \subpage TU4
-- \subpage PwmLdd1
-- \subpage PwmLdd2
 - \subpage BitIoLdd1
 - \subpage BitIoLdd2
 - \subpage BitIoLdd3
+- \subpage TU3
+- \subpage PwmLdd1
+- \subpage PwmLdd2
+- \subpage PwmLdd3
+- \subpage PwmLdd4
+- \subpage PwmLdd5
 
 */
 
@@ -78,12 +81,15 @@
 - \subpage ASerialLdd1
 - \subpage TU1
 - \subpage RealTimeLdd1
-- \subpage TU4
-- \subpage PwmLdd1
-- \subpage PwmLdd2
 - \subpage BitIoLdd1
 - \subpage BitIoLdd2
 - \subpage BitIoLdd3
+- \subpage TU3
+- \subpage PwmLdd1
+- \subpage PwmLdd2
+- \subpage PwmLdd3
+- \subpage PwmLdd4
+- \subpage PwmLdd5
 
 */
 

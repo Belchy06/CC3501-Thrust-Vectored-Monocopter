@@ -1,0 +1,6 @@
+16:39:59 **** Incremental Build of configuration Debug for project Blink ****
+make all 
+make: Nothing to be done for 'all'.
+
+16:39:59 Build Finished (took 464ms)
+

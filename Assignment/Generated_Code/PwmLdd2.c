@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 01.03, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-15, 10:56, # CodeGen: 61
+**     Date/Time   : 2021-10-21, 11:02, # CodeGen: 84
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -17,8 +17,8 @@
 **     Settings    :
 **          Component name                                 : PwmLdd2
 **          Period device                                  : FTM0_MOD
-**          Duty device                                    : FTM0_C5V
-**          Output pin                                     : ADC0_SE6b/PTD5/SPI0_PCS2/UART0_CTS_b/FTM0_CH5/FBa_AD1/EWM_OUT_b/SPI1_SCK
+**          Duty device                                    : FTM0_C4V
+**          Output pin                                     : PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FBa_AD2/EWM_IN/SPI1_PCS0
 **          Counter                                        : FTM0_CNT
 **          Interrupt service/event                        : Disabled
 **          Period                                         : 20 ms
@@ -39,7 +39,7 @@
 **            Clock configuration 6                        : This component disabled
 **            Clock configuration 7                        : This component disabled
 **          Referenced components                          : 
-**            Linked component                             : TU4
+**            Linked component                             : TU3
 **     Contents    :
 **         Init       - LDD_TDeviceData* PwmLdd2_Init(LDD_TUserData *UserDataPtr);
 **         Enable     - LDD_TError PwmLdd2_Enable(LDD_TDeviceData *DeviceDataPtr);
@@ -153,7 +153,7 @@ LDD_TDeviceData* PwmLdd2_Init(LDD_TUserData *UserDataPtr)
   DeviceDataPrv->RatioStore = 0x1333U; /* Ratio after initialization */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_PwmLdd2_ID,DeviceDataPrv);
-  DeviceDataPrv->LinkedDeviceDataPtr = TU4_Init((LDD_TUserData *)NULL);
+  DeviceDataPrv->LinkedDeviceDataPtr = TU3_Init((LDD_TUserData *)NULL);
   if (DeviceDataPrv->LinkedDeviceDataPtr == NULL) { /* Is initialization of TimerUnit unsuccessful? */
     /* Unregistration of the device structure */
     PE_LDD_UnregisterDeviceStructure(PE_LDD_COMPONENT_PwmLdd2_ID);
@@ -188,7 +188,7 @@ LDD_TError PwmLdd2_Enable(LDD_TDeviceData *DeviceDataPtr)
 
   if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
     DeviceDataPrv->EnUser = TRUE;      /* If yes then set the flag "device enabled" */
-    (void)TU4_Enable(DeviceDataPrv->LinkedDeviceDataPtr); /* Enable TimerUnit */
+    (void)TU3_Enable(DeviceDataPrv->LinkedDeviceDataPtr); /* Enable TimerUnit */
   }
   return ERR_OK;
 }
@@ -217,8 +217,8 @@ LDD_TError PwmLdd2_Disable(LDD_TDeviceData *DeviceDataPtr)
 
   if (DeviceDataPrv->EnUser) {         /* Is the device enabled by user? */
     DeviceDataPrv->EnUser = FALSE;     /* If yes then set the flag "device enabled" */
-   (void)TU4_Disable(DeviceDataPrv->LinkedDeviceDataPtr); /* Disable TimerUnit component */
-   (void)TU4_ResetCounter(DeviceDataPrv->LinkedDeviceDataPtr); /* Reset counter */
+   (void)TU3_Disable(DeviceDataPrv->LinkedDeviceDataPtr); /* Disable TimerUnit component */
+   (void)TU3_ResetCounter(DeviceDataPrv->LinkedDeviceDataPtr); /* Reset counter */
    FTM_PDD_InitializeOutputs(FTM0_BASE_PTR); /* Force output signal level */
   }
   return ERR_OK;
@@ -367,14 +367,14 @@ static void SetRatio(LDD_TDeviceData *DeviceDataPtr)
   uint16_t Period;
   uint16_t Duty;
 
-  (void)TU4_GetPeriodTicks(DeviceDataPrv->LinkedDeviceDataPtr, &Period);
+  (void)TU3_GetPeriodTicks(DeviceDataPrv->LinkedDeviceDataPtr, &Period);
   if (Period == 0U) {
     Duty = DeviceDataPrv->RatioStore;
   }
   else {
     Duty = (uint16_t)((((uint32_t)(Period) * DeviceDataPrv->RatioStore) + 0x8000) >> 0x10);
   }
-  (void)TU4_SetOffsetTicks(DeviceDataPrv->LinkedDeviceDataPtr, CHANNEL, Duty);
+  (void)TU3_SetOffsetTicks(DeviceDataPrv->LinkedDeviceDataPtr, CHANNEL, Duty);
 }
 /* END PwmLdd2. */
 

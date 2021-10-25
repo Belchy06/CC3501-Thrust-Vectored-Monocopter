@@ -6,7 +6,7 @@
 **     Version     : Component 01.048, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-19, 12:32, # CodeGen: 78
+**     Date/Time   : 2021-10-21, 11:02, # CodeGen: 84
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -72,19 +72,28 @@
 #include "RealTimeLdd1.h"
 #include "TU1.h"
 #include "WAIT1.h"
-#include "XPos.h"
-#include "Pwm1.h"
-#include "PwmLdd1.h"
-#include "XNeg.h"
-#include "Pwm2.h"
-#include "PwmLdd2.h"
-#include "TU4.h"
 #include "statusBlue.h"
 #include "BitIoLdd1.h"
 #include "statusRed.h"
 #include "BitIoLdd2.h"
 #include "statusGreen.h"
 #include "BitIoLdd3.h"
+#include "EDF.h"
+#include "Pwm1.h"
+#include "PwmLdd1.h"
+#include "TU3.h"
+#include "xPos.h"
+#include "Pwm2.h"
+#include "PwmLdd2.h"
+#include "xNeg.h"
+#include "Pwm3.h"
+#include "PwmLdd3.h"
+#include "yPos.h"
+#include "Pwm4.h"
+#include "PwmLdd4.h"
+#include "yNeg.h"
+#include "Pwm5.h"
+#include "PwmLdd5.h"
 
 
 /*

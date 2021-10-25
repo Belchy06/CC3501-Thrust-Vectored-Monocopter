@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-19, 12:32, # CodeGen: 78
+**     Date/Time   : 2021-10-21, 11:02, # CodeGen: 84
 **     Abstract    :
 **
 **     Settings    :
@@ -121,20 +121,32 @@ void Components_Init(void)
   /* ### RealTime_LDD "RealTimeLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)RealTimeLdd1_Init(NULL);
   WAIT1_Init(); /* ### Wait "WAIT1" init code ... */
-  /* ### PWM_LDD "PwmLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)PwmLdd1_Init(NULL);
-  /* ### Servo "XPos" init code ... */
-  XPos_Init();
-  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
-  (void)PwmLdd2_Init(NULL);
-  /* ### Servo "XNeg" init code ... */
-  XNeg_Init();
   /* ### BitIO_LDD "BitIoLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)BitIoLdd1_Init(NULL);
   /* ### BitIO_LDD "BitIoLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)BitIoLdd2_Init(NULL);
   /* ### BitIO_LDD "BitIoLdd3" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
   (void)BitIoLdd3_Init(NULL);
+  /* ### PWM_LDD "PwmLdd1" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd1_Init(NULL);
+  /* ### Servo "EDF" init code ... */
+  EDF_Init();
+  /* ### PWM_LDD "PwmLdd2" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd2_Init(NULL);
+  /* ### Servo "xPos" init code ... */
+  xPos_Init();
+  /* ### PWM_LDD "PwmLdd3" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd3_Init(NULL);
+  /* ### Servo "xNeg" init code ... */
+  xNeg_Init();
+  /* ### PWM_LDD "PwmLdd4" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd4_Init(NULL);
+  /* ### Servo "yPos" init code ... */
+  yPos_Init();
+  /* ### PWM_LDD "PwmLdd5" component auto initialization. Auto initialization feature can be disabled by component property "Auto initialization". */
+  (void)PwmLdd5_Init(NULL);
+  /* ### Servo "yNeg" init code ... */
+  yNeg_Init();
 }
 #endif /* CPU_COMPONENTS_INIT */
 

@@ -94,7 +94,6 @@
 #define BMP384_DEFAULT_ADDRESS 0x77
 #define MAX_DEGREES 30
 #define MAX_POSITION 20
-#define MAX_ALTITUDE 5
 
 // Barometer Variables
 BMP384 BARO;
@@ -116,6 +115,7 @@ bool bstatusBlue, bstatusRed, bstatusGreen = false;
 bool bFirstRun = true;
 bool bCalculateLandingHeight = true;
 float timeSinceLandingStarted;
+void* nullptr;
 // GPS Variables
 volatile NEO6M GPS;
 float lat, lon, prevLat, prevLon, distance;
@@ -327,9 +327,9 @@ void readIMU() {
 		pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
 		roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 		// Get body frame acceleration (gravity removed)
-		IMU.getLinAccel(&IMU, &lx, &ly, &lz, NULL);
+		IMU.getLinAccel(&IMU, &lx, &ly, &lz, nullptr);
 		// Get body frame angular acceleration
-		IMU.getGyro(&IMU, &p, &q, &r, NULL);
+		IMU.getGyro(&IMU, &p, &q, &r, nullptr);
 		ledToggle(GREEN);
 	}
 }
@@ -570,49 +570,29 @@ float sampleLandingFunction(unsigned int time) {
 
 void handleBTCommands() {
 	if(bbtCompleteCommand) {
-		char *element = strtok(btBuffer, " ");
+		char *element = strtok(buffer, " ");
 		while(element != NULL) {
 			float temp;
 			if(sscanf((char *)element, "Y%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
+				if(temp <= MAX_DEGREES) {
 					setpoint.yaw = temp;
-					snprintf(outputBuffer, 256, "New yaw setpoint: %f\r\n", setpoint.yaw);
-					BT_SendStr(outputBuffer);
 				}
 			} else if(sscanf((char *)element, "P%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
-					setpoint.pitch = temp;
-					snprintf(outputBuffer, 256, "New pitch setpoint: %f\r\n", setpoint.pitch);
-					BT_SendStr(outputBuffer);
+				if(temp <= MAX_DEGREES) {
+					setpoint.
 				}
 			} else if(sscanf((char *)element, "R%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
-					setpoint.roll = temp;
-					snprintf(outputBuffer, 256, "New roll setpoint: %f\r\n", setpoint.roll);
-					BT_SendStr(outputBuffer);
+				if(temp <= MAX_DEGREES) {
+					
 				}
 			} else if(sscanf((char *)element, "X%f", &temp) > 0) {
-				if(abs(temp) <= MAX_POSITION) {
-					setpoint.x = temp;
-					snprintf(outputBuffer, 256, "New X setpoint: %f\r\n", setpoint.x);
-					BT_SendStr(outputBuffer);
+				if(temp <= MAX_POSITION) {
+					
 				}
 			} else if(sscanf((char *)element, "Y%f", &temp) > 0) {
-				if(abs(temp) <= MAX_POSITION) {
-					setpoint.y = temp;
-					snprintf(outputBuffer, 256, "New Y setpoint: %f\r\n", setpoint.y);
-					BT_SendStr(outputBuffer);
+				if(temp <= MAX_POSITION) {
+					
 				}
-			} else if(sscanf((char *)element, "Z%f", &temp) > 0) {
-				if(abs(temp) <= MAX_ALTITUDE) {
-					setpoint.altitude = temp;
-					snprintf(outputBuffer, 256, "New altitude setpoint: %f\r\n", setpoint.altitude);
-					BT_SendStr(outputBuffer);
-				}
-			} else if(0 == strcmp((char *) element, "A")) {
-				state = ASCENT;
-			} else if(0 == strcmp((char *) element, "L")) {
-				state = LANDING;
 			}
 		}
 	}
@@ -629,7 +609,6 @@ int main(void)
 		FC321_GetTimeUS(&time);
 		dt = time * 1e-6;
 		FC321_Reset();
-		handleBTCommands();
 		switch (state) {
 		case START: {
 			// Initialize setpoints and gps values
@@ -670,7 +649,8 @@ int main(void)
 				ledToggle(GREEN);
 				// Wait
 				WAIT1_Waitms(950);
-			}	
+			}
+			handleBTCommands();	
 			// TODO: Parse BT Command
 			state = ASCENT;
 		}
@@ -741,6 +721,7 @@ int main(void)
 		}
 			break;
 		case ERROR: {
+
 		}
 			break;
 		}

@@ -1,35 +1,35 @@
-10:52:42 **** Incremental Build of configuration Debug for project Assignment ****
+13:47:57 **** Incremental Build of configuration Debug for project Assignment ****
 make all 
 Building file: ../Sources/main.c
 Invoking: Cross ARM C Compiler
-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
 ../Sources/main.c: In function 'initializeSensors':
-../Sources/main.c:196:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
    ledOn(RED);
    ^
 ../Sources/main.c: At top level:
-../Sources/main.c:236:6: warning: conflicting types for 'ledOn' [enabled by default]
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
  void ledOn(LEDS_t led) {
       ^
-../Sources/main.c:196:3: note: previous implicit declaration of 'ledOn' was here
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
    ledOn(RED);
    ^
 ../Sources/main.c: In function 'readGPS':
-../Sources/main.c:360:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
    GPS.get_position(&GPS, &lat, &lon, &age);
    ^
-../Sources/main.c:360:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
-../Sources/main.c:371:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
      float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
      ^
-../Sources/main.c:371:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
-../Sources/main.c:373:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
      mps = GPS.speed_mps(&GPS);
      ^
-../Sources/main.c:373:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
 ../Sources/main.c: In function 'handleBTCommands':
-../Sources/main.c:572:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
-   char *element = strtok(btBuffer, " ");
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
    ^
 In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
                  from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
@@ -38,7 +38,7 @@ c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expecte
  char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
         ^
 ../Sources/main.c: In function 'main':
-../Sources/main.c:628:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+../Sources/main.c:691:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
     New_NEO6M(&GPS);
     ^
 In file included from ../Sources/Events.h:74:0,
@@ -54,5 +54,5 @@ arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0
 Finished building target: Assignment.elf
  
 
-10:52:44 Build Finished (took 2s.269ms)
+13:48:00 Build Finished (took 2s.797ms)
 

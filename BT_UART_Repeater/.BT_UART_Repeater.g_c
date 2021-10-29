@@ -48,11 +48,11 @@
       </GenExtraFiles>
       <GenExtraFileSrcDir12>Repositories\lib\doxygen\</GenExtraFileSrcDir12>
       <GenExtraFileSrcDir5>lib\Kinetis\startup\</GenExtraFileSrcDir5>
-      <XtraAge2>1398189618</XtraAge2>
+      <XtraAge2>1398503722</XtraAge2>
       <XtraAge3>1398101139</XtraAge3>
       <XtraAge5>1398101139</XtraAge5>
-      <XtraAge6>1398189618</XtraAge6>
-      <XtraAge7>1398189618</XtraAge7>
+      <XtraAge6>1398503722</XtraAge6>
+      <XtraAge7>1398503721</XtraAge7>
       <XtraAge8>1398101139</XtraAge8>
       <GenExtraFileType12>5</GenExtraFileType12>
       <GenExtraFileType11>4</GenExtraFileType11>
@@ -495,7 +495,7 @@
     </GenFiles>
     <SignalListFile />
     <DestinationCompiler>GNUC</DestinationCompiler>
-    <ProjectModificationStamp>3</ProjectModificationStamp>
+    <ProjectModificationStamp>4</ProjectModificationStamp>
   </Options>
   <CpuID_2>
     <Generated>false</Generated>
@@ -1096,8 +1096,8 @@
     <GenComponentVersion>02.611</GenComponentVersion>
     <GenDriverVersion>01.01</GenDriverVersion>
     <GenEventModule>Events</GenEventModule>
-    <HeaderAge>1398189618</HeaderAge>
-    <CodeAge>1398189618</CodeAge>
+    <HeaderAge>1398503722</HeaderAge>
+    <CodeAge>1398503722</CodeAge>
     <AsemblAge>-1</AsemblAge>
     <GenNumMethods>24</GenNumMethods>
     <Enable>false</Enable>
@@ -1355,8 +1355,8 @@
       <GenComponentVersion>01.188</GenComponentVersion>
       <GenDriverVersion>01.12</GenDriverVersion>
       <GenEventModule>Events</GenEventModule>
-      <HeaderAge>1398189618</HeaderAge>
-      <CodeAge>1398189618</CodeAge>
+      <HeaderAge>1398503722</HeaderAge>
+      <CodeAge>1398503722</CodeAge>
       <AsemblAge>-1</AsemblAge>
       <GenNumMethods>36</GenNumMethods>
       <Init>true</Init>

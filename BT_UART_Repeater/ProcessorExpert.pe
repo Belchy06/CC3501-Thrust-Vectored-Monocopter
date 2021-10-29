@@ -3,7 +3,7 @@
   <Header>
     <Name>BT_UART_Repeater</Name>
     <SavedBy>willi</SavedBy>
-    <ModificationStamp>3</ModificationStamp>
+    <ModificationStamp>4</ModificationStamp>
     <Date>2021-10-17</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -20466,7 +20466,7 @@
         <ItemSymbol>Ser</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>UART0</Value>
+        <Value>UART2</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -20484,12 +20484,12 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>SpecInt</ItemSymbol>
-        <Value>INT_UART2_ERR</Value>
+        <Value>INT_UART0_ERR</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
       </ItemState>
       <ItemState>
         <ItemSymbol>InpInt</ItemSymbol>
-        <Value>INT_UART0_RX_TX</Value>
+        <Value>INT_UART2_RX_TX</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>InitPriority</ItemSymbol>
@@ -20514,7 +20514,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>OutInt</ItemSymbol>
-        <Value>INT_UART0_RX_TX</Value>
+        <Value>INT_UART2_RX_TX</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>IntTxDPriority</ItemSymbol>
@@ -20544,7 +20544,7 @@
       </ItemState>
       <ItemState>
         <ItemSymbol>ErrInt</ItemSymbol>
-        <Value>INT_UART0_ERR</Value>
+        <Value>INT_UART2_ERR</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>IntErrorPriority</ItemSymbol>
@@ -20849,7 +20849,7 @@
         <ItemSymbol>Inp</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN</Value>
+        <Value>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -20891,7 +20891,7 @@
         <ItemSymbol>Out</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b</Value>
+        <Value>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</Value>
         <SharedPrphMode>false</SharedPrphMode>
       </ItemState>
       <ItemState>
@@ -21345,7 +21345,7 @@
               <ItemSymbol>Device</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>UART0</Value>
+              <Value>UART2</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>
@@ -21366,7 +21366,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>InpInt</ItemSymbol>
-              <Value>INT_UART0_RX_TX</Value>
+              <Value>INT_UART2_RX_TX</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>InitPriority</ItemSymbol>
@@ -21401,7 +21401,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>OutInt</ItemSymbol>
-              <Value>INT_UART0_RX_TX</Value>
+              <Value>INT_UART2_RX_TX</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>IntTxDPriority</ItemSymbol>
@@ -21436,7 +21436,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>ErrInt</ItemSymbol>
-              <Value>INT_UART0_ERR</Value>
+              <Value>INT_UART2_ERR</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>IntErrorPriority</ItemSymbol>
@@ -21667,7 +21667,7 @@
               <ItemSymbol>Inp</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN</Value>
+              <Value>PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>
@@ -21688,7 +21688,7 @@
               <ItemSymbol>Out</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b</Value>
+              <Value>PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA</Value>
               <SharedPrphMode>false</SharedPrphMode>
             </ItemState>
             <ItemState>

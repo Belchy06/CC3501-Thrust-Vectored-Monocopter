@@ -8,7 +8,7 @@
 **     Repository  : Kinetis
 **     Datasheet   : K22P121M120SF7RM, Rev. 1, March 24, 2014
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-09-11, 19:23, # CodeGen: 31
+**     Date/Time   : 2021-10-27, 14:44, # CodeGen: 91
 **     Abstract    :
 **         This file collects Processor Expert components configuration 
 **         and interface files.
@@ -58,7 +58,7 @@
 **                    PLL module in Stop                   : Disabled
 **                    PLL output [MHz]                     : 0
 **                    Reference clock divider              : Auto select
-**                    PLL reference clock [MHz]            : 1
+**                    PLL reference clock [MHz]            : 2
 **                    Multiplication factor                : Auto select
 **                    Loss of lock interrupt               : Disabled
 **            Clock configurations                         : 1

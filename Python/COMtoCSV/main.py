@@ -5,7 +5,7 @@ import time
 
 if __name__ == '__main__':
     serialPort = serial.Serial(
-        port="COM3", baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE
+        port="COM5", baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE
     )
     serialString = ""  # Used to hold data coming over UART
     while 1:
@@ -18,7 +18,7 @@ if __name__ == '__main__':
             # Print the contents of the serial data
             try:
                 print(serialString.decode("Ascii"))
-                with open('output.csv', 'a', newline='', encoding='utf-8-sig') as f:
+                with open('data.csv', 'a', newline='', encoding='utf-8-sig') as f:
                     writer = csv.writer(f, delimiter=',')
                     writer.writerow(serialString.decode("Ascii").strip().split(','))
             except:

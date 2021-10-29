@@ -7,7 +7,7 @@
 **     Version     : Component 01.188, Driver 01.12, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2021-10-22, 21:49, # CodeGen: 3
+**     Date/Time   : 2021-10-27, 15:09, # CodeGen: 4
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -17,13 +17,13 @@
 **         The component requires one on-chip asynchronous serial communication channel.
 **     Settings    :
 **          Component name                                 : ASerialLdd2
-**          Device                                         : UART0
+**          Device                                         : UART2
 **          Interrupt service/event                        : Enabled
-**            Interrupt RxD                                : INT_UART0_RX_TX
+**            Interrupt RxD                                : INT_UART2_RX_TX
 **            Interrupt RxD priority                       : medium priority
-**            Interrupt TxD                                : INT_UART0_RX_TX
+**            Interrupt TxD                                : INT_UART2_RX_TX
 **            Interrupt TxD priority                       : medium priority
-**            Interrupt Error                              : INT_UART0_ERR
+**            Interrupt Error                              : INT_UART2_ERR
 **            Interrupt Error priority                     : medium priority
 **          Settings                                       : 
 **            Data width                                   : 8 bits
@@ -38,9 +38,9 @@
 **            Receiver input                               : Not inverted
 **            Break generation length                      : 10/11 bits
 **            Receiver                                     : Enabled
-**              RxD                                        : PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FBa_AD17/EWM_IN
+**              RxD                                        : PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FBa_AD4/LPUART0_RX/I2C0_SCL
 **            Transmitter                                  : Enabled
-**              TxD                                        : PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FBa_AD16/EWM_OUT_b
+**              TxD                                        : PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FBa_AD3/LPUART0_TX/I2C0_SDA
 **            Flow control                                 : None
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
@@ -132,9 +132,9 @@ extern "C" {
 /* {Default RTOS Adapter} Static object used for simulation of dynamic driver memory allocation */
 static ASerialLdd2_TDeviceData DeviceDataPrv__DEFAULT_RTOS_ALLOC;
 /* {Default RTOS Adapter} Global variable used for passing a parameter into ISR */
-static ASerialLdd2_TDeviceDataPtr INT_UART0_RX_TX__DEFAULT_RTOS_ISRPARAM;
+static ASerialLdd2_TDeviceDataPtr INT_UART2_RX_TX__DEFAULT_RTOS_ISRPARAM;
 /* {Default RTOS Adapter} Global variable used for passing a parameter into ISR */
-static ASerialLdd2_TDeviceDataPtr INT_UART0_ERR__DEFAULT_RTOS_ISRPARAM;
+static ASerialLdd2_TDeviceDataPtr INT_UART2_ERR__DEFAULT_RTOS_ISRPARAM;
 
 /*
 ** ===================================================================
@@ -175,56 +175,56 @@ LDD_TDeviceData* ASerialLdd2_Init(LDD_TUserData *UserDataPtr)
   DeviceDataPrv->UserDataPtr = UserDataPtr; /* Store the RTOS device structure */
   /* Allocate interrupt vectors */
   /* {Default RTOS Adapter} Set interrupt vector: IVT is static, ISR parameter is passed by the global variable */
-  INT_UART0_RX_TX__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
+  INT_UART2_RX_TX__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
   /* {Default RTOS Adapter} Set interrupt vector: IVT is static, ISR parameter is passed by the global variable */
-  INT_UART0_ERR__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
-  /* SIM_SCGC4: UART0=1 */
-  SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
-  /* SIM_SCGC5: PORTB=1 */
-  SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
-  /* PORTB_PCR16: ISF=0,MUX=3 */
-  PORTB_PCR16 = (uint32_t)((PORTB_PCR16 & (uint32_t)~(uint32_t)(
-                 PORT_PCR_ISF_MASK |
-                 PORT_PCR_MUX(0x04)
-                )) | (uint32_t)(
-                 PORT_PCR_MUX(0x03)
-                ));
-  /* PORTB_PCR17: ISF=0,MUX=3 */
-  PORTB_PCR17 = (uint32_t)((PORTB_PCR17 & (uint32_t)~(uint32_t)(
-                 PORT_PCR_ISF_MASK |
-                 PORT_PCR_MUX(0x04)
-                )) | (uint32_t)(
-                 PORT_PCR_MUX(0x03)
-                ));
-  /* NVICIP31: PRI31=0x70 */
-  NVICIP31 = NVIC_IP_PRI31(0x70);
-  /* NVICISER0: SETENA|=0x80000000 */
-  NVICISER0 |= NVIC_ISER_SETENA(0x80000000);
-  /* NVICIP32: PRI32=0x70 */
-  NVICIP32 = NVIC_IP_PRI32(0x70);
-  /* NVICISER1: SETENA|=1 */
-  NVICISER1 |= NVIC_ISER_SETENA(0x01);
-  UART_PDD_EnableTransmitter(UART0_BASE_PTR, PDD_DISABLE); /* Disable transmitter. */
-  UART_PDD_EnableReceiver(UART0_BASE_PTR, PDD_DISABLE); /* Disable receiver. */
+  INT_UART2_ERR__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
+  /* SIM_SCGC4: UART2=1 */
+  SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
+  /* SIM_SCGC5: PORTD=1 */
+  SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+  /* PORTD_PCR2: ISF=0,MUX=3 */
+  PORTD_PCR2 = (uint32_t)((PORTD_PCR2 & (uint32_t)~(uint32_t)(
+                PORT_PCR_ISF_MASK |
+                PORT_PCR_MUX(0x04)
+               )) | (uint32_t)(
+                PORT_PCR_MUX(0x03)
+               ));
+  /* PORTD_PCR3: ISF=0,MUX=3 */
+  PORTD_PCR3 = (uint32_t)((PORTD_PCR3 & (uint32_t)~(uint32_t)(
+                PORT_PCR_ISF_MASK |
+                PORT_PCR_MUX(0x04)
+               )) | (uint32_t)(
+                PORT_PCR_MUX(0x03)
+               ));
+  /* NVICIP35: PRI35=0x70 */
+  NVICIP35 = NVIC_IP_PRI35(0x70);
+  /* NVICISER1: SETENA|=8 */
+  NVICISER1 |= NVIC_ISER_SETENA(0x08);
+  /* NVICIP36: PRI36=0x70 */
+  NVICIP36 = NVIC_IP_PRI36(0x70);
+  /* NVICISER1: SETENA|=0x10 */
+  NVICISER1 |= NVIC_ISER_SETENA(0x10);
+  UART_PDD_EnableTransmitter(UART2_BASE_PTR, PDD_DISABLE); /* Disable transmitter. */
+  UART_PDD_EnableReceiver(UART2_BASE_PTR, PDD_DISABLE); /* Disable receiver. */
   DeviceDataPrv->SerFlag = 0x00U;      /* Reset flags */
   DeviceDataPrv->ErrFlag = 0x00U;      /* Reset error flags */
-  /* UART0_C1: LOOPS=0,UARTSWAI=0,RSRC=0,M=0,WAKE=0,ILT=0,PE=0,PT=0 */
-  UART0_C1 = 0x00U;                    /*  Set the C1 register */
-  /* UART0_C3: R8=0,T8=0,TXDIR=0,TXINV=0,ORIE=0,NEIE=0,FEIE=0,PEIE=0 */
-  UART0_C3 = 0x00U;                    /*  Set the C3 register */
-  /* UART0_C4: MAEN1=0,MAEN2=0,M10=0,BRFA=0 */
-  UART0_C4 = UART_C4_BRFA(0x00);       /*  Set the C4 register */
-  /* UART0_S2: LBKDIF=0,RXEDGIF=0,MSBF=0,RXINV=0,RWUID=0,BRK13=0,LBKDE=0,RAF=0 */
-  UART0_S2 = 0x00U;                    /*  Set the S2 register */
-  /* UART0_MODEM: ??=0,??=0,??=0,??=0,RXRTSE=0,TXRTSPOL=0,TXRTSE=0,TXCTSE=0 */
-  UART0_MODEM = 0x00U;                 /*  Set the MODEM register */
-  UART_PDD_SetBaudRateFineAdjust(UART0_BASE_PTR, 12u); /* Set baud rate fine adjust */
-  UART_PDD_SetBaudRate(UART0_BASE_PTR, 11U); /* Set the baud rate register. */
-  UART_PDD_EnableFifo(UART0_BASE_PTR, (UART_PDD_TX_FIFO_ENABLE | UART_PDD_RX_FIFO_ENABLE)); /* Enable RX and TX FIFO */
-  UART_PDD_FlushFifo(UART0_BASE_PTR, (UART_PDD_TX_FIFO_FLUSH | UART_PDD_RX_FIFO_FLUSH)); /* Flush RX and TX FIFO */
-  UART_PDD_EnableTransmitter(UART0_BASE_PTR, PDD_ENABLE); /* Enable transmitter */
-  UART_PDD_EnableReceiver(UART0_BASE_PTR, PDD_ENABLE); /* Enable receiver */
-  UART_PDD_EnableInterrupt(UART0_BASE_PTR, ( UART_PDD_INTERRUPT_RECEIVER | UART_PDD_INTERRUPT_PARITY_ERROR | UART_PDD_INTERRUPT_FRAMING_ERROR | UART_PDD_INTERRUPT_NOISE_ERROR | UART_PDD_INTERRUPT_OVERRUN_ERROR )); /* Enable interrupts */
+  /* UART2_C1: LOOPS=0,UARTSWAI=0,RSRC=0,M=0,WAKE=0,ILT=0,PE=0,PT=0 */
+  UART2_C1 = 0x00U;                    /*  Set the C1 register */
+  /* UART2_C3: R8=0,T8=0,TXDIR=0,TXINV=0,ORIE=0,NEIE=0,FEIE=0,PEIE=0 */
+  UART2_C3 = 0x00U;                    /*  Set the C3 register */
+  /* UART2_C4: MAEN1=0,MAEN2=0,M10=0,BRFA=0 */
+  UART2_C4 = UART_C4_BRFA(0x00);       /*  Set the C4 register */
+  /* UART2_S2: LBKDIF=0,RXEDGIF=0,MSBF=0,RXINV=0,RWUID=0,BRK13=0,LBKDE=0,RAF=0 */
+  UART2_S2 = 0x00U;                    /*  Set the S2 register */
+  /* UART2_MODEM: ??=0,??=0,??=0,??=0,RXRTSE=0,TXRTSPOL=0,TXRTSE=0,TXCTSE=0 */
+  UART2_MODEM = 0x00U;                 /*  Set the MODEM register */
+  UART_PDD_SetBaudRateFineAdjust(UART2_BASE_PTR, 12u); /* Set baud rate fine adjust */
+  UART_PDD_SetBaudRate(UART2_BASE_PTR, 11U); /* Set the baud rate register. */
+  UART_PDD_EnableFifo(UART2_BASE_PTR, (UART_PDD_TX_FIFO_ENABLE | UART_PDD_RX_FIFO_ENABLE)); /* Enable RX and TX FIFO */
+  UART_PDD_FlushFifo(UART2_BASE_PTR, (UART_PDD_TX_FIFO_FLUSH | UART_PDD_RX_FIFO_FLUSH)); /* Flush RX and TX FIFO */
+  UART_PDD_EnableTransmitter(UART2_BASE_PTR, PDD_ENABLE); /* Enable transmitter */
+  UART_PDD_EnableReceiver(UART2_BASE_PTR, PDD_ENABLE); /* Enable receiver */
+  UART_PDD_EnableInterrupt(UART2_BASE_PTR, ( UART_PDD_INTERRUPT_RECEIVER | UART_PDD_INTERRUPT_PARITY_ERROR | UART_PDD_INTERRUPT_FRAMING_ERROR | UART_PDD_INTERRUPT_NOISE_ERROR | UART_PDD_INTERRUPT_OVERRUN_ERROR )); /* Enable interrupts */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_ASerialLdd2_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv);
@@ -350,7 +350,7 @@ LDD_TError ASerialLdd2_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *Buff
   DeviceDataPrv->OutDataNumReq = Size; /* Set the counter of characters to be sent. */
   DeviceDataPrv->OutSentDataNum = 0x00U; /* Clear the counter of sent characters. */
   DeviceDataPrv->SerFlag |= ENABLED_TX_INT; /* Set the flag ENABLED_TX_INT */
-  UART_PDD_EnableInterrupt(UART0_BASE_PTR, UART_PDD_INTERRUPT_TRANSMITTER); /* Enable TX interrupt */
+  UART_PDD_EnableInterrupt(UART2_BASE_PTR, UART_PDD_INTERRUPT_TRANSMITTER); /* Enable TX interrupt */
   /* {Default RTOS Adapter} Critical section end, general PE function is used */
   ExitCritical();
   return ERR_OK;                       /* OK */
@@ -370,7 +370,7 @@ static void InterruptRx(ASerialLdd2_TDeviceDataPtr DeviceDataPrv)
 {
   register uint16_t Data;              /* Temporary variable for data */
 
-  Data = (uint16_t)UART_PDD_GetChar8(UART0_BASE_PTR); /* Read an 8-bit character from the receiver */
+  Data = (uint16_t)UART_PDD_GetChar8(UART2_BASE_PTR); /* Read an 8-bit character from the receiver */
   if (DeviceDataPrv->InpDataNumReq != 0x00U) { /* Is the receive block operation pending? */
     *(DeviceDataPrv->InpDataPtr++) = (uint8_t)Data; /* Put an 8-bit character to the receive buffer */
     DeviceDataPrv->InpRecvDataNum++;   /* Increment received char. counter */
@@ -395,14 +395,14 @@ static void InterruptTx(ASerialLdd2_TDeviceDataPtr DeviceDataPrv)
 {
 
   if (DeviceDataPrv->OutSentDataNum < DeviceDataPrv->OutDataNumReq) { /* Is number of sent characters less than the number of requested incoming characters? */
-    UART_PDD_PutChar8(UART0_BASE_PTR, *(DeviceDataPrv->OutDataPtr++)); /* Put a 8-bit character to the transmit register */
+    UART_PDD_PutChar8(UART2_BASE_PTR, *(DeviceDataPrv->OutDataPtr++)); /* Put a 8-bit character to the transmit register */
     DeviceDataPrv->OutSentDataNum++;   /* Increment the counter of sent characters. */
     if (DeviceDataPrv->OutSentDataNum == DeviceDataPrv->OutDataNumReq) {
       DeviceDataPrv->OutDataNumReq = 0x00U; /* Clear the counter of characters to be send by SendBlock() */
       ASerialLdd2_OnBlockSent(DeviceDataPrv->UserDataPtr);
     }
   } else {
-    UART_PDD_DisableInterrupt(UART0_BASE_PTR, UART_PDD_INTERRUPT_TRANSMITTER); /* Disable TX interrupt */
+    UART_PDD_DisableInterrupt(UART2_BASE_PTR, UART_PDD_INTERRUPT_TRANSMITTER); /* Disable TX interrupt */
     DeviceDataPrv->SerFlag &= (uint16_t)(~(uint16_t)ENABLED_TX_INT); /* Clear the flag ENABLED_TX_INT */
   }
 }
@@ -420,14 +420,14 @@ static void InterruptTx(ASerialLdd2_TDeviceDataPtr DeviceDataPrv)
 PE_ISR(ASerialLdd2_Interrupt)
 {
   /* {Default RTOS Adapter} ISR parameter is passed through the global variable */
-  ASerialLdd2_TDeviceDataPtr DeviceDataPrv = INT_UART0_RX_TX__DEFAULT_RTOS_ISRPARAM;
-  register uint32_t StatReg = UART_PDD_ReadInterruptStatusReg(UART0_BASE_PTR); /* Read status register */
+  ASerialLdd2_TDeviceDataPtr DeviceDataPrv = INT_UART2_RX_TX__DEFAULT_RTOS_ISRPARAM;
+  register uint32_t StatReg = UART_PDD_ReadInterruptStatusReg(UART2_BASE_PTR); /* Read status register */
   register uint16_t OnErrorFlags = 0U; /* Temporary variable for flags */
   register uint8_t  OnBreakFlag = 0U;  /* Temporary variable flag for OnBreak event */
   register uint16_t Data;              /* Temporary variable for data */
 
   if (StatReg & (UART_S1_NF_MASK | UART_S1_OR_MASK | UART_S1_FE_MASK | UART_S1_PF_MASK)) { /* Is any error flag set? */
-    Data = (uint16_t)UART_PDD_GetChar8(UART0_BASE_PTR); /* Read an 8-bit character from receiver */
+    Data = (uint16_t)UART_PDD_GetChar8(UART2_BASE_PTR); /* Read an 8-bit character from receiver */
     if ((StatReg & UART_S1_FE_MASK) != 0U) { /* Is the framing error detected? */
       if (((StatReg & UART_S1_RDRF_MASK) != 0U) && (Data == 0U)) { /* Is the zero character in the receiver? */
         OnBreakFlag++;

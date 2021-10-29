@@ -94,7 +94,9 @@
 #define BMP384_DEFAULT_ADDRESS 0x77
 #define MAX_DEGREES 30
 #define MAX_POSITION 20
-#define MAX_ALTITUDE 5
+#define MAX_ALTITUDE 50
+#define CALIBRATION_COUNT 100
+#define GYRO_PRECESSION 0.9
 
 // Barometer Variables
 BMP384 BARO;
@@ -106,6 +108,7 @@ BNO085 IMU;
 float pitch, roll, yaw;
 float p, q, r;
 float lx, ly, lz;
+uint8_t gyroAccuracy, accAccuracy;
 // Generic Variables 
 char outputBuffer[256];
 unsigned int time;
@@ -142,12 +145,13 @@ float worldVelocity[3] = { 0, 0, 0 };
 // Control Values
 float tau_yaw, tau_pitch, tau_roll = 0;
 float altitude_cmd = 0;
-float w0 = -1.108f * 1.790f;
+float w0 = 1.108f * 1.790f;
 // Servo Variables
 // -x, +x, -y, +y, edf
 float servoVals[5] = { 0, 0, 0, 0, 0 };
 //                   total thrust, yaw, pitch, roll
-float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
+// float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
+float servoWeights[4] = { 0.0, 0, 5, 5 };
 // Structs
 struct setpoints {
 	float x;
@@ -210,9 +214,9 @@ bool initializeSensors() {
 		ledOn(RED);
 		return false;
 	}
-	IMU.enableLinearAccelerometer(&IMU, 50);
-	IMU.enableGameRotationVector(&IMU, 50);
-	IMU.enableGyro(&IMU, 50);
+	IMU.enableLinearAccelerometer(&IMU, 40);
+	IMU.enableGameRotationVector(&IMU, 40);
+	IMU.enableGyro(&IMU, 40);
 
 	return true;
 }
@@ -271,14 +275,15 @@ void ledOff(LEDS_t led) {
 void calibrateAltitude() {
 	float tempAlt = 0;
 	BT_SendStr("Calibrating starting altitude...\r\n");
-	for (uint8_t i = 0; i < 20; i++) {
+	for (uint8_t i = 0; i < CALIBRATION_COUNT; i++) {
 		while (!BARO.getMeasurements(&BARO, &temperature, &pressure, &altitude)) {
 			;
 		}
 		tempAlt += altitude;
 		ledToggle(BLUE);
 	}
-	setpoint.altitude = tempAlt / 20.0f;
+	setpoint.altitude = tempAlt / CALIBRATION_COUNT;
+	altitudeInitial = setpoint.altitude;
 	bstatusBlue = false;
 	statusBlue_PutVal(bstatusBlue);
 	snprintf(outputBuffer, 128, "Starting altitude: %f\r\n", setpoint.altitude);
@@ -288,16 +293,45 @@ void calibrateAltitude() {
 void calibrateYaw() {
 	float tempYaw = 0;
 	BT_SendStr("Calibrating starting yaw...\r\n");
-	for (uint8_t i = 0; i < 20; i++) {
+	for (uint8_t i = 0; i < CALIBRATION_COUNT; i++) {
 		while (!IMU.dataAvailable(&IMU)) {
 			;
 		}
 		tempYaw += (float) (IMU.getYaw(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
 		ledToggle(GREEN);
 	}
-	setpoint.yaw = tempYaw / 20.0f;
-	altitudeAGL = setpoint.yaw;
+	setpoint.yaw = tempYaw / CALIBRATION_COUNT;
 	snprintf(outputBuffer, 128, "Starting yaw: %f\r\n", setpoint.yaw);
+	BT_SendStr(outputBuffer);
+}
+
+void calibratePitch() {
+	float tempPitch= 0;
+	BT_SendStr("Calibrating starting pitch...\r\n");
+	for (uint8_t i = 0; i < CALIBRATION_COUNT; i++) {
+		while (!IMU.dataAvailable(&IMU)) {
+			;
+		}
+		tempPitch += (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+		ledToggle(GREEN);
+	}
+	setpoint.pitch = tempPitch / CALIBRATION_COUNT;
+	snprintf(outputBuffer, 128, "Starting pitch: %f\r\n", setpoint.pitch);
+	BT_SendStr(outputBuffer);
+}
+
+void calibrateRoll() {
+	float tempRoll = 0;
+	BT_SendStr("Calibrating starting roll...\r\n");
+	for (uint8_t i = 0; i < CALIBRATION_COUNT; i++) {
+		while (!IMU.dataAvailable(&IMU)) {
+			;
+		}
+		tempRoll += (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert yaw to degrees
+		ledToggle(GREEN);
+	}
+	setpoint.roll = tempRoll / CALIBRATION_COUNT;
+	snprintf(outputBuffer, 128, "Starting roll: %f\r\n", setpoint.roll);
 	BT_SendStr(outputBuffer);
 }
 
@@ -307,13 +341,13 @@ void startupServos() {
 	yPos_SetPWMDutyUs(1000);
 	yNeg_SetPWMDutyUs(1000);
 	// Wait
-	WAIT1_Waitms(250);
+	WAIT1_Waitms(500);
 	xPos_SetPWMDutyUs(2000);
 	xNeg_SetPWMDutyUs(2000);
 	yPos_SetPWMDutyUs(2000);
 	yNeg_SetPWMDutyUs(2000);
 	// Wait
-	WAIT1_Waitms(250);
+	WAIT1_Waitms(500);
 	xPos_SetPWMDutyUs(1500);
 	xNeg_SetPWMDutyUs(1500);
 	yPos_SetPWMDutyUs(1500);
@@ -327,9 +361,9 @@ void readIMU() {
 		pitch = (float) (IMU.getPitch(&IMU)) * 180.0 / 3.14159; // Convert pitch to degrees
 		roll = (float) (IMU.getRoll(&IMU)) * 180.0 / 3.14159f; // Convert roll to degrees
 		// Get body frame acceleration (gravity removed)
-		IMU.getLinAccel(&IMU, &lx, &ly, &lz, NULL);
+		IMU.getLinAccel(&IMU, &lx, &ly, &lz, &accAccuracy);
 		// Get body frame angular acceleration
-		IMU.getGyro(&IMU, &p, &q, &r, NULL);
+		IMU.getGyro(&IMU, &p, &q, &r, &gyroAccuracy);
 		ledToggle(GREEN);
 	}
 }
@@ -350,8 +384,6 @@ void checkSensorErrors() {
 			// IMU error
 			BT_SendStr("IMU error!\r\n");
 		}
-		// Turn fan off
-		EDF_SetPWMDutyUs(1000);
 		state = ERROR;
 	}
 }
@@ -464,7 +496,7 @@ void calculatePitchRollSetpoint() {
 	 * PD Controller to calculate the orientation the vehicle should be in in order to correct for its positional error
 	 */
 	float XYErr[2] = { (setpoint.x - xOff), (setpoint.y - yOff) };
-	float P = 0.24;
+	float P = 0.024;
 	float P_xy[2] = { -P
 			* clamp((XYErr[0] * cosf(yaw) - XYErr[1] * sinf(yaw)), -3, 3), P
 			* clamp((XYErr[0] * sinf(yaw) - XYErr[1] * cosf(yaw)), -3, 3) };
@@ -480,20 +512,20 @@ void calculatePitchRollTorque() {
 	 */
 	float PRErr[2] = { (setpoint.pitch - pitch), (setpoint.roll - roll) };
 	// Proportional
-	float P[2] = { 0.013, 0.01 };
+	float P[2] = { 0.02, 0.02 };
 	float P_pr[2] = { P[0] * PRErr[0], P[1] * PRErr[1] };
 	// Integral
-	float I = 0.01;
+	float I = 0.0015;
 	float I_pr[2] = { I * clamp(PRErr[0] * dt, -2, 2), I
 			* clamp(PRErr[1] * dt, -2, 2) };
 	// Derivative
-	float D[2] = { 0.002, 0.0028 };
+	float D[2] = { 0.015, 0.015 };
 	// x, y, z
 	// p, q, r
-	float D_pr[2] = { D[0] * q, D[1] * r };
+	float D_pr[2] = { D[0] * q, D[1] * p };
 
-	tau_pitch = P_pr[0] + I_pr[0] - D_pr[0];
-	tau_roll = P_pr[1] + I_pr[1] - D_pr[1];
+	tau_pitch = clamp(P_pr[0] + I_pr[0] - D_pr[0], -0.768, 0.768);
+	tau_roll = clamp(P_pr[1] + I_pr[1] - D_pr[1], -0.768, 0.768);
 }
 
 void calculateYawTorque() {
@@ -508,10 +540,10 @@ void calculateYawTorque() {
 void calculateThrust() {
 	if (state == POSITION_AND_ATTITUDE_HOVER || state == ATTITUDE_HOVER) {
 		// We're in a hovering state, try and maintain altitude
-		float altErr = altitude - setpoint.altitude;
-		float P = 0.8f;
+		float altErr = setpoint.altitude - altitude;
+		float P = 0.4f;
 		float P_alt = P * altErr;
-		float D = 0.3f;
+		float D = 0.15f;
 		float D_alt = D * worldVelocity[2];
 		altitude_cmd = P_alt - D_alt;
 	} else {
@@ -519,30 +551,41 @@ void calculateThrust() {
 		altitude_cmd = w0 * 0.55f;
 	}
 	altitude_cmd += w0;
-	altitude_cmd = clamp(altitude_cmd, -3.0f, 3.0f);
+	altitude_cmd = clamp(altitude_cmd, 0, 3.0f);
+}
+
+float convertTorqueToAngle(float tau) {
+	return asinf(clamp(tau / (0.38 * altitude_cmd), -1, 1)) * 180 / 3.14159f;
 }
 
 void calculateServoValues() {
 	/*
 	 * Servo mixing
 	 */
-	// TODO: Scale the last term based on thrust to counteract gyroscopic effect
 	float thrustComp, yawComp, pitchComp, rollComp = 0;
 	thrustComp = servoWeights[0] * altitude_cmd;
 	yawComp = servoWeights[1] * tau_yaw;
-	pitchComp = servoWeights[2] * tau_pitch;
-	rollComp = servoWeights[3] * tau_roll;
-	servoVals[0] = thrustComp - pitchComp + yawComp;
-	servoVals[1] = thrustComp + pitchComp + yawComp;
-	servoVals[2] = thrustComp + rollComp + yawComp;
-	servoVals[3] = thrustComp - rollComp + yawComp;
+	pitchComp = servoWeights[2] * convertTorqueToAngle(tau_pitch);
+	rollComp = servoWeights[3] * convertTorqueToAngle(tau_roll);
+
+	float gyro_precessionX = 1;
+	float gyro_precessionY = 1;
+	servoVals[0] = thrustComp - pitchComp + yawComp + p * gyro_precessionX;
+	servoVals[1] = thrustComp + pitchComp + yawComp - p * gyro_precessionX;
+	servoVals[2] = thrustComp + rollComp + yawComp + q * gyro_precessionY;
+	servoVals[3] = thrustComp - rollComp + yawComp - q * gyro_precessionY;
+//	servoVals[0] = thrustComp - rollComp + yawComp + p * gyro_precessionX + 0.05 * pitchComp;
+//	servoVals[1] = thrustComp + rollComp + yawComp - p * gyro_precessionX - 0.05 * pitchComp;
+//	servoVals[2] = thrustComp + pitchComp + yawComp + q * gyro_precessionY - 0.05 * rollComp;
+//	servoVals[3] = thrustComp - pitchComp + yawComp - q * gyro_precessionY + 0.05 * rollComp;
 	servoVals[4] = altitude_cmd;
 	for (uint8_t i = 0; i < 4; i++) {
-		servoVals[i] = 1500 - clamp(servoVals[i] * -362.32f, -500, 500);
+		servoVals[i] = 1500 + clamp(servoVals[i], -200, 200);
 	}
-	servoVals[4] = (clamp(servoVals[4] * -362.32f, 0, 1000)) + 1000;
-	snprintf(outputBuffer, 256, "y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n",
-				yawComp, pitchComp, rollComp, yaw, pitch, roll);
+	servoVals[4] = (clamp(servoVals[4] * 362.32f, 0, 150)) + 1000;
+	snprintf(outputBuffer, 256,
+			"y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n", yawComp,
+			pitchComp, rollComp, yaw, pitch, roll);
 	BT_SendStr(outputBuffer);
 }
 
@@ -569,52 +612,67 @@ float sampleLandingFunction(unsigned int time) {
 }
 
 void handleBTCommands() {
-	if(bbtCompleteCommand) {
-		char *element = strtok(btBuffer, " ");
-		while(element != NULL) {
-			float temp;
-			if(sscanf((char *)element, "Y%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
+	if (bbtCompleteCommand) {
+		char* element = strtok(btBuffer, " ");
+		while (element != NULL) {
+			int temp;
+			if (sscanf(element, "y%d", &temp) > 0) {
+				if (abs(temp) <= MAX_DEGREES) {
 					setpoint.yaw = temp;
-					snprintf(outputBuffer, 256, "New yaw setpoint: %f\r\n", setpoint.yaw);
+					snprintf(outputBuffer, 256, "New yaw setpoint: %f\r\n",
+							setpoint.yaw);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(sscanf((char *)element, "P%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
+			} else if (sscanf(element, "p%d", &temp) > 0) {
+				if (abs(temp) <= MAX_DEGREES) {
 					setpoint.pitch = temp;
-					snprintf(outputBuffer, 256, "New pitch setpoint: %f\r\n", setpoint.pitch);
+					snprintf(outputBuffer, 256, "New pitch setpoint: %f\r\n",
+							setpoint.pitch);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(sscanf((char *)element, "R%f", &temp) > 0) {
-				if(abs(temp) <= MAX_DEGREES) {
+			} else if (sscanf(element, "r%d", &temp) > 0) {
+				if (abs(temp) <= MAX_DEGREES) {
 					setpoint.roll = temp;
-					snprintf(outputBuffer, 256, "New roll setpoint: %f\r\n", setpoint.roll);
+					snprintf(outputBuffer, 256, "New roll setpoint: %f\r\n",
+							setpoint.roll);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(sscanf((char *)element, "X%f", &temp) > 0) {
-				if(abs(temp) <= MAX_POSITION) {
+			} else if (sscanf(element, "X%d", &temp) > 0) {
+				if (abs(temp) <= MAX_POSITION) {
 					setpoint.x = temp;
-					snprintf(outputBuffer, 256, "New X setpoint: %f\r\n", setpoint.x);
+					snprintf(outputBuffer, 256, "New Eastings setpoint: %f\r\n",
+							setpoint.x);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(sscanf((char *)element, "Y%f", &temp) > 0) {
-				if(abs(temp) <= MAX_POSITION) {
+			} else if (sscanf(element, "Y%d", &temp) > 0) {
+				if (abs(temp) <= MAX_POSITION) {
 					setpoint.y = temp;
-					snprintf(outputBuffer, 256, "New Y setpoint: %f\r\n", setpoint.y);
+					snprintf(outputBuffer, 256, "New Northings setpoint: %f\r\n",
+							setpoint.y);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(sscanf((char *)element, "Z%f", &temp) > 0) {
-				if(abs(temp) <= MAX_ALTITUDE) {
+			} else if (sscanf(element, "Z%d", &temp) > 0) {
+				if (abs(temp) <= MAX_ALTITUDE) {
 					setpoint.altitude = temp;
-					snprintf(outputBuffer, 256, "New altitude setpoint: %f\r\n", setpoint.altitude);
+					snprintf(outputBuffer, 256, "New altitude setpoint: %f\r\n",
+							setpoint.altitude);
 					BT_SendStr(outputBuffer);
 				}
-			} else if(0 == strcmp((char *) element, "A")) {
-				state = ASCENT;
-			} else if(0 == strcmp((char *) element, "L")) {
-				state = LANDING;
+			} else if (*element == 'A') {
+				if (state == IDLE) {
+					state = ASCENT;
+				}
+			} else if (*element == 'L') {
+				if (state == ATTITUDE_HOVER
+						| state == POSITION_AND_ATTITUDE_HOVER | state == ASCENT) {
+					state = LANDING;
+				}
 			}
+			// Get the next element in the instruction.
+			element = strtok(NULL, " ");
 		}
+		bbtCompleteCommand = false;
+		btIndex = 0;
 	}
 }
 
@@ -625,17 +683,19 @@ int main(void)
 	/*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
 	PE_low_level_init();
 	/*** End of Processor Expert internal initialization.                    ***/
+	float totalTime = 0;
 	for (;;) {
 		FC321_GetTimeUS(&time);
 		dt = time * 1e-6;
+		totalTime += dt;
 		FC321_Reset();
 		handleBTCommands();
 		switch (state) {
 		case START: {
 			// Initialize setpoints and gps values
 			setpoint.x = setpoint.y = setpoint.altitude = setpoint.yaw = 0;
-			setpoint.pitch = -3.47f;
-			setpoint.roll = -0.35f;
+			setpoint.pitch = -0.35f;
+			setpoint.roll = 0.0f;
 			GPSstats.x = GPSstats.y = GPSstats.dx = GPSstats.dy =
 					GPSstats.prevEasting = GPSstats.prevNorthing = 0;
 			// Initialize velocity and position kalman filters
@@ -658,7 +718,10 @@ int main(void)
 		case CALIBRATING: {
 			calibrateAltitude();
 			calibrateYaw();
+			calibratePitch();
+			calibrateRoll();
 			startupServos();
+			BT_SendStr("Calibration completed!\r\n");
 			state = IDLE;
 		}
 			break;
@@ -670,9 +733,7 @@ int main(void)
 				ledToggle(GREEN);
 				// Wait
 				WAIT1_Waitms(950);
-			}	
-			// TODO: Parse BT Command
-			state = ASCENT;
+			}
 		}
 			break;
 		case ASCENT: {
@@ -681,11 +742,13 @@ int main(void)
 			checkSensorErrors();
 			// We successfully read the barometer and are at least as high as our setpoint. Transition to hover
 			if (altitude >= setpoint.altitude) {
-				state == ATTITUDE_HOVER;
+				state = ATTITUDE_HOVER;
 				continue;
 			}
-			calculateWorldAcceleration();
 			calculateThrust();
+			calculateWorldAcceleration();
+			calculatePitchRollTorque();
+			calculateYawTorque();
 			calculateServoValues();
 			writeServos();
 		}
@@ -695,13 +758,13 @@ int main(void)
 			readIMU();
 			readBarometer();
 			checkSensorErrors();
+			calculateThrust();
 			calculateWorldAcceleration();
 			estimateWorldVelocity();
 			estimateWorldPosition();
 			calculatePitchRollSetpoint();
 			calculatePitchRollTorque();
 			calculateYawTorque();
-			calculateThrust();
 			calculateServoValues();
 			writeServos();
 		}
@@ -710,41 +773,49 @@ int main(void)
 			readIMU();
 			readBarometer();
 			checkSensorErrors();
+			calculateThrust();
 			calculatePitchRollTorque();
 			calculateYawTorque();
-			calculateThrust();
 			calculateServoValues();
 			writeServos();
 		}
 			break;
 		case LANDING: {
-			// TODO: A run once function that creates a exponential curve for the altitude setpoint for smooth landing
-			if(bCalculateLandingHeight) {
+			if (bCalculateLandingHeight) {
 				altitudeAGL = setpoint.altitude - altitudeInitial;
 				bCalculateLandingHeight = false;
 			}
 			timeSinceLandingStarted += dt;
-			setpoint.altitude = sampleLandingFunction(timeSinceLandingStarted) + altitudeInitial;
-			if(setpoint.altitude < altitudeInitial) {
+			setpoint.altitude = sampleLandingFunction(timeSinceLandingStarted)
+					+ altitudeInitial;
+			if (setpoint.altitude < altitudeInitial) {
 				zeroServos();
+				ledOff(GREEN);
+				ledOff(BLUE);
+				ledOff(RED);
 				state = IDLE;
 				continue;
 			}
 			readIMU();
 			readBarometer();
 			checkSensorErrors();
+			calculateThrust();
 			calculatePitchRollTorque();
 			calculateYawTorque();
-			calculateThrust();
 			calculateServoValues();
 			writeServos();
 		}
 			break;
 		case ERROR: {
+			// Turn fan off
+			EDF_SetPWMDutyUs(1000);
 		}
 			break;
 		}
 		haveGps = false;
+		// snprintf(outputBuffer, 256, "%f,%f,%f,%f,%f,%f,%f\r\n", totalTime, yaw, pitch, roll, setpoint.yaw, setpoint.pitch, setpoint.roll);
+		// BT_SendStr(outputBuffer);
+		WAIT1_Waitms(10);
 	}
 	/*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

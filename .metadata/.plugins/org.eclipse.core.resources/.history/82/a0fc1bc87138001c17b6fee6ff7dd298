@@ -151,7 +151,7 @@ float w0 = 1.108f * 1.790f;
 float servoVals[5] = { 0, 0, 0, 0, 0 };
 //                   total thrust, yaw, pitch, roll
 // float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
-float servoWeights[4] = { 0.2, 0, 5, 5 };
+float servoWeights[4] = { 0.0, 0, 5, 5 };
 // Structs
 struct setpoints {
 	float x;
@@ -582,10 +582,10 @@ void calculateServoValues() {
 	for (uint8_t i = 0; i < 4; i++) {
 		servoVals[i] = 1500 + clamp(servoVals[i], -200, 200);
 	}
-	servoVals[4] = (clamp(servoVals[4] * 362.32f, 0, 1000)) + 1000;
+	servoVals[4] = (clamp(servoVals[4] * 362.32f, 0, 150)) + 1000;
 	snprintf(outputBuffer, 256,
-			"y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f, throttle: %f\r\n", yawComp,
-			pitchComp, rollComp, yaw, pitch, roll, servoVals[4]);
+			"y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n", yawComp,
+			pitchComp, rollComp, yaw, pitch, roll);
 	BT_SendStr(outputBuffer);
 }
 

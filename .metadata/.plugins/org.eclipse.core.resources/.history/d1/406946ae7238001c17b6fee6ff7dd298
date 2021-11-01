@@ -151,7 +151,7 @@ float w0 = 1.108f * 1.790f;
 float servoVals[5] = { 0, 0, 0, 0, 0 };
 //                   total thrust, yaw, pitch, roll
 // float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
-float servoWeights[4] = { 0.2, 0, 5, 5 };
+float servoWeights[4] = { 0.0, 0, 5, 5 };
 // Structs
 struct setpoints {
 	float x;
@@ -594,7 +594,7 @@ void writeServos() {
 	xNeg_SetPWMDutyUs(servoVals[1]);
 	yPos_SetPWMDutyUs(servoVals[2]);
 	yNeg_SetPWMDutyUs(servoVals[3]);
-	EDF_SetPWMDutyUs(servoVals[4]);
+	// EDF_SetPWMDutyUs(servoVals[4]);
 }
 
 void zeroServos() {

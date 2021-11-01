@@ -151,7 +151,7 @@ float w0 = 1.108f * 1.790f;
 float servoVals[5] = { 0, 0, 0, 0, 0 };
 //                   total thrust, yaw, pitch, roll
 // float servoWeights[4] = { 0.4, 1.57, 1.57, 1.57 };
-float servoWeights[4] = { 0.2, 0, 5, 5 };
+float servoWeights[4] = { 0.0, 0, 5, 5 };
 // Structs
 struct setpoints {
 	float x;
@@ -555,9 +555,6 @@ void calculateThrust() {
 }
 
 float convertTorqueToAngle(float tau) {
-	if(altitude_cmd == 0) {
-		return 0;
-	}
 	return asinf(clamp(tau / (0.38 * altitude_cmd), -1, 1)) * 180 / 3.14159f;
 }
 
@@ -567,7 +564,7 @@ void calculateServoValues() {
 	 */
 	float thrustComp, yawComp, pitchComp, rollComp = 0;
 	thrustComp = servoWeights[0] * altitude_cmd;
-	yawComp = servoWeights[1] * convertTorqueToAngle(tau_yaw);
+	yawComp = servoWeights[1] * tau_yaw;
 	pitchComp = servoWeights[2] * convertTorqueToAngle(tau_pitch);
 	rollComp = servoWeights[3] * convertTorqueToAngle(tau_roll);
 
@@ -577,15 +574,14 @@ void calculateServoValues() {
 	servoVals[1] = thrustComp + pitchComp + yawComp - p * gyro_precessionX;
 	servoVals[2] = thrustComp + rollComp + yawComp + q * gyro_precessionY;
 	servoVals[3] = thrustComp - rollComp + yawComp - q * gyro_precessionY;
-
 	servoVals[4] = altitude_cmd;
 	for (uint8_t i = 0; i < 4; i++) {
 		servoVals[i] = 1500 + clamp(servoVals[i], -200, 200);
 	}
-	servoVals[4] = (clamp(servoVals[4] * 362.32f, 0, 1000)) + 1000;
+	servoVals[4] = (clamp(servoVals[4] * 362.32f, 0, 150)) + 1000;
 	snprintf(outputBuffer, 256,
-			"y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f, throttle: %f\r\n", yawComp,
-			pitchComp, rollComp, yaw, pitch, roll, servoVals[4]);
+			"y_c: %f, p_c: %f, r_c: %f, y: %f, p: %f, r: %f\r\n", yawComp,
+			pitchComp, rollComp, yaw, pitch, roll);
 	BT_SendStr(outputBuffer);
 }
 
@@ -653,7 +649,7 @@ void handleBTCommands() {
 				}
 			} else if (sscanf(element, "Z%d", &temp) > 0) {
 				if (abs(temp) <= MAX_ALTITUDE) {
-					setpoint.altitude += temp;
+					setpoint.altitude = temp;
 					snprintf(outputBuffer, 256, "New altitude setpoint: %f\r\n",
 							setpoint.altitude);
 					BT_SendStr(outputBuffer);

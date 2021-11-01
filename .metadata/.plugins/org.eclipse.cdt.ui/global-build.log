@@ -26536,3 +26536,394 @@ Invoking: Cross ARM C++ Linker
 arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
 Finished building target: Assignment.elf
  
+14:25:21 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+14:28:11 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+14:36:33 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+14:39:21 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+14:40:10 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+14:42:57 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+11:49:34 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+Building file: ../Sources/main.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/System" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/PDD" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/IO_Map" -I"C:\Freescale\KDS_v3\eclipse\ProcessorExpert/lib/Kinetis/pdd/inc" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Sources" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code" -I"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Static_Code/Peripherals" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+../Sources/main.c: In function 'initializeSensors':
+../Sources/main.c:201:3: warning: implicit declaration of function 'ledOn' [-Wimplicit-function-declaration]
+   ledOn(RED);
+   ^
+../Sources/main.c: At top level:
+../Sources/main.c:241:6: warning: conflicting types for 'ledOn' [enabled by default]
+ void ledOn(LEDS_t led) {
+      ^
+../Sources/main.c:201:3: note: previous implicit declaration of 'ledOn' was here
+   ledOn(RED);
+   ^
+../Sources/main.c: In function 'readGPS':
+../Sources/main.c:393:3: warning: passing argument 1 of 'GPS.get_position' discards 'volatile' qualifier from pointer target type [enabled by default]
+   GPS.get_position(&GPS, &lat, &lon, &age);
+   ^
+../Sources/main.c:393:3: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:404:5: warning: passing argument 1 of 'GPS.course_to' discards 'volatile' qualifier from pointer target type [enabled by default]
+     float gYaw = GPS.course_to(&GPS, prevLat, prevLon, lat, lon);
+     ^
+../Sources/main.c:404:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c:406:5: warning: passing argument 1 of 'GPS.speed_mps' discards 'volatile' qualifier from pointer target type [enabled by default]
+     mps = GPS.speed_mps(&GPS);
+     ^
+../Sources/main.c:406:5: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+../Sources/main.c: In function 'handleBTCommands':
+../Sources/main.c:616:3: warning: passing argument 1 of 'strtok' discards 'volatile' qualifier from pointer target type [enabled by default]
+   char* element = strtok(btBuffer, " ");
+   ^
+In file included from c:\freescale\kds_v3\toolchain\arm-none-eabi\include\assert.h:9:0,
+                 from C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Generated_Code/Cpu.h:74,
+                 from ../Sources/main.c:30:
+c:\freescale\kds_v3\toolchain\arm-none-eabi\include\string.h:43:8: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ char  *_EXFUN(strtok,(char *__restrict, const char *__restrict));
+        ^
+../Sources/main.c: In function 'main':
+../Sources/main.c:705:4: warning: passing argument 1 of 'New_NEO6M' discards 'volatile' qualifier from pointer target type [enabled by default]
+    New_NEO6M(&GPS);
+    ^
+In file included from ../Sources/Events.h:74:0,
+                 from ../Sources/main.c:31:
+../Sources/GPS.h:43:6: note: expected 'struct NEO6M *' but argument is of type 'volatile struct NEO6M *'
+ void New_NEO6M(NEO6M *self);
+      ^
+Finished building: ../Sources/main.c
+ 
+Building target: Assignment.elf
+Invoking: Cross ARM C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files/ProcessorExpert.ld" -Xlinker --gc-sections -L"C:/Users/Will/Desktop/group-assignment-cairns-group-1/Assignment/Project_Settings/Linker_Files" -Wl,-Map,"Assignment.map" -specs=nano.specs -specs=nosys.specs -o "Assignment.elf"  ./Static_Code/System/CPU_Init.o ./Static_Code/System/Peripherals_Init.o ./Static_Code/System/Vectors.o  ./Sources/BMP384.o ./Sources/BNO085.o ./Sources/Events.o ./Sources/GPS.o ./Sources/I2C.o ./Sources/PositionEstimator.o ./Sources/VelocityEstimator.o ./Sources/main.o ./Sources/printf.o ./Sources/tranmerc.o ./Sources/utm.o  ./Project_Settings/Startup_Code/startup.o  ./Generated_Code/ASerialLdd1.o ./Generated_Code/ASerialLdd2.o ./Generated_Code/BT.o ./Generated_Code/BitIoLdd1.o ./Generated_Code/BitIoLdd2.o ./Generated_Code/BitIoLdd3.o ./Generated_Code/CI2C1.o ./Generated_Code/Cpu.o ./Generated_Code/EDF.o ./Generated_Code/FC321.o ./Generated_Code/GPS.o ./Generated_Code/GPSTimer.o ./Generated_Code/Inhr1.o ./Generated_Code/Inhr2.o ./Generated_Code/IntI2cLdd1.o ./Generated_Code/MCUC1.o ./Generated_Code/PE_LDD.o ./Generated_Code/Pins1.o ./Generated_Code/Pwm1.o ./Generated_Code/Pwm2.o ./Generated_Code/Pwm3.o ./Generated_Code/Pwm4.o ./Generated_Code/Pwm5.o ./Generated_Code/PwmLdd1.o ./Generated_Code/PwmLdd2.o ./Generated_Code/PwmLdd3.o ./Generated_Code/PwmLdd4.o ./Generated_Code/PwmLdd5.o ./Generated_Code/RealTimeLdd1.o ./Generated_Code/RealTimeLdd2.o ./Generated_Code/TU1.o ./Generated_Code/TU2.o ./Generated_Code/TU3.o ./Generated_Code/WAIT1.o ./Generated_Code/statusBlue.o ./Generated_Code/statusGreen.o ./Generated_Code/statusRed.o ./Generated_Code/xNeg.o ./Generated_Code/xPos.o ./Generated_Code/yNeg.o ./Generated_Code/yPos.o   
+Finished building target: Assignment.elf
+ 
+11:49:56 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+make: Nothing to be done for 'all'.
+11:50:30 **** Incremental Build of configuration Debug for project Assignment ****
+make all 
+make: Nothing to be done for 'all'.
